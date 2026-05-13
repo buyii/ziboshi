@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>applyForAmples</title>
+    <g id="首页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="商品详情页" transform="translate(-28.000000, -761.000000)">
+            <g id="领样流程" transform="translate(16.000000, 715.000000)">
+                <g id="applyForAmples" transform="translate(12.000000, 46.000000)">
+                    <path d="M8,0 L16,0 C20.418278,-8.11624501e-16 24,3.581722 24,8 L24,16 C24,20.418278 20.418278,24 16,24 L8,24 C3.581722,24 5.41083001e-16,20.418278 0,16 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z" id="矩形" fill="#EC6593"></path>
+                    <polygon id="矩形" fill="#FFFFFF" points="12 10 18 8 18 16 12 18"></polygon>
+                    <polygon id="矩形" fill="#FFFFFF" opacity="0.849999964" points="6 8 12 10 12 18 6 16"></polygon>
+                    <polygon id="矩形" fill="#FFFFFF" opacity="0.649999976" points="12 6 18 8 12 10 6 8"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

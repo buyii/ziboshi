@@ -1,0 +1,16 @@
+{
+    "id": "yk-AutoReco",
+    "name": "国内地址智能识别解析支持APP小程序H5随引随用",
+    "displayName": "国内地址智能识别解析支持APP小程序H5随引随用",
+    "version": "1.0.0",
+    "description": "全端通用支持多种地址信息格式解析，方便快捷",
+    "keywords": [
+        "地址智能识别,地址解析,地址自动识别"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

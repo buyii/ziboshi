@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>authentication</title>
+    <g id="我的" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="公司认证第一步" transform="translate(-315.000000, -108.000000)">
+            <g id="购样流程" transform="translate(0.000000, 88.000000)">
+                <g id="authentication" transform="translate(315.000000, 20.000000)">
+                    <path d="M4,0 L24,0 C26.209139,1.11220812e-15 28,1.790861 28,4 L28,24 C28,26.209139 26.209139,28 24,28 L4,28 C1.790861,28 1.78856188e-15,26.209139 0,24 L0,4 C-7.1463071e-16,1.790861 1.790861,-3.82769592e-17 4,0 Z" id="矩形" fill="#F2ECEE"></path>
+                    <path d="M18,8 L21,13 L14,20 L7,13 L10,8 L18,8 Z M15.6464466,11.6464466 L14,13.293 L12.3535534,11.6464466 L11.6464466,12.3535534 L14,14.7071068 L16.3535534,12.3535534 L15.6464466,11.6464466 Z" id="形状结合" fill="#CBB5BC"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

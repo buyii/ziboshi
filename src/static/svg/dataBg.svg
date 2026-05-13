@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="343px" height="344px" viewBox="0 0 343 344" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>dataBg</title>
+    <g id="我的" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="个人数据" transform="translate(-16.000000, -104.000000)" fill="#FFFFFF">
+            <path d="M32,104 L168.467852,104 C175.354739,104 181.468961,108.406882 183.646785,114.940356 L192.353215,141.059644 C194.531039,147.593118 200.645261,152 207.532148,152 L343,152 C351.836556,152 359,159.163444 359,168 L359,432 C359,440.836556 351.836556,448 343,448 L32,448 C23.163444,448 16,440.836556 16,432 L16,120 C16,111.163444 23.163444,104 32,104 Z" id="dataBg"></path>
+        </g>
+    </g>
+</svg>

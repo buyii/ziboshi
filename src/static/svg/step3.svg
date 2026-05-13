@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="268px" height="108px" viewBox="0 0 268 108" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <defs>
+        <circle id="path-1" cx="40" cy="40" r="40"></circle>
+    </defs>
+    <g id="首页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="成本购样三" transform="translate(-56.000000, -327.000000)">
+            <g id="编组" transform="translate(56.000000, 327.000000)">
+                <path d="M256,0.25 C258.140103,0.25 260.077603,1.1174483 261.480078,2.51992245 C262.882552,3.92239659 263.75,5.85989659 263.75,8 L263.75,95 C263.75,97.1401034 262.882552,99.0776034 261.480078,100.480078 C260.077603,101.882552 258.140103,102.75 256,102.75 L8,102.75 C5.85989659,102.75 3.92239659,101.882552 2.51992245,100.480078 C1.1174483,99.0776034 0.25,97.1401034 0.25,95 L0.25,8 C0.25,5.85989659 1.1174483,3.92239659 2.51992245,2.51992245 C3.92239659,1.1174483 5.85989659,0.25 8,0.25 Z" id="矩形" stroke="#E8E8E8" stroke-width="0.5" fill="#FFFFFF"></path>
+                <rect id="矩形" fill="#E8E8E8" x="0" y="40" width="264" height="1"></rect>
+                <path d="M127,55 L240,55 C242.209139,55 244,56.790861 244,59 L244,78 C244,80.209139 242.209139,82 240,82 L127,82 C124.790861,82 123,80.209139 123,78 L123,59 C123,56.790861 124.790861,55 127,55 Z" id="矩形" fill="#FF0057" opacity="0.100000001"></path>
+                <g id="扩大" transform="translate(188.000000, 28.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <circle stroke="#FF0057" cx="40" cy="40" r="39.5"></circle>
+                    <path d="M0,23 L60,23 C64.418278,23 68,26.581722 68,31 L68,50 C68,54.418278 64.418278,58 60,58 L0,58 L0,58 L0,23 Z" id="矩形" fill="#FF0057" mask="url(#mask-2)"></path>
+                    <text id="立即购买" mask="url(#mask-2)" font-family="PingFangSC-Regular, PingFang SC" font-size="14" font-weight="normal" line-spacing="14" fill="#FFFFFF">
+                        <tspan x="6" y="49">立即购买</tspan>
+                    </text>
+                    <path d="M40,0 C62.09139,0 80,17.90861 80,40 C80,62.09139 62.09139,80 40,80 C17.90861,80 0,62.09139 0,40 C0,17.90861 17.90861,0 40,0 Z M40,1 C18.4608948,1 1,18.4608948 1,40 C1,61.5391052 18.4608948,79 40,79 C61.5391052,79 79,61.5391052 79,40 C79,18.4608948 61.5391052,1 40,1 Z" id="椭圆形" fill="#FF0057" fill-rule="nonzero" mask="url(#mask-2)"></path>
+                </g>
+                <text id="保障" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#666666">
+                    <tspan x="14" y="27">保障</tspan>
+                </text>
+                <text id="进店" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#FF0057">
+                    <tspan x="14" y="83">进店</tspan>
+                </text>
+                <text id="7天无理由退货-·-运费险-·-极速退货" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#444444">
+                    <tspan x="46" y="27">7天无理由退货 · 运费险 · 极速退货</tspan>
+                </text>
+                <path d="M30,59 L30,68 L18,68 L18,59 L30,59 Z M29,60 L19,60 L19,67 L29,67 L29,60 Z M31,54 L31,58 L17,58 L17,54 L31,54 Z M30,55 L18,55 L18,57 L30,57 L30,55 Z" id="形状结合" fill="#FF0057" fill-rule="nonzero"></path>
+                <text id="客服" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#666666">
+                    <tspan x="48" y="83">客服</tspan>
+                </text>
+                <text id="购物车" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#666666">
+                    <tspan x="77" y="83">购物车</tspan>
+                </text>
+                <text id="加入购物车" font-family="PingFangSC-Regular, PingFang SC" font-size="10" font-weight="normal" line-spacing="10" fill="#FF0057">
+                    <tspan x="131" y="74">加入购物车</tspan>
+                </text>
+                <path d="M65,54 L64,56.25 L64,67 L62,67 L62,68 L59,68 L59,66 L63,66 L63,56.0377855 L63.461,55 L55,55 C53.3431458,55 52,56.3431458 52,58 L52,66 L56,66 L56,67 L51,67 L51,58 C51,55.790861 52.790861,54 55,54 L65,54 Z M58,57 L58,60 L57,60 L57,57 L58,57 Z M61,57 L61,60 L60,60 L60,57 L61,57 Z" id="形状结合" fill="#666666" fill-rule="nonzero"></path>
+                <path d="M90,68 C90.5522847,68 91,67.5522847 91,67 C91,66.4477153 90.5522847,66 90,66 C89.4477153,66 89,66.4477153 89,67 C89,67.5522847 89.4477153,68 90,68 Z M95.5,68 C96.0522847,68 96.5,67.5522847 96.5,67 C96.5,66.4477153 96.0522847,66 95.5,66 C94.9477153,66 94.5,66.4477153 94.5,67 C94.5,67.5522847 94.9477153,68 95.5,68 Z M88.3299015,65 L86.579,55 L85,55 L85,54 L87.4200985,54 L87.77,56 L99,56 L97.3125,65 L88.3299015,65 Z M96.4815369,64 L97.7945369,57 L87.945,57 L89.17,64 L96.4815369,64 Z" id="形状结合" fill="#666666" fill-rule="nonzero"></path>
+                <path d="M103,43.5" id="路径" stroke="#979797"></path>
+            </g>
+        </g>
+    </g>
+</svg>

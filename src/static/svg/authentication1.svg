@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>authentication1</title>
+    <g id="我的" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="authentication1">
+            <path d="M8,0 L20,0 C24.418278,-1.69980292e-15 28,3.581722 28,8 L28,20 C28,24.418278 24.418278,28 20,28 L8,28 C3.581722,28 -3.47095419e-16,24.418278 0,20 L0,8 C-1.42926142e-15,3.581722 3.581722,-7.65539184e-17 8,0 Z" id="矩形" fill="#EC6593"></path>
+            <path d="M18,8 L21,13 L14,20 L7,13 L10,8 L18,8 Z M15.6464466,11.6464466 L14,13.293 L12.3535534,11.6464466 L11.6464466,12.3535534 L14,14.7071068 L16.3535534,12.3535534 L15.6464466,11.6464466 Z" id="形状结合" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

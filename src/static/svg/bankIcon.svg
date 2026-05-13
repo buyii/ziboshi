@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>银行卡</title>
+    <g id="个人中心" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="收款账户" transform="translate(-48.000000, -128.000000)" fill="#FFFFFF">
+            <g id="银行卡片" transform="translate(24.000000, 104.000000)">
+                <g id="银行卡" transform="translate(24.000000, 24.000000)">
+                    <circle id="椭圆形" opacity="0.25" cx="18" cy="18" r="18"></circle>
+                    <path d="M27,15 L27,24 C27,25.1045695 26.1045695,26 25,26 L11,26 C9.8954305,26 9,25.1045695 9,24 L9,15 L27,15 Z M26,21 L22,21 L21,24 L25,24 L26,21 Z M25,10 C26.1045695,10 27,10.8954305 27,12 L27,14 L9,14 L9,12 C9,10.8954305 9.8954305,10 11,10 L25,10 Z" id="形状结合"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

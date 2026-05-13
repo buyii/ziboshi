@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="24px" viewBox="0 0 72 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>千川全域</title>
+    <g id="首页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页上划" transform="translate(-88.000000, -434.000000)">
+            <g id="千川全域" transform="translate(88.000000, 434.000000)">
+                <rect id="矩形" fill-opacity="0.65" fill="#5300FF" x="0" y="0" width="72" height="24" rx="8"></rect>
+                <text font-family="eryaxindahei" font-size="14" font-weight="normal" fill="#EBEBF2">
+                    <tspan x="7" y="16">千川全域</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

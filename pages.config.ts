@@ -1,0 +1,430 @@
+import { defineUniPages } from '@uni-helper/vite-plugin-uni-pages'
+
+export default defineUniPages({
+  pages: [],
+  globalStyle: {
+    navigationBarTitleText: '星佣宝',
+    navigationBarTextStyle: 'white',
+    navigationStyle: 'custom',
+  },
+  tabBar: {
+    custom: true,
+    height: '0',
+    color: '#999999',
+    selectedColor: '#FF0057',
+    list: [{
+      pagePath: 'pages/home/index',
+    }, {
+      pagePath: 'pages/wisdom/index',
+    }, {
+      pagePath: 'pages/rank/index',
+    }, {
+      pagePath: 'pages/mine/index',
+    }],
+  },
+  subPackages: [
+    {
+      root: 'pageHome',
+      pages: [
+        {
+          path: 'details/index',
+          type: 'page',
+          layout: 'default',
+          name: 'details',
+          style: {
+            navigationBarTitleText: '详情',
+          },
+        },
+        {
+          path: 'detailshare/index',
+          type: 'page',
+          layout: 'default',
+          name: 'detailshare',
+          style: {
+            navigationBarTitleText: '编辑分享内容',
+          },
+        },
+        {
+          path: 'collectInfo/index',
+          type: 'page',
+          layout: 'default',
+          name: 'collectInfo',
+          style: {
+            navigationBarTitleText: '申样信息填写',
+          },
+        },
+        {
+          path: 'applyTraffic/index',
+          type: 'page',
+          layout: 'default',
+          name: 'applyTraffic',
+          style: {
+            navigationBarTitleText: '申请投流',
+          },
+        },
+        {
+          path: 'applySuccess/index',
+          type: 'page',
+          layout: 'default',
+          name: 'applySuccess',
+          style: {
+            navigationBarTitleText: '申样成功',
+          },
+        },
+        {
+          path: 'productRank/index',
+          type: 'page',
+          layout: 'default',
+          name: 'productRank',
+          style: {
+            navigationBarTitleText: '商品榜',
+          },
+        },
+        {
+          path: 'welfare/index',
+          type: 'default',
+          layout: 'default',
+          name: 'welfare',
+          style: {
+            navigationBarTitleText: '低价福利',
+          },
+        },
+        {
+          path: 'traffic/index',
+          type: 'default',
+          layout: 'default',
+          name: 'traffic',
+          style: {
+            navigationBarTitleText: '投流专区',
+          },
+        },
+        {
+          path: 'sampleList/index',
+          type: 'page',
+          layout: 'default',
+          name: 'sampleList',
+          style: {
+            navigationBarTitleText: '申样列表',
+          },
+        },
+        {
+          path: 'sampleDetails/index',
+          type: 'page',
+          layout: 'default',
+          name: 'sampleDetails',
+          style: {
+            navigationBarTitleText: '申样详情',
+          },
+        },
+        {
+          path: 'storeDetails/index',
+          type: 'page',
+          name: 'storeDetails',
+          style: {
+            navigationBarTitleText: '店铺详情',
+          },
+        },
+        {
+          path: 'maintaincar/index',
+          type: 'page',
+          layout: 'page',
+          name: 'maintaincar',
+          style: {
+            navigationBarTitleText: '商品维护',
+          },
+        },
+        {
+          path: 'maintaincarLog/index',
+          type: 'page',
+          layout: 'page',
+          name: 'logList',
+          style: {
+            navigationBarTitleText: '商品维护',
+          },
+        },
+      ],
+    },
+    {
+      root: 'pageAi',
+      pages: [
+        {
+          path: 'findproducts/index',
+          type: 'page',
+          layout: 'default',
+          name: 'findproducts',
+          style: {
+            navigationBarTitleText: '找品申请',
+          },
+        },
+        {
+          path: 'findLog/index',
+          type: 'page',
+          layout: 'default',
+          name: 'findLog',
+          style: {
+            navigationBarTitleText: '找品成功',
+          },
+        },
+        {
+          path: 'seekRecord/index',
+          type: 'page',
+          layout: 'default',
+          name: 'seekRecord',
+          style: {
+            navigationBarTitleText: '找品记录',
+          },
+        },
+        {
+          path: 'selectedCar/index',
+          type: 'page',
+          layout: 'default',
+          name: 'selectedCar',
+          style: {
+            navigationBarTitleText: '我的选品车',
+          },
+        },
+        {
+          path: 'matchingDetails/index',
+          type: 'page',
+          layout: 'default',
+          name: 'matchingDetails',
+          style: {
+            navigationBarTitleText: '匹配详情',
+          },
+        },
+      ],
+    },
+    {
+      root: 'pageRank',
+      pages: [
+        {
+          path: 'searchExperts/index',
+          type: 'page',
+          layout: 'default',
+          name: 'searchexperts',
+          style: {
+            navigationBarTitleText: '搜索',
+          },
+        },
+        {
+          path: 'addressManage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'address',
+          style: {
+            navigationBarTitleText: '地址管理',
+          },
+        },
+        {
+          path: 'addAddress/index',
+          type: 'page',
+          layout: 'default',
+          name: 'addAddress',
+          style: {
+            navigationBarTitleText: '添加地址',
+          },
+        },
+        {
+          path: 'addressSuccess/index',
+          type: 'page',
+          layout: 'default',
+          name: 'addressSuccess',
+          style: {
+            navigationBarTitleText: '地址添加成功',
+          },
+        },
+        {
+          path: 'expertDetails/index',
+          type: 'page',
+          layout: 'default',
+          name: 'expertDetails',
+          style: {
+            navigationBarTitleText: '达人基本信息',
+          },
+        },
+        {
+          path: 'expertManage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'expertManage',
+          style: {
+            navigationBarTitleText: '授权达人',
+          },
+        },
+        {
+          path: 'incomeRecord/index',
+          type: 'page',
+          layout: 'default',
+          name: 'incomeRecord',
+          style: {
+            navigationBarTitleText: '收益记录',
+          },
+        },
+        {
+          path: 'incomeTeamDetails/index',
+          type: 'page',
+          layout: 'default',
+          name: 'incomeTeamDetails',
+          style: {
+            navigationBarTitleText: '收益明细',
+          },
+        },
+        {
+          path: 'incomeUserDetails/index',
+          type: 'page',
+          layout: 'default',
+          name: 'incomeUserDetails',
+          style: {
+            navigationBarTitleText: '收益明细',
+          },
+        },
+      ],
+    },
+    {
+      root: 'pageMine',
+      pages: [
+        {
+          path: 'bankCardManage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'bankCardManage',
+          style: {
+            navigationBarTitleText: '我的账户',
+          },
+        },
+        {
+          path: 'addBankCard/index',
+          type: 'page',
+          layout: 'default',
+          name: 'addBankCard',
+          style: {
+            navigationBarTitleText: '添加银行卡',
+          },
+        },
+        {
+          path: 'myWallet/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myWallet',
+          style: {
+            navigationBarTitleText: '我的钱包',
+          },
+        },
+        {
+          path: 'taking/index',
+          type: 'page',
+          layout: 'default',
+          name: 'taking',
+          style: {
+            navigationBarTitleText: '我的钱包',
+          },
+        },
+        {
+          path: 'extractSuccess/index',
+          type: 'page',
+          layout: 'default',
+          name: 'extractSuccess',
+          style: {
+            navigationBarTitleText: '提现完成',
+          },
+        },
+        {
+          path: 'authManage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'authManage',
+          style: {
+            navigationBarTitleText: '实名认证',
+          },
+        },
+        {
+          path: 'companyAuth/index',
+          type: 'page',
+          layout: 'default',
+          name: 'companyAuth',
+          style: {
+            navigationBarTitleText: '公司认证',
+          },
+        },
+        {
+          path: 'personalAuth/index',
+          type: 'page',
+          layout: 'default',
+          name: 'personalAuth',
+          style: {
+            navigationBarTitleText: '个人认证',
+          },
+        },
+        {
+          path: 'myData/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myData',
+          style: {
+            navigationBarTitleText: '我的数据',
+          },
+        },
+        {
+          path: 'myTeam/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myTeam',
+          style: {
+            navigationBarTitleText: '我的团队',
+          },
+        },
+        {
+          path: 'myteamAdd/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myteamAdd',
+          style: {
+            navigationBarTitleText: '申请开通',
+          },
+        },
+        {
+          path: 'rulePage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'rulePage',
+          style: {
+            navigationBarTitleText: '收益规则',
+          },
+        },
+        {
+          path: 'setupPage/index',
+          type: 'page',
+          layout: 'default',
+          name: 'setupPage',
+          style: {
+            navigationBarTitleText: '设置',
+          },
+        },
+        {
+          path: 'trafficleList/index',
+          type: 'page',
+          layout: 'default',
+          name: 'trafficleList',
+          style: {
+            navigationBarTitleText: '我的投流',
+          },
+        },
+        {
+          path: 'myAccount/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myAccount',
+          style: {
+            navigationBarTitleText: '对公账户信息',
+          },
+        },
+      ],
+    },
+  ],
+  // preloadRule: {
+  //   'pagesA/list/list': {
+  //     network: 'all',
+  //     packages: ['__APP__'],
+  //   },
+  // },
+})
