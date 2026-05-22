@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import { useMessage, useToast } from 'wot-design-uni'
-import SalesVolume from './component/SalesVolume.vue'
+import MyOrder from './component/MyOrder.vue'
 import CellOne from './component/CellOne.vue'
-import CellTwo from './component/CellTwo.vue'
-import FractionPopup from './component/FractionPopup.vue'
 import { getUserInfo } from '@/api/index'
-import { getAgentInfo, getApplyStatus } from '@/api/mine'
+import { getAgentInfo, getUserAmount } from '@/api/mine'
 import { joinAgentTeam } from '@/api/team'
 
 const toast = useToast()
 const message = useMessage('join')
-const applyMessage = useMessage('apply')
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-const applyStatus = computed(() => userStore.applyStatus)
-const fractionPopupRef = ref()
 const joinData = ref<any>({})
-const statusData = ref<any>({})
-const badge = ref<number>(0)
 const loading = ref<boolean>(false)
-const dataTab = ref('1')
+const numData = ref<any>({
+  agentBalance: '0',
+  count: '0',
+  kolServiceBalance: '0',
+})
 
 onShow(() => {
   getUserInfo().then((res) => {
@@ -27,77 +24,28 @@ onShow(() => {
       userStore.setUserInfo(res.data)
     }
   })
-  getApplyStatus().then((res) => {
+  getUserAmount().then((res) => {
     if (res.code === 0) {
-      statusData.value = res.data
-      if (statusData.value) {
-        if (statusData.value.status === '2') {
-          badge.value = 0
-        }
-        else {
-          if (statusData.value.status !== applyStatus.value) {
-            badge.value = 1
-          }
-          else {
-            badge.value = 0
-          }
-        }
-      }
-      else {
-        badge.value = 0
-      }
+      numData.value = res.data
     }
   })
 })
-
-function showFraction() {
-  fractionPopupRef.value.open()
-}
 
 function toWallet() {
   uni.navigateTo({
     url: '/pageMine/myWallet/index',
   })
 }
+
+function toPoints() {
+  uni.navigateTo({
+    url: '/pageMine/myPoints/index',
+  })
+}
 function toTeam() {
-  if (statusData.value.status === '1') {
-    applyMessage.alert({
-      msg: '工作人员将在3个工作日内为您处理',
-      title: '审核中',
-      confirmButtonText: '确 定',
-      confirmButtonProps: {
-        customClass: 'custom-apply',
-      },
-    }).then(() => {
-      badge.value = 0
-      userStore.setApplyStatus(statusData.value.status)
-    })
-    return
-  }
-  if (statusData.value.status === '3') {
-    applyMessage.alert({
-      msg: `拒绝原因 · ${statusData.value.auditRemark}`,
-      title: '拒绝开通团队',
-      confirmButtonText: '确 定',
-      confirmButtonProps: {
-        customClass: 'custom-apply',
-      },
-    }).then(() => {
-      badge.value = 0
-      userStore.setApplyStatus(statusData.value.status)
-    })
-    return
-  }
-  if (userInfo.value.userType === '03') {
-    uni.navigateTo({
-      url: '/pageMine/myTeam/index',
-    })
-  }
-  else {
-    uni.navigateTo({
-      url: '/pageMine/myteamAdd/index',
-    })
-  }
+  uni.navigateTo({
+    url: '/pageMine/myTeam/index',
+  })
 }
 function toAuth() {
   uni.navigateTo({
@@ -137,14 +85,14 @@ function joinTeam() {
     console.log('点击了取消按钮')
   })
 }
-function copyId() {
-  uni.setClipboardData({
-    data: userInfo.value.userCode,
-    success() {
-      console.log('success')
-    },
-  })
-}
+// function copyId() {
+//   uni.setClipboardData({
+//     data: userInfo.value.userCode,
+//     success() {
+//       console.log('success')
+//     },
+//   })
+// }
 
 function scanCcode() {
   uni.scanCode({
@@ -205,10 +153,8 @@ onShareTimeline (() => {
     <view class="banner-wrap">
       <wd-navbar safe-area-inset-top :left-arrow="false" :bordered="false" custom-class="my-navbar">
         <template #title>
-          <view class="code-box">
-            <view class="user-scan">
-              <text class="iconfont icon-scan1" @click="scanCcode" />
-            </view>
+          <view class="mytitle">
+            我的
           </view>
         </template>
       </wd-navbar>
@@ -224,6 +170,15 @@ onShareTimeline (() => {
             <view class="name">
               {{ userInfo.userName }}
             </view>
+            <view class="user-scan">
+              <text class="iconfont icon-scan1" @click="scanCcode" />
+            </view>
+          </view>
+          <view class="user-id">
+            ID · {{ userInfo.userCode }}
+            <!-- <text class="iconfont icon-copy" @click.stop="copyId" /> -->
+          </view>
+          <view class="status-box">
             <view class="user-status">
               <view v-if="userInfo.inAuth === 2 || userInfo.enAuth === 2" class="auth" @click="toAuth">
                 <text>已认证</text>
@@ -235,76 +190,63 @@ onShareTimeline (() => {
                 <text>未认证</text>
               </view>
             </view>
-          </view>
-          <view class="user-id">
-            ID · {{ userInfo.userCode }}
-            <text class="iconfont icon-copy" @click.stop="copyId" />
-          </view>
-          <!-- <view class="user-status">
-            <view v-if="userInfo.inAuth || userInfo.enAuth" class="auth" @click="toAuth">
-              <text class="iconfont icon-authentication" />
-              <text>已认证</text>
+            <view class="user-status1">
+              <view v-if="userInfo.amountType === 2" class="auth">
+                <text class="iconfont icon-grade" />
+                <text>代理</text>
+              </view>
+              <view v-else class="notauth">
+                <text class="iconfont icon-grade" />
+                <text>会员</text>
+              </view>
             </view>
-            <view v-else class="notauth" @click="toAuth">
-              <text>未认证</text>
-            </view>
-            <view class="score">
-              <text>星佣分</text>
-              <text>{{ userInfo.score }}</text>
-              <text class="iconfont icon-question" @click="showFraction" />
-            </view>
-          </view> -->
-        </view>
-        <view class="score" @click="showFraction">
-          <view class="score-num">
-            <DigitBold :value="userInfo.score" color="#8A0A28" int-size="56rpx" decimal-size="42rpx" />
-          </view>
-          <view class="score-desc">
-            星佣分
           </view>
         </view>
       </view>
     </view>
     <view class="content">
-      <SalesVolume v-model="dataTab" :user-info="userInfo" />
       <view class="team-box">
-        <view class="team-item" @click="toWallet">
+        <view v-if="userInfo.amountType === 2" class="team-item" @click="toWallet">
           <image src="../../static/svg/wallet.svg" />
           <view>
             <view class="team-title">
-              我的钱包
+              我的收益
             </view>
             <view class="team-desc">
-              去查看
+              {{ numData.agentBalance }}元
+              <text class="iconfont icon-into" />
+            </view>
+          </view>
+        </view>
+        <view v-else class="team-item" @click="toPoints">
+          <image src="../../static/svg/points.svg" />
+          <view>
+            <view class="team-title">
+              我的积分
+            </view>
+            <view class="team-desc">
+              {{ numData.kolServiceBalance }}
               <text class="iconfont icon-into" />
             </view>
           </view>
         </view>
         <view class="team-item" @click="toTeam">
-          <image v-if="userInfo.userType === '03'" src="../../static/svg/team.svg" />
-          <image v-else src="../../static/svg/teamAsh.svg" />
+          <image src="../../static/svg/team.svg" />
           <view>
             <view class="team-title">
-              <wd-badge :model-value="badge">
-                我的团队
-              </wd-badge>
+              我的团队
             </view>
-            <view v-if="userInfo.userType === '03'" class="team-desc">
-              去查看
+            <view class="team-desc">
+              {{ numData.count }}人
               <text class="iconfont icon-into" />
-            </view>
-            <view v-else class="team-desc">
-              {{ statusData.status === '1' ? '审核中' : '未开通' }}
-              <wd-icon name="help" size="24rpx" color="#BABABA" />
             </view>
           </view>
         </view>
       </view>
-      <CellOne />
-      <CellTwo />
+      <MyOrder />
+      <CellOne :amount-type="userInfo.amountType" />
     </view>
     <view class="isbottom" />
-    <FractionPopup ref="fractionPopupRef" :user-info="userInfo" />
     <wd-message-box selector="join" custom-class="jonmsg">
       <view class="join-box">
         <img class="join-img" :src="joinData.agentAvatar" alt="">
@@ -327,16 +269,13 @@ onShareTimeline (() => {
   .isbottom{
     height: calc(var(--wot-tabbar-height) + env(safe-area-inset-bottom) + 16rpx);
   }
-  .code-box{
-    padding-left: 48rpx;
-    display: flex;
-    gap: 16rpx;
-    .user-scan{
-      text{
-        font-size: 32rpx;
-        color: #000000;
-      }
-    }
+  .mytitle{
+    font-weight: 500;
+    font-size: 64rpx;
+    color: #000000;
+    line-height: 64rpx;
+    text-align: left;
+    padding-left: 32rpx;
   }
   :deep(){
     .my-navbar{
@@ -377,7 +316,7 @@ onShareTimeline (() => {
       .custom-apply{
         width: 220rpx;
         height: 80rpx;
-        background: #FF0057 !important;
+        background: #089D39 !important;
         border-radius: 16rpx 40rpx 40rpx 16rpx !important;
       }
     }
@@ -411,7 +350,7 @@ onShareTimeline (() => {
       .user-name{
         display: flex;
         align-items: center;
-
+        justify-content: space-between;
         .name{
           font-family: PingFangSC, PingFang SC;
           font-weight: 500;
@@ -419,6 +358,9 @@ onShareTimeline (() => {
           color: #000000;
           line-height: 40rpx;
         }
+        // .user-scan{
+
+        // }
       }
       .user-id{
         font-family: PingFangSC, PingFang SC;
@@ -433,19 +375,23 @@ onShareTimeline (() => {
           margin-left: 16rpx;
         }
       }
+      .status-box{
+        display: flex;
+        gap: 10rpx;
+        align-items: center;
+        margin-top: 16rpx;
+      }
       .user-status{
         display: flex;
         align-items: center;
-        gap: 20rpx;
-        margin-left: 20rpx;
         gap: 16rpx;
         .auth{
           display: flex;
           align-items: center;
           justify-content: center;
           width: 96rpx;
-          height: 44rpx;
-          background: #FF2457;
+          height: 48rpx;
+          background: #089D39;
           border-radius: 16rpx;
           text{
             font-family: PingFangSC, PingFang SC;
@@ -461,8 +407,8 @@ onShareTimeline (() => {
           align-items: center;
           justify-content: center;
           width: 96rpx;
-          height: 44rpx;
-          background: rgba(255, 0, 87, 0.25);
+          height: 48rpx;
+          background: rgba(131, 164, 142, 0.25);
           border-radius: 16rpx;
           text{
             font-family: PingFangSC, PingFang SC;
@@ -471,6 +417,50 @@ onShareTimeline (() => {
             color: #FFFFFF;
             line-height: 24rpx;
             font-style: normal;
+          }
+        }
+      }
+      .user-status1{
+        .auth{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6rpx;
+          width: 128rpx;
+          height: 48rpx;
+          background: rgba(255, 108, 32, 0.15);
+          border-radius: 16rpx;
+          text{
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 500;
+            font-size: 24rpx;
+            color: #FF6C20;
+            line-height: 24rpx;
+            font-style: normal;
+          }
+          .iconfont{
+            font-size: 20rpx;
+          }
+        }
+        .notauth{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6rpx;
+          width: 128rpx;
+          height: 48rpx;
+          background: rgba(8, 157, 57, 0.25);
+          border-radius: 16rpx;
+          text{
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 500;
+            font-size: 24rpx;
+            color: #089D39;
+            line-height: 24rpx;
+            font-style: normal;
+          }
+          .iconfont{
+            font-size: 20rpx;
           }
         }
       }
@@ -561,7 +551,7 @@ onShareTimeline (() => {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>
 

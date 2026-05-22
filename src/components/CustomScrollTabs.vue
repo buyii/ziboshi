@@ -109,7 +109,7 @@ export default {
     width: 60rpx;
     text-align: right;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 }
 .itembox{
@@ -133,7 +133,7 @@ export default {
       text-align: center;
     }
     .active{
-      color: #FF0057;
+      color: #089D39;
     }
   }
 }

@@ -62,13 +62,13 @@ export default {
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 32rpx;
-        color: #FF0057;
+        color: #089D39;
         font-style: normal;
       }
     }
 
     .wd-tabs__line{
-      background: #FF0057;
+      background: #089D39;
       height: 16rpx;
       opacity: 0.15;
       border-radius: 200rpx;
@@ -92,7 +92,7 @@ export default {
   }
   .active{
     .tabtext{
-      color: #FF0057;
+      color: #089D39;
     }
   }
 }

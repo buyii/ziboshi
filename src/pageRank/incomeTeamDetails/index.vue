@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import TeamItem from './component/TeamItem.vue'
+
 import { useLayoutStore } from '@/stores'
-import { getSaleProductList } from '@/api/mine'
+import { getMyTeamMemberOrderList } from '@/api/team'
 
 interface DateRange {
   startDate: string
@@ -13,11 +15,28 @@ interface Pagination {
   pageSize: number
   total: number
 }
-const userStore = useUserStore()
-const userInfo = computed(() => userStore.userInfo)
+const tabs = [
+  {
+    title: '全部',
+    key: 'all',
+  },
+  {
+    title: '待收货',
+    key: '1',
+  },
+  {
+    title: '已收货',
+    key: '2',
+  },
+  {
+    title: '退货退款',
+    key: '3',
+  },
+]
+
+const tabValue = ref<string>('all')
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const userId = ref('')
-const isTeam = ref('')
 const layoutStore = useLayoutStore()
 const state = ref()
 const productName = ref('')
@@ -34,7 +53,7 @@ const pagination = ref<Pagination>({
   total: 0,
 })
 const statusBarHeight = computed(() => {
-  const h = 198
+  const h = 300
   const num = uni.upx2px(h)
   return layoutStore.layoutStore.statusBarHeight + num
 })
@@ -47,6 +66,11 @@ function showCalendar() {
   myCalendarRef.value.onShow()
 }
 
+function tabClick() {
+  pagination.value.pageNum = 1
+  getDataList()
+}
+
 function changeCalendar(value: any) {
   pagination.value.pageNum = 1
   dataList.value = []
@@ -57,17 +81,32 @@ function changeCalendar(value: any) {
   }
   getDataList()
 }
-function getList1() {
+function scrolltolower() {
+  if (pagination.value.pageNum * pagination.value.pageSize >= pagination.value.total) {
+    state.value = 'finished'
+    return
+  }
+  state.value = 'loading'
+  pagination.value.pageNum++
+  getDataList()
+}
+function loadmore() {
+  state.value = 'loading'
+  getDataList()
+}
+
+function getDataList() {
   const params = {
     startTime: dateRange.value.startDate,
     endTime: dateRange.value.endDate,
-    userId: userId.value,
+    userId: userId.value || '',
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
     productName: productName.value,
-    agentUserId: userInfo.value?.userId,
+    status2: tabValue.value === 'all' ? '' : tabValue.value,
+    amountType: 2,
   }
-  getSaleProductList({ ...params }).then((res) => {
+  getMyTeamMemberOrderList({ ...params }).then((res) => {
     if (res.code === 0) {
       if (pagination.value.pageNum === 1) {
         dataList.value = [...res.rows]
@@ -85,31 +124,12 @@ function getList1() {
     state.value = 'error'
   })
 }
-function scrolltolower() {
-  if (pagination.value.pageNum * pagination.value.pageSize >= pagination.value.total) {
-    state.value = 'finished'
-    return
-  }
-  state.value = 'loading'
-  pagination.value.pageNum++
-  getDataList()
-}
-function loadmore() {
-  state.value = 'loading'
-  getDataList()
-}
-
-function getDataList() {
-  getList1()
-}
 function search() {
   pagination.value.pageNum = 1
   getDataList()
 }
 onLoad((options) => {
-  console.log(options)
   userId.value = options?.userId
-  isTeam.value = options?.isTeam
   const month = getCurrentMonth()
   // 获取月份有多少天
   const days = getDaysInMonth(month)
@@ -128,11 +148,13 @@ onLoad((options) => {
 
 <template>
   <view class="page-top">
-    <wd-navbar title="收益明细" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
+    <wd-navbar title="收益记录" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
     <view class="search-box">
       <MySearch v-model="productName" @search="search" @clear="search" />
-      <!-- <wd-search v-model="productName" hide-cancel custom-input-class="inputClass" placeholder-class="placeholderClass" placeholder="请搜索" @search="search" /> -->
       <text class="iconfont icon-calendar myicon" @click="showCalendar" />
+    </view>
+    <view class="tab-box">
+      <LineTabs v-model="tabValue" :tabs="tabs" @change="tabClick" />
     </view>
   </view>
   <MyScrollView :top="`${statusBarHeight || 0}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
@@ -149,14 +171,12 @@ onLoad((options) => {
         </view>
         <template v-if="dataList.length > 0">
           <template v-for="(item, i) in dataList" :key="i">
-            <!-- <RecordsDetails v-if="type === 'user'" :item="item" />
-            <RecordsMonth v-if="type === 'team'" :item="item" /> -->
-            <RecordsMonthTeam :item="item" :user-id="userId" :is-team="isTeam" :start-time="dateRange.startDate" :end-time="dateRange.endDate" />
+            <TeamItem :item="item" :user-id="userId" :start-time="dateRange.startDate" :end-time="dateRange.endDate" />
           </template>
         </template>
         <wd-status-tip v-else tip="暂无数据~">
           <template #image>
-            <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData.png`" />
+            <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
           </template>
         </wd-status-tip>
       </view>

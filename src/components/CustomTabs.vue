@@ -52,11 +52,11 @@ function tabClick(item: any) {
     }
   }
   .active{
-    color: #FF0057;
+    color: #089D39;
     font-size: 32rpx;
   }
   .tabiconright{
-    color: #FF0057;
+    color: #089D39;
     font-size: 32rpx;
   }
 }

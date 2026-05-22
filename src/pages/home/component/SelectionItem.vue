@@ -85,7 +85,7 @@ export default {
       font-style: normal;
     }
     .active{
-      background: #FF0057;
+      background: #089D39;
       color: #fff;
     }
   }

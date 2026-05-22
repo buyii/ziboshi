@@ -1,64 +1,47 @@
 <script setup lang="ts">
-import { getMyCarCount } from '@/api/pickCar'
-import { getUnViewCount } from '@/api/productfind'
-import { getConfirmCount } from '@/api/sample'
-
-const myCar = ref(0)
-const vewCount = ref(0)
-const confirmCount = ref(0)
+interface Props {
+  amountType: any
+}
+const props = withDefaults(defineProps<Props>(), {})
 
 const list = ref([
   {
-    title: '我的选品车',
-    icon: 'icon-selectedUser',
-    url: '/pageAi/selectedCar/index',
-    valueKey: ref(myCar),
+    title: '代理申请',
+    icon: 'icon-grade',
+    url: '/pageMine/myteamAdd/index',
+    show: props.amountType === 1,
   },
   {
-    title: '授权达人',
-    icon: 'icon-expertUser',
-    url: '/pageRank/expertManage/index',
+    title: '体验装申请',
+    icon: 'icon-cost',
+    url: '/pageMine/myteamAdd/index',
+    show: props.amountType === 2,
   },
   {
-    title: '申样列表',
+    title: '我的地址',
+    icon: 'icon-addressUser',
+    url: '/pageRank/addressManage/index?type=manage',
+    show: true,
+  },
+  {
+    title: '银行卡管理',
+    icon: 'icon-bankUser',
+    url: '/pageMine/bankCardManage/index',
+    show: true,
+  },
+  {
+    title: '认证',
     icon: 'icon-sampleUser',
-    url: '/pageHome/sampleList/index',
-    valueKey: ref(confirmCount),
+    url: '/pageMine/authManage/index',
+    show: true,
   },
   {
-    title: '找品记录',
-    icon: 'icon-categoryUser',
-    url: '/pageAi/seekRecord/index',
-    valueKey: ref(vewCount),
-  },
-  {
-    title: '我的投流',
-    icon: 'icon-subsidy',
-    url: '/pageMine/trafficleList/index',
+    title: '设置',
+    icon: 'icon-setUser',
+    url: '/pageMine/setupPage/index',
+    show: true,
   },
 ])
-
-function getDataList() {
-  getMyCarCount({}).then((res) => {
-    if (res.code === 0) {
-      myCar.value = res.data
-    }
-  })
-  getUnViewCount({}).then((res) => {
-    if (res.code === 0) {
-      vewCount.value = res.data
-    }
-  })
-  getConfirmCount({}).then((res) => {
-    if (res.code === 0) {
-      confirmCount.value = res.data
-    }
-  })
-}
-
-onShow(() => {
-  getDataList()
-})
 </script>
 
 <script lang="ts">
@@ -73,10 +56,7 @@ export default {
 
 <template>
   <view class="cell-wrap">
-    <wd-cell v-for="(item, i) in list" :key="i" :title="item.title" :to="item.url" :value="item.valueKey" is-link>
-      <view v-if="item.valueKey" class="custom-value">
-        {{ item.valueKey }}
-      </view>
+    <wd-cell v-for="(item, i) in list.filter(e => e.show)" :key="i" :title="item.title" :to="item.url" is-link>
       <template #icon>
         <text class="iconfont" :class="item.icon" />
       </template>

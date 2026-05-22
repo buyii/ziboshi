@@ -90,21 +90,21 @@ function tabClick(item: any) {
   .activetab{
     .tabtext{
       font-weight: 600;
-      color: #FF0057;
+      color: #089D39;
     }
     .iconRise{
       .tabicon1{
-        color: #FF0057;
+        color: #089D39;
       }
     }
     .iconFall{
       .tabicon2{
-        color: #FF0057;
+        color: #089D39;
       }
     }
   }
   .tabiconright{
-    color: #FF0057;
+    color: #089D39;
     font-size: 32rpx;
   }
 }

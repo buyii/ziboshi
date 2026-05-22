@@ -53,7 +53,7 @@ onLoad((options) => {
     </view>
     <wd-status-tip v-if="list.length <= 0" tip="暂无数据~">
       <template #image>
-        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData.png`" />
+        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
       </template>
     </wd-status-tip>
   </view>
@@ -88,7 +88,7 @@ onLoad((options) => {
     }
     :deep(){
       .wd-button{
-        background: #FF0057 !important;
+        background: #089D39 !important;
         border-radius: 24rpx!important;
         font-size: 24rpx !important;
         font-weight: 500 !important;
@@ -179,7 +179,7 @@ onLoad((options) => {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 28rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 28rpx;
     text-align: center;
     font-style: normal;

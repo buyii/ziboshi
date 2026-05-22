@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Comprehensive, ProductItem } from '@/types/common'
+import ProductHome from './component/ProductHome.vue'
+import type { ProductItem } from '@/types/common'
 import { getProductList } from '@/api/product'
-import { getCategoryList } from '@/api/common'
 import { getAgentInfo } from '@/api/mine'
 import { login } from '@/api/index'
 
@@ -21,39 +21,15 @@ const state = ref()
 const joinData = ref<any>({})
 
 const productList = ref<ProductItem[]>([])
-const categoryList = ref<any[]>([])
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-const comprehensive = ref<Comprehensive>(
-  {
-    maxPrice: '', // 最大价格
-    minPrice: '', // 最小价格
-    maxCosRatio: '', // 最大佣金率
-    minCosRatio: '', // 最小佣金率
-    maxKolServiceRatio: '', // 最大每单补率
-    minKolServiceRatio: '', // 最小每单补率
-    maxSales: '', // 最大销量
-    minSales: '', // 最小销量
-  },
-)
-const orderField = ref<number>(0)
-const productName = ref<string>('')
-const categoryId = ref<string>('0')
-const sortType = ref<0 | 1 | 2>(0)
+
 function getdata() {
   if (pagination.value.pageNum === 1) {
     nextTick(() => {
     })
   }
   const params = {
-    pageNum: pagination.value.pageNum,
-    pageSize: pagination.value.pageSize,
-    orderField: orderField.value,
-    sortType: sortType.value,
-    productName: productName.value,
-    categoryId: categoryId.value === '0' ? '' : categoryId.value,
-    source: 1,
-    ...comprehensive.value,
   }
   getProductList(params).then((res) => {
     if (res.code === 0) {
@@ -74,14 +50,6 @@ function getdata() {
   }).catch(() => {
     uni.stopPullDownRefresh()
     state.value = 'error'
-  })
-}
-
-function getCategory() {
-  getCategoryList().then((res) => {
-    if (res.code === 0) {
-      categoryList.value = res.data
-    }
   })
 }
 
@@ -141,7 +109,6 @@ onLoad((options) => {
     getAgent(scene.value)
   }
   getdata()
-  getCategory()
 })
 </script>
 
@@ -156,7 +123,9 @@ onLoad((options) => {
         查看<wd-icon name="arrow-right" color="#042A10" />
       </wd-button>
     </view>
-    <ProductCard :product-list="productList" />
+    <view v-for="item in productList" :key="item.productId" class="produc-list">
+      <ProductHome :item-data="item" />
+    </view>
   </view>
 </template>
 
@@ -197,17 +166,8 @@ onLoad((options) => {
       }
     }
   }
-  :deep(){
-    .wd-divider{
-      text-align: center;
-      justify-content: center;
-      &::before{
-        display: none;
-      }
-      &::after{
-        display: none;
-      }
-    }
+  .produc-list{
+    margin-top: 32rpx;
   }
 }
 </style>

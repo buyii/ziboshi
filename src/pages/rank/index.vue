@@ -167,7 +167,7 @@ onLoad(() => {
     <GoodsCard v-if="productList.length > 0" :product-list="productList" />
     <wd-status-tip v-else tip="暂无数据~">
       <template #image>
-        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData.png`" />
+        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
       </template>
     </wd-status-tip>
   </view>

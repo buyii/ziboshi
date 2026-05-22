@@ -54,7 +54,7 @@ function handleOpenPrivacyContract() {
       </view>
     </view>
     <view class="xieyi-warp">
-      <wd-checkbox v-model="checkbox" shape="square" checked-color="#FF0057" />
+      <wd-checkbox v-model="checkbox" shape="square" checked-color="#089D39" />
       <view class="xieyi-box" @click="handleOpenPrivacyContract">
         <text class="iconfont icon-agreement" />
         <text>《星佣宝小程序隐私保护指引》</text>
@@ -115,13 +115,13 @@ function handleOpenPrivacyContract() {
   font-family: PingFangSC, PingFang SC;
   font-weight: 500;
   font-size: 28rpx;
-  color: #FF0057;
+  color: #089D39;
   line-height: 28rpx;
   font-style: normal;
   .iconfont{
      font-weight: 500;
     font-size: 28rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 28rpx;
     font-style: normal;
   }
@@ -132,7 +132,7 @@ function handleOpenPrivacyContract() {
     .btn1{
       height: 88rpx !important;
       margin: 0 80rpx;
-      background: #FF0057 !important;
+      background: #089D39 !important;
       .wd-button__text{
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;

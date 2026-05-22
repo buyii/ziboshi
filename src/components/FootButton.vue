@@ -60,7 +60,7 @@ export default {
     .wd-button{
       flex: 1;
       height: 88rpx !important;
-      background: #FF0057 !important;
+      background: #089D39 !important;
       border-radius: 8rpx 32rpx 8rpx 32rpx !important;
       font-size: 32rpx !important;
       font-weight: 500 !important;
@@ -86,11 +86,11 @@ export default {
 .isplain{
   :deep(.wd-button){
     background: #fff !important;
-    border: 1px solid #FF0057 !important;
-    color: #FF0057 !important;
+    border: 1px solid #089D39 !important;
+    color: #089D39 !important;
   }
   .iconfont{
-    color: #FF0057;
+    color: #089D39;
     font-size: 32rpx;
     line-height: 32rpx;
     margin-right: 16rpx;

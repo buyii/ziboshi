@@ -11,11 +11,9 @@ export default defineUniPages({
     custom: true,
     height: '0',
     color: '#999999',
-    selectedColor: '#FF0057',
+    selectedColor: '#089D39',
     list: [{
       pagePath: 'pages/home/index',
-    }, {
-      pagePath: 'pages/wisdom/index',
     }, {
       pagePath: 'pages/rank/index',
     }, {
@@ -36,30 +34,12 @@ export default defineUniPages({
           },
         },
         {
-          path: 'detailshare/index',
+          path: 'payment/index',
           type: 'page',
           layout: 'default',
-          name: 'detailshare',
+          name: 'payment',
           style: {
-            navigationBarTitleText: '编辑分享内容',
-          },
-        },
-        {
-          path: 'collectInfo/index',
-          type: 'page',
-          layout: 'default',
-          name: 'collectInfo',
-          style: {
-            navigationBarTitleText: '申样信息填写',
-          },
-        },
-        {
-          path: 'applyTraffic/index',
-          type: 'page',
-          layout: 'default',
-          name: 'applyTraffic',
-          style: {
-            navigationBarTitleText: '申请投流',
+            navigationBarTitleText: '支付结算',
           },
         },
         {
@@ -69,59 +49,6 @@ export default defineUniPages({
           name: 'applySuccess',
           style: {
             navigationBarTitleText: '申样成功',
-          },
-        },
-        {
-          path: 'productRank/index',
-          type: 'page',
-          layout: 'default',
-          name: 'productRank',
-          style: {
-            navigationBarTitleText: '商品榜',
-          },
-        },
-        {
-          path: 'welfare/index',
-          type: 'default',
-          layout: 'default',
-          name: 'welfare',
-          style: {
-            navigationBarTitleText: '低价福利',
-          },
-        },
-        {
-          path: 'traffic/index',
-          type: 'default',
-          layout: 'default',
-          name: 'traffic',
-          style: {
-            navigationBarTitleText: '投流专区',
-          },
-        },
-        {
-          path: 'sampleList/index',
-          type: 'page',
-          layout: 'default',
-          name: 'sampleList',
-          style: {
-            navigationBarTitleText: '申样列表',
-          },
-        },
-        {
-          path: 'sampleDetails/index',
-          type: 'page',
-          layout: 'default',
-          name: 'sampleDetails',
-          style: {
-            navigationBarTitleText: '申样详情',
-          },
-        },
-        {
-          path: 'storeDetails/index',
-          type: 'page',
-          name: 'storeDetails',
-          style: {
-            navigationBarTitleText: '店铺详情',
           },
         },
         {
@@ -145,67 +72,8 @@ export default defineUniPages({
       ],
     },
     {
-      root: 'pageAi',
-      pages: [
-        {
-          path: 'findproducts/index',
-          type: 'page',
-          layout: 'default',
-          name: 'findproducts',
-          style: {
-            navigationBarTitleText: '找品申请',
-          },
-        },
-        {
-          path: 'findLog/index',
-          type: 'page',
-          layout: 'default',
-          name: 'findLog',
-          style: {
-            navigationBarTitleText: '找品成功',
-          },
-        },
-        {
-          path: 'seekRecord/index',
-          type: 'page',
-          layout: 'default',
-          name: 'seekRecord',
-          style: {
-            navigationBarTitleText: '找品记录',
-          },
-        },
-        {
-          path: 'selectedCar/index',
-          type: 'page',
-          layout: 'default',
-          name: 'selectedCar',
-          style: {
-            navigationBarTitleText: '我的选品车',
-          },
-        },
-        {
-          path: 'matchingDetails/index',
-          type: 'page',
-          layout: 'default',
-          name: 'matchingDetails',
-          style: {
-            navigationBarTitleText: '匹配详情',
-          },
-        },
-      ],
-    },
-    {
       root: 'pageRank',
       pages: [
-        {
-          path: 'searchExperts/index',
-          type: 'page',
-          layout: 'default',
-          name: 'searchexperts',
-          style: {
-            navigationBarTitleText: '搜索',
-          },
-        },
         {
           path: 'addressManage/index',
           type: 'page',
@@ -234,33 +102,6 @@ export default defineUniPages({
           },
         },
         {
-          path: 'expertDetails/index',
-          type: 'page',
-          layout: 'default',
-          name: 'expertDetails',
-          style: {
-            navigationBarTitleText: '达人基本信息',
-          },
-        },
-        {
-          path: 'expertManage/index',
-          type: 'page',
-          layout: 'default',
-          name: 'expertManage',
-          style: {
-            navigationBarTitleText: '授权达人',
-          },
-        },
-        {
-          path: 'incomeRecord/index',
-          type: 'page',
-          layout: 'default',
-          name: 'incomeRecord',
-          style: {
-            navigationBarTitleText: '收益记录',
-          },
-        },
-        {
           path: 'incomeTeamDetails/index',
           type: 'page',
           layout: 'default',
@@ -270,12 +111,21 @@ export default defineUniPages({
           },
         },
         {
-          path: 'incomeUserDetails/index',
+          path: 'pointsDetails/index',
           type: 'page',
           layout: 'default',
-          name: 'incomeUserDetails',
+          name: 'pointsDetails',
           style: {
-            navigationBarTitleText: '收益明细',
+            navigationBarTitleText: '收益记录',
+          },
+        },
+        {
+          path: 'pointsRedemption/index',
+          type: 'page',
+          layout: 'default',
+          name: 'pointsRedemption',
+          style: {
+            navigationBarTitleText: '兑换记录',
           },
         },
       ],
@@ -283,6 +133,24 @@ export default defineUniPages({
     {
       root: 'pageMine',
       pages: [
+        {
+          path: 'orderList/index',
+          type: 'page',
+          layout: 'default',
+          name: 'orderList',
+          style: {
+            navigationBarTitleText: '我的订单',
+          },
+        },
+        {
+          path: 'orderRefund/index',
+          type: 'page',
+          layout: 'default',
+          name: 'orderRefund',
+          style: {
+            navigationBarTitleText: '申请退款',
+          },
+        },
         {
           path: 'bankCardManage/index',
           type: 'page',
@@ -307,7 +175,16 @@ export default defineUniPages({
           layout: 'default',
           name: 'myWallet',
           style: {
-            navigationBarTitleText: '我的钱包',
+            navigationBarTitleText: '我的收益',
+          },
+        },
+        {
+          path: 'myPoints/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myPoints',
+          style: {
+            navigationBarTitleText: '我的积分',
           },
         },
         {
@@ -356,15 +233,6 @@ export default defineUniPages({
           },
         },
         {
-          path: 'myData/index',
-          type: 'page',
-          layout: 'default',
-          name: 'myData',
-          style: {
-            navigationBarTitleText: '我的数据',
-          },
-        },
-        {
           path: 'myTeam/index',
           type: 'page',
           layout: 'default',
@@ -383,30 +251,12 @@ export default defineUniPages({
           },
         },
         {
-          path: 'rulePage/index',
-          type: 'page',
-          layout: 'default',
-          name: 'rulePage',
-          style: {
-            navigationBarTitleText: '收益规则',
-          },
-        },
-        {
           path: 'setupPage/index',
           type: 'page',
           layout: 'default',
           name: 'setupPage',
           style: {
             navigationBarTitleText: '设置',
-          },
-        },
-        {
-          path: 'trafficleList/index',
-          type: 'page',
-          layout: 'default',
-          name: 'trafficleList',
-          style: {
-            navigationBarTitleText: '我的投流',
           },
         },
         {

@@ -10,68 +10,72 @@ defineOptions({
 const props = withDefaults(defineProps<Props>(), {})
 
 interface Props {
-  dateRange: any
   datasList: any[]
 }
 
-function maskedBankNumber(cnum: any) {
-  const num = cnum || ''
-  return num.slice(-4)
+// 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
+const statusMap: { [key: number]: string } = {
+  1: '待支付',
+  2: '待发货',
+  3: '交易关闭',
+  4: '待收货',
+  5: '已收货',
+  7: '待评价',
+  8: '退款中',
+  9: '退款完成',
 }
 </script>
 
 <template>
   <view class="records-wrap">
-    <view class="records-time">
-      <view class="top-sticky">
-        <view class="month">
-          {{ props.dateRange.showStartDate }}
+    <view v-for="item in props.datasList" :key="item.id" class="revenue-item">
+      <view class="item-top">
+        <view class="bianhao">
+          订单编号{{ item.orderId }}
         </view>
-        <text class="iconfont icon-rotate" />
-        <view class="month">
-          {{ props.dateRange.showEndDate }}
+        <view class="revenue-num">
+          <view>+{{ item.focAgentFee }}</view>
         </view>
       </view>
-    </view>
-    <view class="item-box">
-      <view v-for="item in props.datasList" :key="item.id" class="month-item">
-        <view class="item-left">
-          <view>{{ item.applyTime }}</view>
-          <view>{{ item.applyDay }}</view>
-        </view>
-        <view class="line" />
-        <view class="item-right">
-          <view class="right1">
-            <view class="tight-text">
-              <view>提现至</view>
-              <view>
-                <text>{{ item.bankName }}</text>
-                <text>●●●●</text>
-                <text> {{ maskedBankNumber(item.cardNumber) }}</text>
-              </view>
-            </view>
-            <view class="right-amount">
-              <DigitBold v-if="item.status === '1' || item.status === '3' || item.status === '5'" :value="item.amount" int-size="32rpx" decimal-size="24rpx" color="#444444" />
-              <DigitBold v-if="item.status === '2' || item.status === '4'" :value="item.amount" int-size="32rpx" decimal-size="24rpx" color="#FF0057" />
-              <view v-if="item.status === '1'" class="status">
-                申请中
-              </view>
-              <view v-if="item.status === '2'" class="status">
-                审核通过
-              </view>
-              <view v-if="item.status === '3'" class="status">
-                审核驳回
-              </view>
-              <view v-if="item.status === '4'" class="status">
-                交易成功
-              </view>
-              <view v-if="item.status === '5'" class="status">
-                交易失败
-              </view>
-            </view>
+      <view class="item-user">
+        <view class="user-box">
+          <img class="user-img" :src="item.avatar" alt="">
+          <view class="user-name">
+            {{ item.userName }}
           </view>
-          <view v-if="item.remark" class="remarks">
-            {{ item.remark }}
+        </view>
+        <view
+          v-if="item.status === 2" class="daishou"
+          :class="{
+            'status-ing': item.status === 1,
+            'status-success': item.status === 2,
+            'status-apply': item.status === 4,
+            'status-refuse': item.status === 3,
+            'status-queren': item.status === 5,
+            'status-daipingjia': item.status === 7,
+            'status-tuikuan': item.status === 8 || item.status === 9,
+          }"
+        >
+          {{ statusMap[item.status] }}
+        </view>
+      </view>
+      <view class="item-content">
+        <img class="item-img" :src="item.productImg" alt="">
+        <view class="item-desc">
+          <view class="item-name">
+            <wd-text :text="item.productName" color="#000000" :lines="2" size="28rpx" />
+          </view>
+          <view class="item-time">
+            <text class="iconfont icon-time icon" />
+            {{ item.paySuccessTime }}
+          </view>
+        </view>
+        <view class="item-num">
+          <view class="num">
+            {{ item.itemNum }}
+          </view>
+          <view class="unt">
+            数量
           </view>
         </view>
       </view>
@@ -81,130 +85,128 @@ function maskedBankNumber(cnum: any) {
 
 <style lang="scss" scoped>
 .records-wrap{
-  .records-time{
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #f8f8f8;
-    margin-bottom: 24rpx;
-    .top-sticky{
-      padding: 0 0 24rpx 0;
-      position: sticky;
-      top: 0;
-      background-color: #f8f8f8;
-      z-index: 1; /* 确保层级足够高 */
+  .revenue-item{
+    background: #FFFFFF;
+    border-radius: 16rpx;
+    padding: 32rpx 28rpx;
+    margin-bottom: 16rpx;
+    .item-top{
       display: flex;
       align-items: center;
-    }
-    .icon-rotate{
-      color: #444444;
-      font-size: 16rpx;
-      margin: 0 16rpx;
-    }
-    .month{
-      display: flex;
       justify-content: space-between;
-      color: #444444;
-      font-size: 28rpx;
-    }
-  }
-  .item-box{
-    border-radius: 16rpx;
-    overflow: hidden;
-  }
-  .month-item{
-    display: flex;
-    align-items: center;
-    // min-height: 144rpx;
-    // padding: 38rpx 32rpx;
-    background-color: #ffffff;
-    .item-left{
-      padding: 38rpx 36rpx 38rpx 32rpx;
-      view:nth-child(1){
-        font-family: HelveticaNeue;
-        font-size: 28rpx;
-        color: #111111;
-        line-height: 28rpx;
-        font-style: normal;
-      }
-      view:nth-child(2){
-        font-family: HelveticaNeue;
-        font-size: 24rpx;
-        color: #999999;
-        line-height: 24rpx;
-        font-style: normal;
-        margin-top: 16rpx;
-      }
-    }
-    .line{
-      width: 4rpx;
-      background-color: #EEEEEE;
-      align-self: stretch;
-    }
-    .item-right{
-      flex: 1;
-      padding: 38rpx 32rpx 28rpx 28rpx;
-      .right1{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .remarks{
-        border-radius: 8rpx;
-        border: 1rpx solid #EEEEEE;
-        padding: 20rpx 0 20rpx 30rpx;
-        font-family: PingFangSC, PingFang SC;
+      .bianhao{
         font-weight: 400;
         font-size: 24rpx;
-        color: #444444;
+        color: #666666;
         line-height: 24rpx;
-        font-style: normal;
-        margin-top: 24rpx;
       }
-      .tight-text{
-        view:nth-child(1){
-          font-family: PingFangSC, PingFang SC;
-          font-weight: 400;
-          font-size: 20rpx;
-          color: #999999;
-          line-height: 20rpx;
-          font-style: normal;
-        }
-        view:nth-child(2){
-          font-family: PingFangSC, PingFang SC;
-          font-weight: 400;
+      .revenue-num{
+        text-align: right;
+        font-weight: 500;
+        font-size: 32rpx;
+        color: #FF0057;
+        line-height: 32rpx;
+      }
+    }
+    .item-user{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20rpx 0;
+      .user-box{
+        display: flex;
+        align-items: center;
+        gap: 8rpx;
+      }
+      .user-img{
+        width: 32rpx;
+        height: 32rpx;
+        border-radius: 56rpx;
+        border: 2rpx solid #FFFFFF;
+      }
+      .user-name{
+        font-weight: 400;
+        font-size: 24rpx;
+        color: #111111;
+        line-height: 24rpx;
+      }
+      .daishou{
+        text-align: right;
+        font-weight: 400;
+        font-size: 24rpx;
+        color: #AAAAAA;
+        line-height: 24rpx;
+      }
+      .status-ing{
+        color: #DA261D;
+      }
+      .status-success{
+        color: #EF942B;
+      }
+      .status-refuse{
+        color: #BABABA;
+      }
+      .status-apply{
+        color: #5084F3;
+      }
+      .status-queren{
+        color: #000000;
+      }
+      .status-tuikuan{
+        color: #666666;
+      }
+    }
+    .item-content{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .item-img{
+        width: 128rpx;
+        height: 128rpx;
+        border-radius: 8rpx;
+      }
+      .item-desc{
+        height: 128rpx;
+        margin-left: 22rpx;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .item-name{
+          font-size: 28rpx;
           color: #111111;
-          font-style: normal;
-          margin-top: 12rpx;
+          line-height: 36rpx;
+        }
+        .item-time{
           display: flex;
           align-items: center;
-          text:nth-child(1){
-            font-size: 28rpx;
-            line-height: 28rpx;
-          }
-          text:nth-child(2){
-            margin-left: 24rpx;
-            font-size: 10rpx;
-            line-height: 10rpx;
-            letter-spacing: 6rpx;
-          }
-          text:nth-child(3){
-            margin-left: 12rpx;
+          gap: 8rpx;
+          font-weight: 400;
+          font-size: 24rpx;
+          color: #999999;
+          line-height: 24rpx;
+          .icon{
+            font-weight: 400;
             font-size: 24rpx;
+            color: #999999;
             line-height: 24rpx;
           }
         }
       }
-      .right-amount{
-        .status{
-          font-family: PingFangSC, PingFang SC;
+      .item-num{
+        text-align: center;
+        .num{
           font-weight: 500;
-          font-size: 20rpx;
-          color: #999999;
+          font-size: 36rpx;
+          color: #222222;
+          line-height: 36rpx;
+          margin-bottom: 8rpx;
+        }
+        .unt{
+          font-weight: 400;
+          font-size: 24rpx;
+          color: #BABABA;
           line-height: 20rpx;
-          font-style: normal;
-          text-align: center;
-          margin-top: 10rpx;
         }
       }
     }

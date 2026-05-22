@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useMessage, useToast } from 'wot-design-uni'
-import TakingCheckbox from './component/TakingCheckbox.vue'
 import TakingAmount from './component/TakingAmount.vue'
 import { useLayoutStore } from '@/stores'
 import { applyWithdraw, getLastApplyTime, getWalletAccountsBalance } from '@/api/wallet'
@@ -20,8 +19,6 @@ const describeList = [
   '为了避免频繁提现交易，平台限定七天提现一次',
   '如有疑问请及时联系客服',
 ]
-const balanceType = ref<number[]>([])
-const typeValue = ref<string>('')
 const amount = ref<string>('')
 const invoice = ref<string[]>([])
 const bankData = ref<any>(null)
@@ -32,16 +29,6 @@ const balanceData = ref({
   agentBalance: 0,
 })
 
-const maxAmount = computed(() => {
-  let num = 0
-  if (balanceType.value.includes(1)) {
-    num += Number(balanceData.value.kolServiceBalance)
-  }
-  if (balanceType.value.includes(2)) {
-    num += Number(balanceData.value.agentBalance)
-  }
-  return num
-})
 function handleClickLeft() {
   uni.navigateBack()
 }
@@ -103,7 +90,7 @@ function onConfirm() {
     beforeConfirm: ({ resolve }) => {
       toast.loading({
         loadingType: 'ring',
-        loadingColor: '#FF0057',
+        loadingColor: '#089D39',
         msg: '提交中...',
       })
       resolve(true)
@@ -111,12 +98,11 @@ function onConfirm() {
   }).then(() => {
     console.log('点击了确定按钮')
     // 把balanceType.value 的每个值相加
-    const balanceTypeValue = balanceType.value.reduce((prev, curr) => prev + curr, 0)
 
     const params: any = {
       amount: amount.value,
-      balanceType: balanceTypeValue,
       channelType: channelType.value,
+      balanceType: '3',
     }
 
     if (channelType.value === 1) {
@@ -147,22 +133,6 @@ function getBalance() {
   getWalletAccountsBalance().then((res) => {
     if (res.code === 0) {
       balanceData.value = res.data
-      if (typeValue.value === '1') {
-        if (Number(res.data.kolServiceBalance) > 0) {
-          balanceType.value = [1]
-        }
-      }
-      if (typeValue.value === '2') {
-        if (Number(res.data.kolServiceBalance) > 0) {
-          balanceType.value = [1]
-        }
-        if (Number(res.data.agentBalance) > 0) {
-          balanceType.value = [2]
-        }
-        if (Number(res.data.kolServiceBalance) > 0 && Number(res.data.agentBalance) > 0) {
-          balanceType.value = [1, 2]
-        }
-      }
     }
   })
 }
@@ -190,12 +160,7 @@ function getAppleTime() {
     }
   })
 }
-// onShow(() => {
-//   getAppleTime()
-//   getBalance()
-// })
-onLoad((options: any) => {
-  typeValue.value = options.active || ''
+onLoad(() => {
   getAppleTime()
   getBalance()
 })
@@ -204,10 +169,15 @@ onLoad((options: any) => {
 <template>
   <wd-navbar title="我的钱包" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view class="taking" :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }">
-    <TakingCheckbox v-model:balance-type="balanceType" v-model:amount="amount" :amount-data="balanceData" />
+    <view class="amount-box">
+      <view class="amount-keti">
+        可提现金额
+      </view>
+      <wd-text custom-class="custom-text" :text="balanceData.agentBalance" mode="price" />
+    </view>
     <TakingAmount
       v-model:amount="amount" v-model:channel-type="channelType" v-model:bank-data="bankData"
-      v-model:invoice="invoice" :max-amount="maxAmount" :balance-type="balanceType"
+      v-model:invoice="invoice" :max-amount="balanceData.agentBalance"
     />
     <view class="describe">
       <view v-for="(item, index) in describeList" :key="index" class="describe-item">
@@ -251,7 +221,25 @@ onLoad((options: any) => {
 .taking {
   padding-left: 32rpx;
   padding-right: 32rpx;
-
+  .amount-box{
+    padding: 64rpx 0;
+    text-align: center;
+    .amount-keti{
+      font-weight: 400;
+      font-size: 28rpx;
+      color: rgba(102,102,102,0.85);
+      line-height: 28rpx;
+      margin-bottom: 24rpx;
+    }
+    :deep(){
+      .custom-text{
+        font-weight: 500;
+        font-size: 96rpx;
+        color: #111111;
+        line-height: 96rpx;
+      }
+    }
+  }
   .describe {
     padding: 32rpx;
     background-color: #fff;
@@ -309,20 +297,20 @@ onLoad((options: any) => {
     justify-content: center;
     gap: 22rpx;
     height: 88rpx;
-    background: rgba(255, 0, 87, 0.1);
+    background: rgba(8, 157, 57, 0.1);
     border-radius: 8rpx 32rpx 8rpx 32rpx;
   }
 
   .iconfont {
     font-size: 36rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 
   .time-label {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 32rpx;
     font-style: normal;
   }
@@ -331,7 +319,7 @@ onLoad((options: any) => {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 36rpx;
     font-style: normal;
   }
@@ -340,7 +328,7 @@ onLoad((options: any) => {
 
 <style lang="scss">
 .custom-taking-btn {
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>
 

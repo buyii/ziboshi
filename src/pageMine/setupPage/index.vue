@@ -177,7 +177,7 @@ function onUpload({ avatarUrl }: { avatarUrl: string }) {
 
 <style lang="scss">
 .custom-taking-btn{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>
 

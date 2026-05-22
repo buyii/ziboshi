@@ -88,7 +88,7 @@ export default {
     <slot />
     <wd-status-tip v-if="props.notData" :tip="props.tip">
       <template #image>
-        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData.png`" />
+        <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
       </template>
     </wd-status-tip>
     <wd-loadmore :state="props.state" custom-class="myloadmore" :loading-props="{ color: '#ff0057' }" @reload="loadmore" />

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useMessage } from 'wot-design-uni'
-import IncomeTab from './component/IncomeTab.vue'
 import RevenueRecords from './component/RevenueRecords.vue'
+import WalletTabs from './component/WalletTabs.vue'
 
-import { getWalletAccountsBalance, getWithdrawList } from '@/api/wallet'
-import { claimRedPacket, getRedPacket } from '@/api/common'
+import { getPayouts } from '@/api/wallet'
 
-import { useLayoutStore } from '@/stores'
+import { getMyTeamMemberOrderList } from '@/api/team'
 
 interface Pagination {
   pageNum: number
@@ -14,39 +12,19 @@ interface Pagination {
   total: number
 }
 
-interface DateRange {
-  startDate: string
-  endDate: string
-  showStartDate: string
-  showEndDate: string
-}
-
-const message = useMessage('redJoin')
-const messageSucc = useMessage()
-const tabActive = ref(1)
-const countdown = ref<any>(null)
-const countdown7 = ref<any>(null)
-const redData = ref<any>({})
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
-const layoutStore = useLayoutStore()
-const statusBarHeight = computed(() => {
-  let h = 600
-  if ((tabActive.value === 2) || (tabActive.value === 1 && redData.value.join && (redData.value.status <= 5))) {
-    h = 600 + 72
-  }
-  const num = uni.upx2px(h)
-  return layoutStore.layoutStore.statusBarHeight + num
-})
 function handleClickLeft() {
   uni.navigateBack()
 }
-const balanceData = ref({
-  kolServiceBalance: 0,
-  agentBalance: 0,
-})
-const activeTab = ref(7)
+
+const activeTab = ref<number>(1)
 
 const state = ref()
+const amountData = ref({
+  amount: '0.00',
+  total: '0.00',
+  waitSettle: '0.00',
+})
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
 const pagination = ref<Pagination>({
@@ -54,126 +32,24 @@ const pagination = ref<Pagination>({
   pageSize: 10,
   total: 0,
 })
-const dateRange = ref<DateRange>({
-  showStartDate: '',
-  showEndDate: '',
-  startDate: '',
-  endDate: '',
-})
-const itemList: any[] = [
-  {
-    id: 7,
-    name: '近七天',
-  },
-  {
-    id: 30,
-    name: '近一个月',
-  },
-  {
-    id: 90,
-    name: '近三个月',
-  },
-  {
-    id: 183,
-    name: '近半年',
-  },
-]
 
-function showTips() {
-  message.alert({
-    title: '专属奖励金',
-    confirmButtonProps: {
-      customClass: 'custom-shadow',
-    },
-  }).then(() => {
-    console.log('点击了确定按钮')
-  })
-}
-
-function showSuccTips() {
-  messageSucc.alert({
-    title: '领取成功',
-    msg: '金额已发放至个人收益,可即刻提现',
-    confirmButtonProps: {
-      customClass: 'custom-shadow',
-    },
-  }).then(() => {
-    console.log('点击了确定按钮')
-  })
-}
-
-function getMyRedPacket(flag = false) {
-  getRedPacket().then((res) => {
+function getPayoutsData() {
+  getPayouts().then((res) => {
     if (res.code === 0) {
-      redData.value = { ...res.data }
-      const str = res.data.end_time.replace(/-/g, '\/')
-      const times = new Date(str).getTime() - new Date().getTime()
-      countdown.value = times > 0 ? times : null
-      // 结束时间加上 7天 为结算时间
-      const str7 = new Date(str)
-      str7.setDate(str7.getDate() + redData.value.settleDays)
-      countdown7.value = new Date(str7).getTime() - new Date().getTime()
-      if (flag) {
-        message.alert({
-          title: '专属奖励金',
-          confirmButtonProps: {
-            customClass: 'custom-shadow',
-          },
-        }).then(() => {
-          console.log('点击了确定按钮')
-        })
-      }
+      amountData.value = res.data
     }
   })
-}
-
-function onReceive() {
-  claimRedPacket().then((res) => {
-    if (res.code === 0) {
-      getMyRedPacket(true)
-    }
-  })
-}
-
-function changeCalendar(value: any) {
-  dateRange.value = {
-    ...value,
-    showStartDate: value.startDate.replace(/-/g, '.'),
-    showEndDate: value.endDate.replace(/-/g, '.'),
-  }
-  pagination.value.pageNum = 1
-  getDataList()
-}
-
-function tabChange() {
-  const day = activeTab.value
-  const dates = getNDaysRange(day)
-  dateRange.value = {
-    startDate: dates.start,
-    endDate: dates.end,
-    showStartDate: dates.start.replace(/-/g, '.'),
-    showEndDate: dates.end.replace(/-/g, '.'),
-  }
-  pagination.value.pageNum = 1
-  getDataList()
-}
-
-function typeClick() {
-  dataList.value = []
-  pagination.value.pageNum = 1
-  getDataList()
 }
 
 function getDataList() {
   const params = {
-    startTime: dateRange.value.startDate,
-    endTime: dateRange.value.endDate,
-    queryType: tabActive.value,
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
+    status: activeTab.value,
+    amountType: 2,
   }
   loading.value = true
-  getWithdrawList(params).then((res) => {
+  getMyTeamMemberOrderList(params).then((res) => {
     if (res.code === 0) {
       if (pagination.value.pageNum === 1) {
         dataList.value = [...res.rows]
@@ -209,165 +85,99 @@ function loadmore() {
   getDataList()
 }
 
-function getBalance() {
-  getWalletAccountsBalance().then((res) => {
-    if (res.code === 0) {
-      balanceData.value = res.data
-    }
+function tabClick() {
+  pagination.value.pageNum = 1
+  getDataList()
+}
+
+function handleWithdraw() {
+  uni.navigateTo({
+    url: `/pageMine/taking/index`,
   })
 }
+
+const statusBarHeight = computed(() => {
+  const h = 760
+  const num = uni.upx2px(h)
+  return num
+})
+
 onShow(() => {
-  const dates = getNDaysRange(activeTab.value)
-  dateRange.value = {
-    startDate: dates.start,
-    endDate: dates.end,
-    showStartDate: dates.start.replace(/-/g, '.'),
-    showEndDate: dates.end.replace(/-/g, '.'),
-  }
+  getPayoutsData()
   getDataList()
-  getBalance()
-  getMyRedPacket()
 })
 </script>
 
 <template>
   <view class="page-top">
-    <wd-navbar title="我的钱包" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
-    <view class="wallet-top">
-      <IncomeTab
-        v-model="tabActive"
-        :balance-data="balanceData" :red-data="redData"
-        @show-succ-tips="showSuccTips" @type-click="typeClick" @on-receive="onReceive" @show-tips="showTips"
-      />
+    <wd-navbar title="我的收益" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
+    <wd-notice-bar :scrollable="false" text="团队成员购买产品获得 40% 提成" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+      <template #prefix>
+        <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
+      </template>
+    </wd-notice-bar>
+    <view class="wallet-am">
+      <view class="wallet-top">
+        <view class="top-title">
+          可提现金额
+        </view>
+        <view class="amount-box">
+          <wd-text custom-class="custom-text" :text="amountData.amount" mode="price" color="#111111" size="56rpx">
+            <template #prefix>
+              <text class="prefix-text">
+                ¥
+              </text>
+            </template>
+          </wd-text>
+          <view class="amount-btn">
+            <wd-button type="text" @click="handleWithdraw">
+              去提现
+              <text class="iconfont icon-into" />
+            </wd-button>
+          </view>
+        </view>
+        <view class="accumulated-box">
+          <view class="accumulated-item">
+            <view class="acc-title">
+              历史累计收益
+            </view>
+            <wd-text custom-class="custom-text" :text="amountData.total" mode="price" color="#444444" size="48rpx">
+              <template #prefix>
+                <text class="prefix-acc">
+                  ¥
+                </text>
+              </template>
+            </wd-text>
+          </view>
+          <view class="accumulated-item">
+            <view class="acc-title">
+              未结算金额
+            </view>
+            <wd-text custom-class="custom-text" :text="amountData.waitSettle" mode="price" color="#444444" size="48rpx">
+              <template #prefix>
+                <text class="prefix-acc">
+                  ¥
+                </text>
+              </template>
+            </wd-text>
+          </view>
+        </view>
+      </view>
+      <WalletTabs v-model="activeTab" @tab-click="tabClick" />
     </view>
-    <view class="jilulabel">
-      提现记录
-    </view>
-    <CustomScrollTabs
-      v-model:active-tab="activeTab"
-      :item-list="itemList"
-      bg="#f8f8f8"
-      @tab-change="tabChange"
-      @change-calendar="changeCalendar"
-    />
   </view>
   <MyScrollView :top="`${(statusBarHeight || 0) - 1}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
     <view class="records-box">
       <template v-if="dataList.length > 0">
-        <RevenueRecords :date-range="dateRange" :datas-list="dataList" />
+        <RevenueRecords :datas-list="dataList" />
       </template>
       <wd-status-tip v-if="dataList.length < 1 && !loading" tip="暂无数据~">
         <template #image>
-          <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData.png`" />
+          <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
         </template>
       </wd-status-tip>
     </view>
   </MyScrollView>
-
-  <!-- hongbao -->
-  <wd-message-box selector="redJoin" custom-class="joinmsg">
-    <view class="join-box">
-      <view class="join-text">
-        <view class="join-label">
-          领取时间：
-        </view>
-        <view class="join-value">
-          {{ redData.receive_time }}
-        </view>
-      </view>
-      <view class="join-text">
-        <view class="join-label">
-          活动期限：
-        </view>
-        <view class="join-value">
-          {{ redData.days }}天
-        </view>
-      </view>
-      <view class="join-text">
-        <view class="join-label">
-          奖励金额：
-        </view>
-        <view class="join-value">
-          {{ redData.bonusAmount }}元
-        </view>
-      </view>
-      <view class="join-text">
-        <view class="join-label">
-          有效GMV：
-        </view>
-        <view class="join-value">
-          {{ redData.gmv }}元(扣除退货退款)
-        </view>
-      </view>
-      <view class="join-zhu">
-        <view class="join-value">
-          该奖励金与平台每单补贴不冲突
-        </view>
-        <view class="join-value">
-          达标且活动结束{{ redData.settleDays }}天后可通过钱包直接提现
-        </view>
-      </view>
-
-      <view v-if="countdown && redData.status === 2" class="down-box">
-        <wd-count-down :time="countdown">
-          <template #default="{ current }">
-            <view class="time-box">
-              <text class="text-time">
-                {{ current.days >= 10 ? current.days : `0${current.days}` }}
-              </text>
-              天
-              <text class="text-time">
-                <text>
-                  {{ current.hours >= 10 ? current.hours : `0${current.hours}` }}
-                </text>
-                :
-                <text>
-                  {{ current.minutes >= 10 ? current.minutes : `0${current.minutes}` }}
-                </text>
-                :
-                <text>
-                  {{ current.seconds >= 10 ? current.seconds : `0${current.seconds}` }}
-                </text>
-              </text>
-              结束
-            </view>
-          </template>
-        </wd-count-down>
-      </view>
-
-      <view v-if="countdown7 && redData.status === 3" class="down-box">
-        <wd-count-down :time="countdown7">
-          <template #default="{ current }">
-            <view class="time-box">
-              <text class="text-timesucc">
-                {{ current.days >= 10 ? current.days : `0${current.days}` }}
-              </text>
-              天
-              <text class="text-timesucc">
-                <text>
-                  {{ current.hours >= 10 ? current.hours : `0${current.hours}` }}
-                </text>
-                :
-                <text>
-                  {{ current.minutes >= 10 ? current.minutes : `0${current.minutes}` }}
-                </text>
-                :
-                <text>
-                  {{ current.seconds >= 10 ? current.seconds : `0${current.seconds}` }}
-                </text>
-              </text>
-              后结算
-            </view>
-          </template>
-        </wd-count-down>
-      </view>
-      <view v-if="redData.status === 4" class="down-box">
-        <view class="time-box">
-          活动结束
-        </view>
-      </view>
-    </view>
-  </wd-message-box>
 </template>
 
 <style scoped lang="scss">
@@ -376,9 +186,101 @@ onShow(() => {
   top: 0;
   left: 0;
   width: 100vw;
+  .prefiximg{
+    width: 58rpx;
+    height: 42rpx;
+    margin-right: 18rpx;
+  }
+  :deep(){
+    .my-notice{
+      .wd-notice-bar__content{
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 28rpx;
+        color: #000000;
+        line-height: 28rpx;
+        font-style: normal;
+      }
+    }
+  }
+}
+.wallet-am{
+  padding: 32rpx;
+  background-color: #F4F4F4;
 }
 .wallet-top{
-  padding: 32rpx 32rpx 48rpx 32rpx;
+  padding: 48rpx 48rpx 32rpx 48rpx;
+  background-color: #fff;
+  border-radius: 12rpx;
+  .top-title{
+    font-weight: 400;
+    font-size: 24rpx;
+    color: #666666;
+    line-height: 24rpx;
+    margin-bottom: 16rpx;
+  }
+  .amount-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 48rpx;
+    :deep(){
+      .custom-text{
+        font-weight: 400;
+        font-size: 56rpx;
+        color: #111111;
+        line-height: 64rpx;
+        .prefix-text{
+          font-weight: 400;
+          font-size: 32rpx;
+          color: #111111;
+        }
+      }
+    }
+  }
+  .amount-btn{
+    :deep(){
+      .wd-button__text{
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 500;
+        font-size: 32rpx;
+        color: #089D39;
+        line-height: 32rpx;
+      }
+    }
+    .iconfont{
+      display: inline-block;
+      font-size: 28rpx;
+      color: #089D39;
+    }
+  }
+  .accumulated-box{
+    display: flex;
+    gap: 32rpx;
+    .accumulated-item{
+      .acc-title{
+        font-weight: 400;
+        font-size: 24rpx;
+        color: #999999;
+        line-height: 24rpx;
+        margin-bottom: 16rpx;
+      }
+    }
+    :deep(){
+      .custom-text{
+        font-weight: 400;
+        font-size: 48rpx;
+        color: #444444;
+        line-height: 48rpx;
+        .prefix-acc{
+          font-weight: 400;
+          font-size: 32rpx;
+          color: #444444;
+        }
+      }
+    }
+  }
+
 }
 .jilulabel{
   padding-left: 32rpx;
@@ -400,7 +302,7 @@ onShow(() => {
     width: 60rpx;
     text-align: right;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 }
 .scroll-Y{
@@ -468,7 +370,7 @@ onShow(() => {
       font-family: PingFangSC, PingFang SC;
       font-weight: bold;
       font-size: 32rpx;
-      color: #FF0057;
+      color: #089D39;
       line-height: 32rpx;
       font-style: normal;
       margin: 0 6rpx;
@@ -488,7 +390,7 @@ onShow(() => {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 .joinmsg{
   .wd-message-box__body{
@@ -508,7 +410,7 @@ onShow(() => {
   "layout": "default",
   "name": "myWallet",
   "style": {
-    "navigationBarTitleText": "我的钱包"
+    "navigationBarTitleText": "我的收益"
   }
 }
 </route>

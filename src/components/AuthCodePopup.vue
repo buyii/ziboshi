@@ -193,7 +193,7 @@ export default {
       display: flex;
       align-items: center;
       gap: 16rpx;
-      background: #FF0057;
+      background: #089D39;
       .img-box{
         width: 130rpx;
         height: 130rpx;
@@ -285,7 +285,7 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
-        border: 4rpx solid #FF0057;
+        border: 4rpx solid #089D39;
         mask: conic-gradient(at 32rpx 24rpx, transparent 75%, blue 75%) 0 0 / calc(100% - 32rpx) calc(100% - 24rpx);
       }
     }
@@ -318,7 +318,7 @@ export default {
     .jiantou{
       width: 100%;
       height: 12rpx;
-      background-color: #FF0057;
+      background-color: #089D39;
       display: flex;
       justify-content: center;
       .jiantoul{
@@ -336,7 +336,7 @@ export default {
       .wd-button{
         flex: 1;
         height: 88rpx !important;
-        background: #FF0057 !important;
+        background: #089D39 !important;
         border-radius: 24rpx!important;
         font-size: 32rpx !important;
         font-weight: 500 !important;
@@ -375,7 +375,7 @@ export default {
       }
       :deep(){
         .wd-icon{
-          background: #FF0057;
+          background: #089D39;
           border-radius: 8rpx 8rpx 30rpx 30rpx;
           width: 28rpx;
           height: 28rpx;
@@ -390,6 +390,6 @@ export default {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>

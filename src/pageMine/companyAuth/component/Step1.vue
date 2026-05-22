@@ -202,7 +202,7 @@ export default {
       .icon-box{
         width: 98rpx;
         height: 98rpx;
-        background: #FF0057;
+        background: #089D39;
         border-radius: 50%;
         text-align: center;
         min-width: auto !important;
@@ -244,7 +244,7 @@ export default {
       .icon-box{
         width: 270rpx;
         height: 80rpx;
-        background: #FF0057;
+        background: #089D39;
         border-radius: 40rpx;
         text-align: center;
         min-width: auto !important;

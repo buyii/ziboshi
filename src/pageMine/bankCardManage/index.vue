@@ -54,7 +54,7 @@ onShow(() => {
 </script>
 
 <template>
-  <wd-navbar title="我的账户" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
+  <wd-navbar title="银行卡管理" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }" class="bank-box">
     <view v-if="dataList.length > 0" class="card-list">
       <view v-for="item in dataList" :key="item.id">
@@ -116,7 +116,7 @@ onShow(() => {
   "layout": "default",
   "name": "bankCardManage",
   "style": {
-    "navigationBarTitleText": "我的账户"
+    "navigationBarTitleText": "银行卡管理"
   }
 }
 </route>

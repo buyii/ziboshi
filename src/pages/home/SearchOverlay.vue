@@ -174,7 +174,7 @@ onLoad((options: any) => {
           display: flex;
           align-items: center;
           .wd-button{
-            background-color: #FF0056;
+            background-color: #089D39;
             color: #fff;
             font-size: 28rpx;
             font-family: PingFangSC, PingFang SC;

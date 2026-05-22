@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Sample, User } from '@/types/common'
+import type { User } from '@/types/common'
 
 const initState = {
   userId: '',
@@ -18,6 +18,7 @@ const initState = {
   sampleCount: '',
   orderCount: '',
   agentId: '',
+  amountType: '',
 }
 
 export const useUserStore = defineStore(
@@ -25,7 +26,7 @@ export const useUserStore = defineStore(
   () => {
     const token = shallowRef<NullableString>(null)
     const userInfo = ref<User>({ ...initState })
-    const sampleData = ref<Sample | null>(null)
+    const paymentData = ref<any | null>(null)
     const productData = ref<any | null>(null)
     const applyStatus = ref<string>('0')
     const showCopyTip = ref<boolean>(true)
@@ -38,8 +39,8 @@ export const useUserStore = defineStore(
       applyStatus.value = val
     }
 
-    const setSampleData = (val: any) => {
-      sampleData.value = { ...val }
+    const setPaymentData = (val: any) => {
+      paymentData.value = { ...val }
     }
 
     const setProductData = (val: any) => {
@@ -85,8 +86,8 @@ export const useUserStore = defineStore(
       userInfo,
       productData,
       setProductData,
-      sampleData,
-      setSampleData,
+      paymentData,
+      setPaymentData,
       setToken,
       setUserInfo,
       upDataUserInfo,

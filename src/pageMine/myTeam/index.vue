@@ -14,7 +14,7 @@ interface Pagination {
 
 const layoutStore = useLayoutStore()
 const scrollTop1 = computed(() => {
-  const h = 530
+  const h = 540
   const num = uni.upx2px(h)
   return layoutStore.layoutStore.statusBarHeight + num
 })
@@ -233,7 +233,7 @@ onLoad(() => {
           {{ teamData.teamMember || 0 }}
         </view>
         <view class="item-label">
-          绑定用户
+          团队用户
         </view>
       </view>
       <view class="top-item">
@@ -241,7 +241,7 @@ onLoad(() => {
           {{ teamData.totalKolFocServiceFee || 0 }}
         </view>
         <view class="item-label">
-          用户全部收益
+          已结算收益
         </view>
       </view>
       <view class="top-item">
@@ -249,7 +249,7 @@ onLoad(() => {
           {{ teamData.focAgentFee || 0 }}
         </view>
         <view class="item-label">
-          我的全部分红
+          未结算收益
         </view>
       </view>
     </view>
@@ -281,8 +281,8 @@ onLoad(() => {
   <view :style="{ top: `${(scrollTop1 || 0)}px` }" class="scroll-box">
     <MyScrollView top="0px" :fixed="false" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
       <view class="list-box">
-        <template v-for="(item, index) in dataList" :key="item.userId">
-          <TeamUser :item="item" :show-line="index < dataList.length - 1" :start-time="startTime" :end-time="endTime" @on-del-success="onDelSuccess" />
+        <template v-for="(item) in dataList" :key="item.userId">
+          <TeamUser :item="item" :start-time="startTime" :end-time="endTime" @on-del-success="onDelSuccess" />
         </template>
       </view>
     </MyScrollView>
@@ -368,31 +368,31 @@ onLoad(() => {
   }
   .active1{
     .sort-text{
-      color: #FF0057;
+      color: #089D39;
     }
     .iconbox{
       :deep(){
         .up{
-          color: #FF0057;
+          color: #089D39;
         }
       }
     }
   }
   .active2{
     .sort-text{
-      color: #FF0057;
+      color: #089D39;
     }
     .iconbox{
       :deep(){
         .down{
-          color: #FF0057;
+          color: #089D39;
         }
       }
     }
   }
   .active{
     .sort-text{
-      color: #FF0057;
+      color: #089D39;
     }
   }
 }
@@ -407,7 +407,7 @@ onLoad(() => {
     width: 60rpx;
     text-align: right;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 }
 .scroll-box{

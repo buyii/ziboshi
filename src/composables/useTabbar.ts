@@ -9,9 +9,8 @@ export interface TabbarItem {
 }
 
 const tabbarItems = ref<TabbarItem[]>([
-  { name: 'home', value: null, active: true, title: '选品广场', showNavbar: false, icon: 'icon-home_0', activeIcon: 'icon-home_1' },
-  { name: 'wisdom', value: null, active: false, title: '智能找品', showNavbar: false, icon: 'icon-wisdom_0', activeIcon: 'icon-wisdom_1' },
-  { name: 'rank', value: null, active: false, title: '排行榜', showNavbar: false, icon: 'icon-rank_0', activeIcon: 'icon-rank_1' },
+  { name: 'home', value: null, active: true, title: '首页', showNavbar: false, icon: 'icon-home_0', activeIcon: 'icon-home_1' },
+  { name: 'rank', value: null, active: false, title: '消息', showNavbar: false, icon: 'icon-rank_0', activeIcon: 'icon-rank_1' },
   { name: 'mine', value: null, active: false, title: '我的', showNavbar: false, icon: 'icon-user_0', activeIcon: 'icon-user_1' },
 ])
 

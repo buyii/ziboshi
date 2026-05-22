@@ -66,7 +66,7 @@ export default {
       </view>
       <view class="popup-warp">
         <view v-for="item in list" :key="item.id" class="checkboxitem" @click="itemClick(item)">
-          <wd-checkbox :model-value="selectItem && (item.id === selectItem.id) ? true : false" checked-color="#FF0057" size="large" shape="square" />
+          <wd-checkbox :model-value="selectItem && (item.id === selectItem.id) ? true : false" checked-color="#089D39" size="large" shape="square" />
           <view class="item-content">
             <image
               :src="item.avatar"

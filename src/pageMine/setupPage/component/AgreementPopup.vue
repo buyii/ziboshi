@@ -424,7 +424,7 @@ export default {
     .wd-button{
       flex: 1;
       height: 88rpx !important;
-      background: #FF0057 !important;
+      background: #089D39 !important;
       border-radius: 16rpx 200rpx 200rpx 16rpx !important;
       font-size: 32rpx !important;
       font-weight: 500 !important;

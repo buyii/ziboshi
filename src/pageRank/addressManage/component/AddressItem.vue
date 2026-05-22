@@ -98,7 +98,7 @@ export default {
     position: absolute;
     top: -2rpx;
     right: -2rpx;
-    color: #FF0057;
+    color: #089D39;
   }
   .name{
     font-family: PingFangSC, PingFang SC;
@@ -137,25 +137,25 @@ export default {
   .user-box{
     width: 128rpx;
     height: 48rpx;
-    background: rgba(255, 0, 87, 0.05);
+    background: rgba(8, 157, 57, 0.1);
     text-align: center;
     line-height: 48rpx;
     border-radius: 4rpx;
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 20rpx;
-    color: #FF0057;
+    color: #089D39;
     font-style: normal;
     margin-top: 20rpx;
   }
 }
 .active{
-  border: 2rpx solid #FF0057;
+  border: 2rpx solid #089D39;
 }
 </style>
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>

@@ -8,26 +8,14 @@ const statusBarHeight = computed(() => {
   return layoutStore.layoutStore.statusBarHeight
 })
 const { success: showSuccess } = useToast()
-const promotionlist = ref<any[]>([
-  {
-    value: '2',
-    label: '企业',
-  },
-  {
-    value: '1',
-    label: '个人',
-  },
-])
 const errProps = ref<string[]>([])
 const loading = ref(false)
 const model = reactive<{
-  accountType: string
-  monthGmv: string
+  name: string
   phone: string
   remark: string
 }>({
-  accountType: '',
-  monthGmv: '',
+  name: '',
   phone: '',
   remark: '',
 })
@@ -69,34 +57,24 @@ function handleClickLeft() {
 </script>
 
 <template>
-  <wd-navbar title="申请开通" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
+  <wd-navbar title="申请代理" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }" class="form-wrapper">
-    <wd-notice-bar :scrollable="false" text="开通此功能后，可享受团队总收益的10%补贴" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+    <wd-notice-bar :scrollable="false" text="总积积分≥5000积分即可申请" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
       <template #prefix>
         <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
       </template>
     </wd-notice-bar>
     <wd-form ref="form" :model="model" error-type="message">
       <wd-cell-group>
-        <wd-picker
-          v-model="model.accountType"
-          label="我的身份"
-          placeholder="请选择我的身份"
-          prop="accountType"
-          :columns="promotionlist"
-          :rules="[{ required: true, message: '请选择我的身份' }]"
-        />
         <wd-input
-          v-model="model.monthGmv"
-          label="月GMV(万元)"
-          prop="monthGmv"
-          type="digit"
-          :maxlength="6"
+          v-model="model.name"
+          label="姓名"
+          prop="name"
           :cursor-spacing="100"
           placeholder-class="myPlaceholder"
           custom-input-class="myInput"
           placeholder="请输入"
-          :rules="[{ required: true, message: '请输入月GMV' }]"
+          :rules="[{ required: true, message: '请输入姓名' }]"
         />
         <wd-input
           v-model="model.phone"

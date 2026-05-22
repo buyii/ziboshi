@@ -75,7 +75,7 @@ export default {
       <view class="custom-box">
         <wd-tabbar
           :model-value="activeTabbar.name"
-          bordered safe-area-inset-bottom placeholder fixed active-color="#FF0057"
+          bordered safe-area-inset-bottom placeholder fixed active-color="#089D39"
           inactive-color="#999999"
           @change="handleTabbarChange"
         >
@@ -87,7 +87,7 @@ export default {
           </wd-tabbar-item>
         </wd-tabbar>
       </view>
-      <KefuBotton />
+      <!-- <KefuBotton /> -->
     </template>
     <template v-else>
       <VehicleManage />
@@ -99,7 +99,7 @@ export default {
     <view class="custom-box">
       <wd-tabbar
         :model-value="activeTabbar.name"
-        bordered safe-area-inset-bottom placeholder fixed active-color="#FF0057"
+        bordered safe-area-inset-bottom placeholder fixed active-color="#089D39"
         inactive-color="#999999"
         @change="handleTabbarChange"
       >
@@ -135,6 +135,6 @@ export default {
   }
 }
 .isActive{
-  color: #FF0057;
+  color: #089D39;
 }
 </style>

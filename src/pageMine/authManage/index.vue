@@ -75,7 +75,7 @@ onShow(() => {
     gap: 24rpx;
     .icon1{
       font-size: 68rpx;
-      color: #FF0057;
+      color: #089D39;
     }
     .item-label{
       flex: 1;
@@ -89,14 +89,14 @@ onShow(() => {
     }
     .item-status{
       padding: 12rpx 16rpx;
-      background: rgba(255, 0, 87, 0.05);
+      background: rgba(8, 157, 57, 0.1);
       border-radius: 24rpx;
       display: flex;
       .status-label{
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 24rpx;
-        color: #FF0057;
+        color: #089D39;
         line-height: 24rpx;
         font-style: normal;
       }
@@ -104,7 +104,7 @@ onShow(() => {
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 24rpx;
-        color: rgba(255, 0, 87, 0.65);
+        color: rgba(8, 157, 57, 0.65);
         line-height: 24rpx;
         font-style: normal;
       }

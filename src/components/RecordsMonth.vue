@@ -108,8 +108,8 @@ export default {
       </view>
       <view class="item-right">
         <!-- <view>
-          <DigitBold v-if="props.isTeam === '1'" :value="props.item.effectFocAgentFee" prefix="+" int-size="32rpx" decimal-size="24rpx" color="#FF0057" />
-          <DigitBold v-else :value="props.item.effectKolFocServiceFee" prefix="+" int-size="32rpx" decimal-size="24rpx" color="#FF0057" />
+          <DigitBold v-if="props.isTeam === '1'" :value="props.item.effectFocAgentFee" prefix="+" int-size="32rpx" decimal-size="24rpx" color="#089D39" />
+          <DigitBold v-else :value="props.item.effectKolFocServiceFee" prefix="+" int-size="32rpx" decimal-size="24rpx" color="#089D39" />
           <view class="item-right-label">
             {{ props.isTeam === '1' ? '有效分红' : '有效补贴' }}
           </view>

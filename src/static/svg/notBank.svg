@@ -3,22 +3,22 @@
     <title>银行卡缺省</title>
     <defs>
         <linearGradient x1="100%" y1="27.7777778%" x2="50%" y2="72.2222222%" id="linearGradient-1">
-            <stop stop-color="#FFF5CC" offset="0%"></stop>
-            <stop stop-color="#FFE79C" offset="100%"></stop>
+            <stop stop-color="#FFBF76" offset="0%"></stop>
+            <stop stop-color="#FF4F02" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g id="我的" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="代理角色" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="银行卡缺省" transform="translate(-65.000000, -104.000000)">
             <g transform="translate(65.000000, 104.000000)">
-                <path d="M8,0 L236,0 C240.418278,-8.11624501e-16 244,3.581722 244,8 L244,132 C244,136.418278 240.418278,140 236,140 L8,140 C3.581722,140 5.41083001e-16,136.418278 0,132 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z" id="矩形" fill="#F7D7E2"></path>
+                <path d="M8,0 L236,0 C240.418278,0 244,3.581722 244,8 L244,132 C244,136.418278 240.418278,140 236,140 L8,140 C3.581722,140 0,136.418278 0,132 L0,8 C0,3.581722 3.581722,8.8817842e-16 8,0 Z" id="矩形" fill="#DBECE1"></path>
                 <polygon id="矩形" fill-opacity="0.65" fill="#FFFFFF" points="1 108 161 108 155 122 1 122"></polygon>
                 <polygon id="矩形" fill-opacity="0.45" fill="#FFFFFF" points="169 108 245 108 245 122 163 122"></polygon>
                 <polygon id="矩形" fill="url(#linearGradient-1)" points="18 60 40 60 38 76 16 76"></polygon>
-                <text id="Bank" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" line-spacing="16" fill="#FFFFFF" fill-opacity="0.85">
-                    <tspan x="16" y="33">Bank</tspan>
+                <text id="Bank" opacity="0.449999988" font-family="Arial-Black, Arial Black" font-size="16" font-weight="700" line-spacing="16" fill="#000000">
+                    <tspan x="16" y="34">Bank</tspan>
                 </text>
-                <rect id="矩形" fill-opacity="0.45" fill="#FFFFFF" x="16" y="40" width="16" height="4" rx="2"></rect>
-                <rect id="矩形" fill-opacity="0.45" fill="#FFFFFF" x="36" y="40" width="16" height="4" rx="2"></rect>
+                <rect id="矩形" fill-opacity="0.45" fill="#000000" opacity="0.25" x="16" y="40" width="16" height="4" rx="2"></rect>
+                <rect id="矩形" fill-opacity="0.45" fill="#000000" opacity="0.25" x="36" y="40" width="16" height="4" rx="2"></rect>
                 <circle id="椭圆形" fill-opacity="0.85" fill="#FFFFFF" cx="210" cy="34" r="18"></circle>
             </g>
         </g>

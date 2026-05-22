@@ -5,7 +5,6 @@ import { delMember } from '@/api/team'
 
 interface Props {
   item: any
-  showLine: boolean
   startTime?: string
   endTime?: string
 }
@@ -16,14 +15,6 @@ const toast = useToast()
 // const message = useMessage('tips')
 const delmessage = useMessage('del')
 const idValue = ref('')
-function copyId() {
-  uni.setClipboardData({
-    data: props.item.userCode,
-    success() {
-      console.log('success')
-    },
-  })
-}
 
 function zhantie() {
   uni.getClipboardData({
@@ -45,7 +36,7 @@ function zhantie() {
 function toTeamPerson() {
   const userId = props.item.userId
   uni.navigateTo({
-    url: `/pageRank/incomeTeamDetails/index?userId=${userId}&isTeam=1&startTime=${props.startTime}&endTime=${props.endTime}`,
+    url: `/pageRank/incomeTeamDetails/index?userId=${userId}&startTime=${props.startTime}&endTime=${props.endTime}`,
   })
 }
 
@@ -58,7 +49,7 @@ function onDel() {
     beforeConfirm: ({ resolve }) => {
       toast.loading({
         loadingType: 'ring',
-        loadingColor: '#FF0057',
+        loadingColor: '#089D39',
         msg: '删除中...',
       })
       if (!idValue.value) {
@@ -102,38 +93,30 @@ export default {
           <view class="info-one">
             <view class="user-name">
               <text>{{ props.item.userName }}</text>
-              <text class="iconfont icon-copy" @click.stop="copyId" />
-            </view>
-            <view class="user-score">
-              <wd-text :text="props.item.score">
-                <template #prefix>
-                  <text class="prefix1">星佣分</text>
-                </template>
-              </wd-text>
             </view>
           </view>
-          <view class="user-income" :class="{ 'user-line': props.showLine }">
-            <view class="income-left">
-              <DigitBold :value="props.item.kolFocServiceFee" int-size="32rpx" decimal-size="28rpx" color="#111111" />
-              <view class="income-label">
-                用户全部收益
-              </view>
-            </view>
-            <view class="income-right">
-              <DigitBold :value="props.item.focAgentFee" int-size="32rpx" decimal-size="28rpx" color="#111111" />
-              <view class="income-label">
-                我的全部分红
-              </view>
-            </view>
-            <view class="income-time">
-              <view class="user-time">
-                {{ props.item.joinTime }}
-              </view>
-              <view class="income-label">
-                加入时间
-              </view>
-            </view>
+          <view class="user-time">
+            {{ props.item.joinTime }}
           </view>
+        </view>
+        <view class="user-amount">
+          <view class="user-num">
+            {{ props.item.totalPayAmount }}
+          </view>
+          <view class="user-label">
+            下单金额
+          </view>
+        </view>
+        <view class="user-amount">
+          <view class="user-num">
+            {{ props.item.focAgentFee }}
+          </view>
+          <view class="user-label">
+            我的收益
+          </view>
+        </view>
+        <view class="user-icon">
+          <text class="iconfont icon-into icon" />
         </view>
       </view>
     </view>
@@ -164,21 +147,21 @@ export default {
 
 <style lang="scss">
 .custom-taking-btn{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>
 
 <style scoped lang="scss">
 .user-box{
   background-color: #fff;
-  padding: 24rpx 0rpx 0 32rpx;
+  padding: 32rpx;
   .user-content{
     display: flex;
-    // align-items: center;
+    align-items: center;
     gap: 20rpx;
     .img{
-      width: 96rpx;
-      height: 96rpx;
+      width: 84rpx;
+      height: 84rpx;
       border-radius: 48rpx;
     }
     .user-info{
@@ -195,121 +178,39 @@ export default {
           color: #000000;
           line-height: 32rpx;
           font-style: normal;
-          .iconfont{
-            font-size: 26rpx;
-            color: #999999;
-            margin-left: 16rpx;
-          }
-        }
-        .user-score{
-          :deep(){
-            .wd-text{
-              font-family: DINAlternate, DINAlternate;
-              font-weight: bold;
-              font-size: 32rpx;
-              color: #111111;
-              line-height: 32rpx;
-              font-style: normal;
-            }
-          }
-          .prefix1{
-            font-family: PingFangSC, PingFang SC;
-            font-weight: 400;
-            font-size: 20rpx;
-            color: #999999;
-            line-height: 20rpx;
-            text-align: center;
-            font-style: normal;
-            margin-right: 10rpx;
-          }
-        }
-
-      }
-      .info-two{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 16rpx;
-        .user-id{
-          padding: 8rpx 20rpx;
-          font-family: PingFangSC, PingFang SC;
-          font-weight: 400;
-          font-size: 24rpx;
-          color: #666666;
-          line-height: 24rpx;
-          font-style: normal;
-          background: #F8F8F8;
-          text-align: center;
-          border-radius: 24rpx;
-          .iconfont{
-            font-size: 24rpx;
-            color: #999999;
-            margin-left: 12rpx;
-          }
-        }
-        .user-time{
-          font-family: PingFangSC, PingFang SC;
-          font-weight: 400;
-          font-size: 24rpx;
-          color: #666666;
-          line-height: 24rpx;
-          font-style: normal;
         }
       }
     }
   }
-  .user-income{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 20rpx;
-    padding-bottom: 24rpx;
-    padding-right: 32rpx;
-    .income-left{
-      text-align: center;
-      .income-label{
-        font-family: PingFangSC, PingFang SC;
-        font-weight: 400;
-        font-size: 20rpx;
-        color: #999999;
-        line-height: 20rpx;
-        font-style: normal;
-        margin-top: 8rpx;
-      }
+  .user-amount{
+    .user-num{
+      font-weight: 500;
+      font-size: 32rpx;
+      color: #131415;
+      line-height: 32rpx;
     }
-    .income-right{
-      text-align: center;
-      .income-label{
-        font-family: PingFangSC, PingFang SC;
-        font-weight: 400;
-        font-size: 20rpx;
-        color: #999999;
-        line-height: 20rpx;
-        font-style: normal;
-        margin-top: 8rpx;
-      }
+    .user-label{
+      margin-top: 16rpx;
+      font-weight: 400;
+      font-size: 20rpx;
+      color: #999999;
+      line-height: 20rpx;
     }
-    .income-time{
-      text-align: left;
-      .income-label{
-        font-family: PingFangSC, PingFang SC;
-        font-weight: 400;
-        font-size: 20rpx;
-        color: #999999;
-        line-height: 20rpx;
-        font-style: normal;
-        margin-top: 8rpx;
-      }
-      .user-time{
-        font-family: PingFangSC, PingFang SC;
-        font-weight: 400;
-        font-size: 28rpx;
-        color: #666666;
-        line-height: 28rpx;
-        text-align: left;
-        font-style: normal;
-      }
+  }
+  .user-icon{
+    .icon{
+      color: #DADADA;
+      font-size: 28rpx;
     }
+  }
+  .user-time{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 28rpx;
+    color: #666666;
+    line-height: 28rpx;
+    font-style: normal;
+    margin-top: 12rpx;
   }
   .user-line{
     box-shadow: inset 0rpx -1rpx 0rpx 0rpx #DADADA, inset 140rpx 1rpx 2rpx 0rpx #FFFFFF;
@@ -318,7 +219,7 @@ export default {
 .action{
   height: 100%;
   width: 128rpx;
-  background: #FF0057;
+  background: #089D39;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -340,7 +241,7 @@ export default {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 .delmsg{
   .myPlaceholder{
@@ -377,7 +278,7 @@ export default {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 28rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 28rpx;
     text-align: center;
     font-style: normal;

@@ -23,7 +23,7 @@ function onAddCar() {
     beforeConfirm: ({ resolve }) => {
       toast.loading({
         loadingType: 'ring',
-        loadingColor: '#FF0057',
+        loadingColor: '#089D39',
         msg: '添加...',
       })
       if (!value.value) {
@@ -170,7 +170,7 @@ export default {
     }
     :deep(){
       .wd-button{
-        background: #FF0057 !important;
+        background: #089D39 !important;
         border-radius: 24rpx!important;
         font-size: 24rpx !important;
         font-weight: 500 !important;
@@ -261,7 +261,7 @@ export default {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 28rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 28rpx;
     text-align: center;
     font-style: normal;

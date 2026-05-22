@@ -321,18 +321,18 @@ function chongzhi() {
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 24rpx;
-        color: #FF0057;
+        color: #089D39;
         line-height: 24rpx;
         font-style: normal;
       }
       .custom-btntext{
         font-family: PingFangSC, PingFang SC;
-        background: rgba(255, 0, 87, 0.2);
+        background: rgba(8, 157, 57, 0.2);
         border-radius: 10rpx;
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 24rpx;
-        color: #FF0057;
+        color: #089D39;
         line-height: 24rpx;
         font-style: normal;
       }

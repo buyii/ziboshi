@@ -121,7 +121,7 @@ export default {
   }
   .rate{
     height: 40rpx;
-    color: #FF0057;
+    color: #089D39;
     border-radius: 4rpx 16rpx 4rpx 16rpx;
     display: flex;
     align-items: baseline;
@@ -129,7 +129,7 @@ export default {
       font-family: PingFangSC, PingFang SC;
       font-weight: 500;
       font-size: 20rpx;
-      color: #FF0057;
+      color: #089D39;
       line-height: 20rpx;
       font-style: normal;
     }
@@ -211,7 +211,7 @@ export default {
     font-family: PingFangSC, PingFang SC;
     font-weight: 400;
     font-size: 20rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 20rpx;
     font-style: normal;
   }

@@ -51,7 +51,7 @@ defineExpose({
       color="#222222"
       month-change-color="#000000"
       year-change-color="#999999"
-      active-bg-color="#FF0057"
+      active-bg-color="#089D39"
       range-bg-color="rgba(255, 0, 87, 0.1)"
       @input="close"
       @change="change"
@@ -105,7 +105,7 @@ defineExpose({
     }
     .calendar-btn{
       button{
-        background-color: #FF0057 !important;
+        background-color: #089D39 !important;
         border-radius: 8rpx 32rpx 8rpx 32rpx !important;
         font-family: PingFangSC, PingFang SC !important;
         font-weight: 500 !important;

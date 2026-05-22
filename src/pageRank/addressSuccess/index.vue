@@ -28,7 +28,7 @@ function toAdd() {
     <view class="tip-box">
       <wd-status-tip tip="地址新增完成">
         <template #image>
-          <image style="width: 320rpx;height: 344rpx;margin-top: 112rpx;" :src="`${imgBaseUrl}/notData.png`" />
+          <image style="width: 320rpx;height: 344rpx;margin-top: 112rpx;" :src="`${imgBaseUrl}/notData1.png`" />
         </template>
       </wd-status-tip>
       <view class="tip-btn">
@@ -81,7 +81,7 @@ function toAdd() {
         .wd-button:nth-child(2){
           width: 264rpx;
           height: 80rpx;
-          background: #FF0057;
+          background: #089D39;
           border-radius: 30rpx 200rpx 200rpx 30rpx;
           font-family: PingFangSC, PingFang SC;
           font-weight: 500;

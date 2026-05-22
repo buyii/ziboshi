@@ -68,7 +68,7 @@ export default {
     .wd-button:nth-child(2){
       flex: 1;
       height: 88rpx !important;
-      background: #FF0057 !important;
+      background: #089D39 !important;
       border-radius: 16rpx 200rpx 200rpx 16rpx !important;
     }
   }
@@ -80,8 +80,8 @@ export default {
 .isplain{
   :deep(.wd-button){
     background: #fff !important;
-    border: 2rpx solid #FF0057 !important;
-    color: #FF0057 !important;
+    border: 2rpx solid #089D39 !important;
+    color: #089D39 !important;
   }
 }
 </style>

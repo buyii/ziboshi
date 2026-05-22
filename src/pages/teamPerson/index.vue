@@ -173,7 +173,7 @@ onLoad(() => {
     width: 60rpx;
     text-align: right;
     font-size: 32rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 }
 .scroll-Y{

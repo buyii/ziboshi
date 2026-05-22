@@ -10,54 +10,37 @@ interface NavigateToOptions {
        "/pages/mine/index" |
        "/pages/rank/index" |
        "/pages/teamPerson/index" |
-       "/pages/wisdom/index" |
        "/pageHome/details/index" |
-       "/pageHome/detailshare/index" |
-       "/pageHome/collectInfo/index" |
-       "/pageHome/applyTraffic/index" |
+       "/pageHome/payment/index" |
        "/pageHome/applySuccess/index" |
-       "/pageHome/productRank/index" |
-       "/pageHome/welfare/index" |
-       "/pageHome/traffic/index" |
-       "/pageHome/sampleList/index" |
-       "/pageHome/sampleDetails/index" |
-       "/pageHome/storeDetails/index" |
        "/pageHome/maintaincar/index" |
        "/pageHome/maintaincarLog/index" |
-       "/pageAi/findproducts/index" |
-       "/pageAi/findLog/index" |
-       "/pageAi/seekRecord/index" |
-       "/pageAi/selectedCar/index" |
-       "/pageAi/matchingDetails/index" |
-       "/pageRank/searchExperts/index" |
        "/pageRank/addressManage/index" |
        "/pageRank/addAddress/index" |
        "/pageRank/addressSuccess/index" |
-       "/pageRank/expertDetails/index" |
-       "/pageRank/expertManage/index" |
-       "/pageRank/incomeRecord/index" |
        "/pageRank/incomeTeamDetails/index" |
-       "/pageRank/incomeUserDetails/index" |
+       "/pageRank/pointsDetails/index" |
+       "/pageRank/pointsRedemption/index" |
+       "/pageMine/orderList/index" |
+       "/pageMine/orderRefund/index" |
        "/pageMine/bankCardManage/index" |
        "/pageMine/addBankCard/index" |
        "/pageMine/myWallet/index" |
+       "/pageMine/myPoints/index" |
        "/pageMine/taking/index" |
        "/pageMine/extractSuccess/index" |
        "/pageMine/authManage/index" |
        "/pageMine/companyAuth/index" |
        "/pageMine/personalAuth/index" |
-       "/pageMine/myData/index" |
        "/pageMine/myTeam/index" |
        "/pageMine/myteamAdd/index" |
-       "/pageMine/rulePage/index" |
        "/pageMine/setupPage/index" |
-       "/pageMine/trafficleList/index" |
        "/pageMine/myAccount/index";
 }
 interface RedirectToOptions extends NavigateToOptions {}
 
 interface SwitchTabOptions {
-  url: "/pages/home/index" | "/pages/wisdom/index" | "/pages/rank/index" | "/pages/mine/index"
+  url: "/pages/home/index" | "/pages/rank/index" | "/pages/mine/index"
 }
 
 type ReLaunchOptions = NavigateToOptions | SwitchTabOptions;

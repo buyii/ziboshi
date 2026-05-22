@@ -96,7 +96,7 @@ onShow(() => {
   <view v-if="rows.length < 1" class="address-notData" :style="{ paddingTop: `${(statusBarHeight || 0) + 49}px` }">
     <wd-status-tip tip="当前暂无地址请新增地址">
       <template #image>
-        <image style="width: 320rpx;height: 344rpx;margin-top: 112rpx;" :src="`${imgBaseUrl}/notData.png`" />
+        <image style="width: 320rpx;height: 344rpx;margin-top: 112rpx;" :src="`${imgBaseUrl}/notData1.png`" />
       </template>
     </wd-status-tip>
     <wd-button block @click="onConfirm">
@@ -132,7 +132,7 @@ onShow(() => {
       background: #FFFFFF !important;
       border-radius: 8rpx 32rpx 8rpx 32rpx !important;
       font-size: 32rpx !important;
-      font-weight: 500 !important;
+      font-weight: bold !important;
       margin-top: 80rpx;
     }
     .wd-button__text{
@@ -140,12 +140,12 @@ onShow(() => {
       align-items: center;
       justify-content: center;
       line-height: 32rpx;
-      color: #FF0057;
+      color: #089D39;
     }
   }
   .add{
     padding: 6rpx 10rpx;
-    background: rgba(255, 0, 87, 0.05);
+    background: rgba(8, 157, 57, 0.1);
     border-radius: 16rpx;
     font-size: 24rpx !important;
     margin-right: 20rpx;

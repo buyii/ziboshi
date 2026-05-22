@@ -70,7 +70,7 @@ function aaa(data: any) {
   .wenzi{
     padding: 6rpx 12rpx;
     border-radius: 20rpx;
-    background-color: #FF0057;
+    background-color: #089D39;
     margin-top: -24rpx;
     color: #FFf;
   }
@@ -92,13 +92,13 @@ function aaa(data: any) {
   }
   .iconfont{
     font-size: 60rpx;
-    color: #FF0057;
+    color: #089D39;
   }
 }
 </style>
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>

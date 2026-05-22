@@ -4,6 +4,7 @@ interface MyProps {
   intSize?: string
   decimalSize?: string
   prefixSize?: string
+  suffixSize?: string
   color?: string
   suffix?: string
   prefix?: string
@@ -35,14 +36,14 @@ const objValue = computed(() => {
 
 <template>
   <view class="yongj" :style="{ color, lineHeight: intSize }">
-    <text v-if="prefix" class="prefix" :style="{ fontSize: decimalSize }">{{ prefix }}</text>
+    <text v-if="prefix" class="prefix" :style="{ fontSize: prefixSize || decimalSize }">{{ prefix }}</text>
     <text class="integer" :style="{ fontSize: intSize }">
       {{ objValue.intPart }}
     </text>
     <text v-if="objValue.decimalPart" class="decimal" :style="{ fontSize: decimalSize }">
       .{{ objValue.decimalPart }}
     </text>
-    <text v-if="suffix" :style="{ fontSize: decimalSize }">{{ suffix }}</text>
+    <text v-if="suffix" class="prefix" :style="{ fontSize: suffixSize || decimalSize }">{{ suffix }}</text>
   </view>
 </template>
 
@@ -50,16 +51,22 @@ const objValue = computed(() => {
 .yongj{
     font-family: DINAlternate, DINAlternate;
     font-weight: 500;
-    color: #FF0057;
+    color: #089D39;
     line-height: 36rpx;
     font-style: normal;
     display: flex;
     align-items: baseline;
+    .prefix{
+      margin-right: 8rpx;
+    }
     .integer{
       font-size: 36rpx;
     }
     .decimal{
       font-size: 28rpx;
+    }
+    .prefix{
+      margin-left: 8rpx;
     }
   }
 </style>

@@ -167,7 +167,7 @@ export default {
     }
   }
   .status-refuse{
-    color: #FF0057;
+    color: #089D39;
     background: rgba(255, 0, 87, 0.1);
     .status-left{
       background-color: rgba(255, 0, 87,0.1);
@@ -254,7 +254,7 @@ export default {
               font-family: PingFangSC, PingFang SC;
               font-weight: 600;
               font-size: 36rpx;
-              color: #FF0057;
+              color: #089D39;
               line-height: 36rpx;
               font-style: normal;
             }
@@ -262,7 +262,7 @@ export default {
               font-family: PingFangSC, PingFang SC;
               font-weight: 600;
               font-size: 28rpx;
-              color: #FF0057;
+              color: #089D39;
               font-style: normal;
             }
           }

@@ -37,7 +37,7 @@ function onDel() {
     beforeConfirm: ({ resolve }) => {
       toast.loading({
         loadingType: 'ring',
-        loadingColor: '#FF0057',
+        loadingColor: '#089D39',
         msg: '删除中...',
       })
       resolve(true)
@@ -123,7 +123,7 @@ export default {
 
 <style lang="scss">
 .custom-taking-btn{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>
 
@@ -213,7 +213,7 @@ export default {
 .action{
   height: 100%;
   width: 128rpx;
-  background: #FF0057;
+  background: #089D39;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -235,7 +235,7 @@ export default {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 .delmsg{
   .myPlaceholder{
@@ -272,7 +272,7 @@ export default {
     font-family: PingFangSC, PingFang SC;
     font-weight: 500;
     font-size: 28rpx;
-    color: #FF0057;
+    color: #089D39;
     line-height: 28rpx;
     text-align: center;
     font-style: normal;

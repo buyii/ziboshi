@@ -110,7 +110,7 @@ export default {
       z-index: 9;
     }
     .first{
-      background-color: #FF0057;
+      background-color: #089D39;
     }
     .second{
       background-color: #FF8600;

@@ -164,4 +164,5 @@ export interface User {
   sampleCount: number | string
   orderCount: number | string
   agentId: number | string
+  amountType: any
 }

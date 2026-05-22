@@ -3,7 +3,6 @@ import { useToast } from 'wot-design-uni'
 
 interface Props {
   maxAmount: any
-  balanceType: number[]
 }
 
 const props = withDefaults(defineProps<Props>(), {})
@@ -67,13 +66,6 @@ function onInput(value: any) {
 }
 
 function allWithdrawal() {
-  if (props.balanceType.length < 1) {
-    toast.error({
-      position: 'middle',
-      msg: '请选择要提现金额',
-    })
-    return
-  }
   amount.value = props.maxAmount
 }
 
@@ -137,19 +129,19 @@ export default {
 <template>
   <view class="taking-amount">
     <view class="amount-label">
-      输入提现金额
+      提现金额
     </view>
     <view class="amount-input">
-      <wd-input v-model="amount" size="large" :cursor-spacing="100" type="digit" :disabled="balanceType.length < 1" placeholder="" @input="onInput">
+      <wd-input v-model="amount" size="large" :cursor-spacing="100" type="digit" placeholder="" @input="onInput">
         <template #suffix>
           <wd-button custom-class="amount-button" type="text" @click="allWithdrawal">
-            全部提现
+            全部
           </wd-button>
         </template>
       </wd-input>
     </view>
     <view>
-      <wd-radio-group v-model="channelType" inline shape="dot" checked-color="#FF0057" @change="radioChange">
+      <wd-radio-group v-model="channelType" inline shape="dot" checked-color="#089D39" @change="radioChange">
         <view class="radio-item">
           <wd-radio :value="1">
             个人提现
@@ -209,7 +201,7 @@ export default {
         font-family: PingFangSC, PingFang SC;
         font-weight: 500;
         font-size: 28rpx;
-        color: #FF0057;
+        color: #089D39;
         line-height: 28rpx;
         font-style: normal;
       }

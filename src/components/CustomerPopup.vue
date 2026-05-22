@@ -79,7 +79,7 @@ export default {
   .name-box {
     height: 80rpx;
     width: 100%;
-    background: #FF0057;
+    background: #089D39;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -130,7 +130,7 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
-        border: 4rpx solid #FF0057;
+        border: 4rpx solid #089D39;
         mask: conic-gradient(at 32rpx 24rpx, transparent 75%, blue 75%) 0 0 / calc(100% - 32rpx) calc(100% - 24rpx);
       }
     }
@@ -163,7 +163,7 @@ export default {
     .jiantou{
       width: 100%;
       height: 12rpx;
-      background-color: #FF0057;
+      background-color: #089D39;
       display: flex;
       justify-content: center;
       .jiantoul{
@@ -180,7 +180,7 @@ export default {
     .btn{
       flex: 1;
       height: 60rpx;
-      background: #FF0057;
+      background: #089D39;
       border-radius: 24rpx;
       font-size: 26rpx;
       font-weight: 500;
@@ -219,7 +219,7 @@ export default {
       }
       :deep(){
         .wd-icon{
-          background: #FF0057;
+          background: #089D39;
           border-radius: 8rpx 8rpx 30rpx 30rpx;
           width: 28rpx;
           height: 28rpx;
