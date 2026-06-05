@@ -33,14 +33,6 @@ export default {
           </view>
         </view>
       </view>
-      <view class="num-box">
-        <view class="num1">
-          1
-        </view>
-        <view class="num2">
-          数量
-        </view>
-      </view>
     </view>
   </view>
 </template>

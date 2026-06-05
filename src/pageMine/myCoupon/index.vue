@@ -1,40 +1,14 @@
 <script setup lang="ts">
-import OrderItem from './component/OrderItem.vue'
-import ScrollTabs from './component/ScrollTabs.vue'
 import { useLayoutStore } from '@/stores'
-
-import { getOrderList } from '@/api/order'
+import { getCouponList } from '@/api/common'
 
 interface Pagination {
   pageNum: number
   pageSize: number
   total: number
 }
-const tabs = [
-  {
-    title: '待支付',
-    key: '1',
-  },
-  {
-    title: '待发货',
-    key: '2',
-  },
-  {
-    title: '待收货',
-    key: '3',
-  },
-  {
-    title: '待评价',
-    key: '4',
-  },
-  {
-    title: '退款/售后',
-    key: '5',
-  },
-]
 
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
-const orderType = ref<string>('all')
 const state = ref()
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
@@ -55,10 +29,9 @@ function getDataList() {
   const params = {
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
-    status: orderType.value === 'all' ? '' : orderType.value,
   }
   loading.value = true
-  getOrderList(params).then((res) => {
+  getCouponList(params).then((res) => {
     if (res.code === 0) {
       if (pagination.value.pageNum === 1) {
         dataList.value = [...res.rows]
@@ -93,32 +66,21 @@ function loadmore() {
   state.value = 'loading'
   getDataList()
 }
-
-function tabClick() {
-  pagination.value.pageNum = 1
-  getDataList()
-}
-
-function onRefresh() {
-  pagination.value.pageNum = 1
-  getDataList()
-}
 onShow(() => {
   getDataList()
 })
 </script>
 
 <template>
-  <view class="topbox">
-    <wd-navbar title="我的订单" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
-    <view class="tab-box">
-      <ScrollTabs v-model="orderType" :item-list="tabs" @tab-click="tabClick" />
-    </view>
-  </view>
-  <MyScrollView :top="`${(statusBarHeight || 0) + 91}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
+  <wd-navbar title="我的优惠券" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
+  <MyScrollView :top="`${(statusBarHeight || 0) + 45}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
     <view v-if="dataList.length > 0" class="sample-content">
       <template v-for="item in dataList" :key="item.id">
-        <OrderItem :item="item" @on-refresh="onRefresh" />
+        <x-coupon
+          :value="item.price" :title="item.name" color="#24d192"
+          :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" validity="优惠券x1"
+          :show-btn="false" :status="item.status === 2 ? 'used' : 'available'"
+        />
       </template>
     </view>
     <wd-status-tip v-if="dataList.length <= 0 && !loading" tip="暂无数据~">

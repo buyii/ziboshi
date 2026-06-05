@@ -143,6 +143,15 @@ export default defineUniPages({
           },
         },
         {
+          path: 'orderLogistics/index',
+          type: 'page',
+          layout: 'default',
+          name: 'orderLogistics',
+          style: {
+            navigationBarTitleText: '物流详情',
+          },
+        },
+        {
           path: 'orderRefund/index',
           type: 'page',
           layout: 'default',
@@ -185,6 +194,15 @@ export default defineUniPages({
           name: 'myPoints',
           style: {
             navigationBarTitleText: '我的积分',
+          },
+        },
+        {
+          path: 'myCoupon/index',
+          type: 'page',
+          layout: 'default',
+          name: 'myCoupon',
+          style: {
+            navigationBarTitleText: '我的优惠券',
           },
         },
         {

@@ -2,11 +2,13 @@
 import { useToast } from 'wot-design-uni'
 import ProductDetails from './component/ProductDetails.vue'
 import PosterTem from './component/PosterTem.vue'
+import SharePopup from './component/SharePopup.vue'
+import BuyPopup from './component/BuyPopup.vue'
 import PosterPopup from './component/PosterPopup.vue'
+import StoreDetail from './component/StoreDetail.vue'
 import { getProductDetail } from '@/api/product'
 import { miniQRCode } from '@/api/common'
 
-const userStore = useUserStore()
 const toast = useToast()
 const productId = ref('')
 const activityId = ref('')
@@ -16,12 +18,18 @@ const countdown = ref<any>(null)
 const yearsNum = ref<number>(0)
 
 const posterPopupRef = ref<ComponentPublicInstance<{ open: (num: string) => void }> | null>(null)
+const SharePopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
+const BuyPopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
 
 const showPoster = ref(false)
 const imgUrl = ref('')
 const codeImg = ref('')
 
 const detailData = ref<any>({})
+
+const swiperList = computed(() => {
+  return detailData.value.imgs ? detailData.value.imgs.split(',') : [detailData.value.cover]
+})
 
 function getDetail() {
   getProductDetail({ productId: productId.value, activityId: activityId.value }).then((res) => {
@@ -39,7 +47,11 @@ function getDetail() {
   })
 }
 
-function onShow() {
+function onShareClick() {
+  SharePopupRef.value?.open()
+}
+
+function onPoster() {
   if (imgUrl.value) {
     posterPopupRef.value?.open(imgUrl.value)
   }
@@ -79,12 +91,27 @@ function handleClickLeft() {
 }
 
 function toPay() {
-  const data = { ...detailData.value }
-  userStore.setPaymentData(data)
-  uni.navigateTo({
-    url: `/pageHome/payment/index`,
-  })
+  BuyPopupRef.value?.open()
 }
+
+onShareAppMessage ((res) => {
+  if (res.from === 'button') { // 来自页面内分享按钮
+    console.log(res, 999999999999)
+    SharePopupRef.value?.close()
+  }
+  return {
+    title: detailData.value.productName,
+    path: `/pageHome/details/index?productId=${detailData.value.productId}`,
+    imageUrl: detailData.value.cover,
+  }
+})
+onShareTimeline (() => {
+  return {
+    title: detailData.value.productName,
+    path: `/pageHome/details/index?productId=${detailData.value.productId}`,
+    imageUrl: detailData.value.cover,
+  }
+})
 
 // const chartRef = ref<ComponentPublicInstance<{ getServerData: () => void }> | null>(null)
 
@@ -114,7 +141,7 @@ onLoad((options) => {
         </view>
       </template>
     </wd-navbar>
-    <ProductDetails :item-data="detailData" />
+    <ProductDetails :item-data="detailData" :swiper-list="swiperList" />
     <view class="cell-box">
       <wd-cell custom-value-class="cell-right" custom-title-class="cell-left">
         <template #icon>
@@ -137,16 +164,22 @@ onLoad((options) => {
         </template>
       </wd-cell>
     </view>
+    <!-- 详情页 -->
+    <StoreDetail :swiper-list="swiperList" />
     <view class="btn-box">
-      <wd-button icon="apple" custom-class="share-btn" @click="onShow">
+      <wd-button custom-class="share-btn" @click="onShareClick">
+        <text class="iconfont icon-share1" />
         分享
       </wd-button>
-      <wd-button icon="apple" custom-class="buy-btn" @click="toPay">
+      <wd-button custom-class="buy-btn" @click="toPay">
+        <text class="iconfont icon-buy" />
         购买
       </wd-button>
     </view>
     <PosterPopup ref="posterPopupRef" />
     <PosterTem v-if="showPoster" :code-img="codeImg" :detail-data="detailData" @change-img="changeImg" />
+    <SharePopup ref="SharePopupRef" @on-poster="onPoster" />
+    <BuyPopup ref="BuyPopupRef" :detail-data="detailData" />
   </view>
 </template>
 
@@ -203,9 +236,16 @@ onLoad((options) => {
     }
   }
   .btn-box{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 0 32rpx;
     display: flex;
     justify-content: space-between;
+    background-color: #fff;
+    padding-bottom: calc(8rpx + env(safe-area-inset-bottom));
+    padding-top: 12rpx;
     :deep(){
       .share-btn{
         width: 256rpx;
@@ -229,6 +269,10 @@ onLoad((options) => {
         color: #FFFFFF;
         line-height: 32rpx;
       }
+    }
+    .iconfont{
+      font-size: 28rpx;
+      margin-right: 8rpx;
     }
   }
 }

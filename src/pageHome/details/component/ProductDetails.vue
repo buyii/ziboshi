@@ -1,14 +1,36 @@
 <script setup lang="ts">
-const { itemData } = defineProps<Props>()
+const { itemData, swiperList } = defineProps<Props>()
 interface Props {
   itemData: any
+  swiperList: any[]
+}
+
+const currentimg = ref(0)
+
+function swiperClick(e: any) {
+  uni.previewImage({
+    current: e.index,
+    urls: swiperList,
+  })
 }
 </script>
 
 <template>
   <view class="productBox">
-    <view class="img-box">
+    <!-- <view class="img-box">
       <image class="img" :src="itemData.cover" mode="aspectFill" />
+    </view> -->
+    <view class="detail-top">
+      <!-- <image :src="detailData?.schema.cover" style="width: 750rpx;height: 750rpx;" /> -->
+      <wd-swiper
+        v-model:current="currentimg"
+        height="750rpx"
+        :list="swiperList"
+        autoplay
+        :indicator="{ type: 'fraction' }"
+        indicator-position="bottom-right"
+        @click="swiperClick"
+      />
     </view>
     <view class="product-info">
       <view class="jiage">
@@ -54,6 +76,20 @@ interface Props {
       color: #111111;
       line-height: 44rpx;
       text-align: left;
+    }
+  }
+  .detail-top{
+    position: relative;
+    width: 100%;
+    height: 750rpx;
+    .image{
+      width: 750rpx;
+      height: 750rpx;
+    }
+    :deep(){
+      .wd-swiper__track{
+        border-radius: 0rpx;
+      }
     }
   }
 }

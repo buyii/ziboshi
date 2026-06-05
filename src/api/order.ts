@@ -13,9 +13,28 @@ export function getOrderList(params: Record<string, any>) {
     params: { ...params },
   })
 }
+
+// 获取订单物流
+export function getOrderLogistics(params: Record<string, any>) {
+  return alova.Get<any>('/mall/mini/order/getOrderLogistics', {
+    params: { ...params },
+  })
+}
 // 退款
 export function refund(params: Record<string, any>) {
   return alova.Post<any>('/mall/mini/order/refund', {
+    ...params,
+  })
+}
+// 退款
+export function payOrder(params: Record<string, any>) {
+  return alova.Post<any>('/mall/mini/order/payOrder', {
+    ...params,
+  })
+}
+// 退款
+export function confirmOrder(params: Record<string, any>) {
+  return alova.Post<any>('/mall/mini/order/confirm', {
     ...params,
   })
 }

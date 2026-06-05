@@ -124,3 +124,17 @@ export function getParentCode(params: Record<string, any>) {
     params: { ...params },
   })
 }
+
+export function getUserDefaultAddress() {
+  return alova.Get<any>('/mall/mini/user-address/getUserDefaultAddress', {})
+}
+
+export function getCoupon() {
+  return alova.Get<any>('/mall/mini/order/getCoupon', {})
+}
+
+export function getCouponList(params: Record<string, any>) {
+  return alova.Get<any>('/mall/mini/order/getCouponList', {
+    params: { ...params },
+  })
+}

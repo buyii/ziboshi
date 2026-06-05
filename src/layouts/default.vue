@@ -27,7 +27,7 @@ export default {
     <!-- <slot v-if="envVersion === 'release'" /> -->
     <template v-if="envVersion === 'release' || envVersion === 'develop'">
       <slot />
-      <!-- <KefuBotton /> -->
+      <KefuBotton />
     </template>
     <template v-else>
       <VehicleManage />

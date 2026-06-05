@@ -62,9 +62,9 @@ export default {
           </view>
           <view class="info-foot">
             <view class="foot-left">
-              <view class="yunfei">
+              <!-- <view class="yunfei">
                 运费：10元
-              </view>
+              </view> -->
               <view class="shuliang">
                 x{{ props.item.itemNum }}
               </view>

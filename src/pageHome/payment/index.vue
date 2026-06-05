@@ -2,8 +2,10 @@
 import { useToast } from 'wot-design-uni'
 import Commodity from './component/Commodity.vue'
 import MyPopup from './component/MyPopup.vue'
+import CouponPopup from './component/CouponPopup.vue'
 import { createAndPayOrder } from '@/api/order'
 import { getMyPoint } from '@/api/wallet'
+import { getCoupon, getUserDefaultAddress } from '@/api/common'
 import { useLayoutStore } from '@/stores'
 
 const userStore = useUserStore()
@@ -16,11 +18,15 @@ const paymentData = computed(() => {
   return userStore.paymentData
 })
 const MyPopupRef = ref()
+const CouponPopupRef = ref()
 const loading = ref<boolean>(false)
 const addressData = ref()
+const couponList = ref([])
+const selectCoupons = ref([])
 const payType = ref<number>(2)
 const itemNum = ref<number>(1)
 const amountPoint = ref<number>(0)
+const remark = ref<string>('')
 
 function handleClickLeft() {
   uni.navigateBack()
@@ -29,19 +35,46 @@ function handleClickLeft() {
 function confirmAuth() {
   const params: any = {
     productId: paymentData.value?.productId,
+    logisticsFee: paymentData.value.logisticsfee,
     payType: payType.value,
     itemNum: itemNum.value,
     addressId: addressData.value?.id,
+    remark: remark.value,
   }
+  loading.value = true
   createAndPayOrder(params).then((res) => {
+    loading.value = false
     if (res.code === 0) {
-      console.log(res, '0000000000000000')
+      // 如果需要支付运费，调用支付接口
+      if (res.data.needPay) {
+        const data = { ...res.data }
+        uni.requestPayment({
+          ...data,
+          success(res) {
+            console.log(`success:${JSON.stringify(res)}`)
+            uni.navigateTo({
+              url: '/pageHome/applySuccess/index',
+            })
+          },
+          fail(err) {
+            console.log(`fail:${JSON.stringify(err)}`)
+          },
+        })
+        return
+      }
       uni.navigateTo({
         url: '/pageHome/applySuccess/index',
       })
     }
+  }).catch(() => {
+    loading.value = false
   })
 }
+
+const discount = computed(() => {
+  const totalDiscount = selectCoupons.value.reduce((sum: number, coupon: any) => sum + Number(coupon.price), 0)
+  return totalDiscount.toFixed(2)
+})
 
 function onConfirm() {
   if (!addressData.value) {
@@ -53,15 +86,21 @@ function onConfirm() {
     MyPopupRef.value.open()
     return
   }
+
+  const filterCoupon = selectCoupons.value.filter((item: any) => item.type !== 1)
+  const couponId = filterCoupon.map((item: any) => item.id).join(',')
   const params: any = {
     productId: paymentData.value?.productId,
     payType: payType.value,
     itemNum: itemNum.value,
     addressId: addressData.value?.id,
+    remark: remark.value,
+    couponId,
   }
+  loading.value = true
   createAndPayOrder(params).then((res) => {
+    loading.value = false
     if (res.code === 0) {
-      console.log(res, '0000000000000000')
       const data = { ...res.data }
       uni.requestPayment({
         ...data,
@@ -76,6 +115,8 @@ function onConfirm() {
         },
       })
     }
+  }).catch(() => {
+    loading.value = false
   })
 }
 
@@ -85,6 +126,29 @@ function getPoint() {
       amountPoint.value = res.data.amount ? Number(res.data.amount) : 0
     }
   })
+}
+
+function getDefaultAddress() {
+  if (addressData.value)
+    return
+  getUserDefaultAddress().then((res) => {
+    if (res.code === 0) {
+      addressData.value = res.data ? res.data : null
+    }
+  })
+}
+
+function getYouHui() {
+  getCoupon().then((res) => {
+    if (res.code === 0) {
+      couponList.value = res.data || []
+      selectCoupons.value = couponList.value.filter((item: any) => item.type === 1)
+    }
+  })
+}
+
+function selectCoupon() {
+  CouponPopupRef.value.open()
 }
 
 function toAddress() {
@@ -99,8 +163,16 @@ function toAddress() {
   })
 }
 
-onLoad(() => {
+onShow(() => {
   getPoint()
+  getDefaultAddress()
+  getYouHui()
+})
+
+onLoad((options) => {
+  if (options?.itemNum) {
+    itemNum.value = Number(options?.itemNum)
+  }
 })
 </script>
 
@@ -113,17 +185,14 @@ onLoad(() => {
         <view class="lefttitle">
           待支付
         </view>
-        <view class="left-desc">
-          选择您的地址以及样品达人
-        </view>
       </view>
       <view class="top-right">
         <image src="../../static/svg/bubble.svg" />
       </view>
     </view>
 
-    <view v-if="addressData" class="dizhibox">
-      <view class="dizhiLeft" @click="toAddress">
+    <view v-if="addressData" class="dizhibox" @click="toAddress">
+      <view class="dizhiLeft">
         <view class="dizhiname">
           <view class="name">
             {{ addressData.name }}
@@ -136,7 +205,7 @@ onLoad(() => {
           {{ addressData.area }} {{ addressData.detail }}
         </view>
       </view>
-      <view class="dizhiRight" @click="toAddress">
+      <view class="dizhiRight">
         <text class="iconfont icon-address" />
       </view>
     </view>
@@ -147,71 +216,82 @@ onLoad(() => {
         新增地址
       </view>
     </view>
-
-    <Commodity :payment-data="paymentData" />
-
-    <view class="guigebox" style="margin-top: 24rpx;">
-      <view class="guige">
-        <view>订单编号</view>
-        <view>{{ paymentData?.sku?.specName }}</view>
-      </view>
-      <view class="guige">
-        <view>创建时间</view>
-        <view>
-          {{ paymentData?.sampleStock }}
+    <view class="warp111">
+      <Commodity :payment-data="paymentData" />
+      <view class="guigebox" style="margin-top: 24rpx;">
+        <view class="guige">
+          <view>支付方式</view>
+          <view>
+            <wd-radio-group v-model="payType" shape="button" checked-color="#089D39">
+              <wd-radio :value="2">
+                现金支付
+              </wd-radio>
+              <wd-radio :value="1">
+                积分兑换
+              </wd-radio>
+            </wd-radio-group>
+          </view>
         </view>
-      </view>
-    </view>
-
-    <view class="guigebox" style="margin-top: 24rpx;">
-      <view class="guige">
-        <view>支付方式</view>
-        <view>
-          <wd-radio-group v-model="payType" shape="button" checked-color="#089D39">
-            <wd-radio :value="2">
-              现金支付
-            </wd-radio>
-            <wd-radio :value="1">
-              积分兑换
-            </wd-radio>
-          </wd-radio-group>
-        </view>
-      </view>
-      <view class="guige">
+        <!-- <view class="guige">
         <view>运费</view>
         <view>
           {{ paymentData?.exclusivePrice }}元
         </view>
+      </view> -->
+        <view class="guige">
+          <view>购买数量</view>
+          <view>
+            <wd-input-number v-model="itemNum" />
+          </view>
+        </view>
       </view>
-      <view class="guige">
-        <view>购买数量</view>
-        <view>
-          <wd-input-number v-model="itemNum" />
+
+      <view class="guigebox" style="margin-top: 24rpx;">
+        <view class="guige">
+          <view>优惠券</view>
+          <view @click="selectCoupon">
+            - ¥ {{ payType === 2 ? discount : 0 }}
+            <text class="iconfont icon-into" />
+          </view>
+        </view>
+        <view class="guige">
+          <view>运费</view>
+          <view>
+            + {{ payType === 1 ? paymentData?.logisticsfee || 0 : 0 }} 元
+          </view>
+        </view>
+        <view class="guige">
+          <view>我要留言</view>
+          <view>
+            <wd-input v-model="remark" no-border clearable placeholder="备注" custom-input-class="custom-input" />
+          </view>
         </view>
       </view>
     </view>
 
     <view class="botbox">
       <view v-if="payType === 1" class="jifeng">
-        <view>
-          <DigitBold :value="paymentData!.price" int-size="40rpx" color="#FF5100" suffix=" 积分" suffix-size="24rpx" />
+        <view class="jifengbox">
+          <DigitBold :value="paymentData!.price * itemNum" int-size="40rpx" color="#FF5100" suffix=" 积分" suffix-size="24rpx" />
+          <DigitBold v-if="paymentData.logisticsfee && Number(paymentData?.logisticsfee) > 0" :value="paymentData?.logisticsfee" int-size="40rpx" color="#FF5100" suffix=" 运费" suffix-size="24rpx" />
         </view>
         <view class="jifengnum">
           当前可用 <DigitBold :value="amountPoint" int-size="24rpx" color="#FF5100" /> 积分
         </view>
       </view>
       <view v-else class="jifeng">
-        <DigitBold :value="paymentData!.price" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
+        <DigitBold :value="((paymentData!.price * itemNum) - Number(discount)).toFixed(2)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
         <view class="yingfu">
           应付
         </view>
       </view>
-      <wd-button plain :loading="loading" block @click="onConfirm">
+      <button class="puy-btn" :loading="loading" @click="onConfirm">
         去结算
-      </wd-button>
+      </button>
     </view>
   </view>
   <MyPopup ref="MyPopupRef" :amount-point="amountPoint" :price="paymentData!.price" @confirm-auth="confirmAuth" />
+  <CouponPopup ref="CouponPopupRef" v-model="selectCoupons" :list="couponList" />
 </template>
 
 <style scoped lang="scss">
@@ -236,18 +316,33 @@ onLoad(() => {
     color: #999999;
     line-height: 24rpx;
   }
-  :deep(){
-    .wd-button{
-      width: 360rpx;
-      height: 88rpx !important;
-      background: #089D39 !important;
-      border-radius: 16rpx 200rpx 200rpx 16rpx !important;
-      font-weight: 500 !important;
-      font-size: 36rpx !important;
-      color: #FFFFFF !important;
-      line-height: 36rpx !important;
-    }
+  .puy-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    width: 360rpx;
+    height: 88rpx !important;
+    background: #089D39 !important;
+    border-radius: 16rpx 200rpx 200rpx 16rpx !important;
+    font-weight: 500 !important;
+    font-size: 36rpx !important;
+    color: #FFFFFF !important;
+    // line-height: 88rpx !important;
+    margin: 0;
   }
+  // :deep(){
+  //   .wd-button{
+  //     width: 360rpx;
+  //     height: 88rpx !important;
+  //     background: #089D39 !important;
+  //     border-radius: 16rpx 200rpx 200rpx 16rpx !important;
+  //     font-weight: 500 !important;
+  //     font-size: 36rpx !important;
+  //     color: #FFFFFF !important;
+  //     line-height: 36rpx !important;
+  //   }
+  // }
 }
 .jifeng{
   padding: 12rpx 0;
@@ -261,17 +356,21 @@ onLoad(() => {
     color: #999999;
     line-height: 24rpx;
   }
+  .jifengbox{
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+  }
 }
 .topbg{
   position: fixed;
   height: 400rpx;
   width: 100%;
-  background: linear-gradient( 180deg, rgba(255,36,87,0.05) 0%, rgba(248,248,248,0) 100%);
+  background: linear-gradient( 180deg, #DEFFE9 0%, #FFFFFF 100%);
 }
 .collect-warp{
   position: relative;
   z-index: 2;
-  padding: 0 32rpx;
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
   .top-warp{
     display: flex;
@@ -436,6 +535,9 @@ onLoad(() => {
       }
     }
   }
+  .warp111{
+    padding: 0 32rpx;
+  }
   .guigebox{
     background-color: #FFFFFF;
     border-radius: 16rpx;
@@ -453,8 +555,10 @@ onLoad(() => {
       min-width: 160rpx;
     }
     view:nth-child(2){
+      flex: 1;
       color: #111111;
       line-height: 1.4;
+      text-align: right;
       text{
         font-family: PingFangSC, PingFang SC;
         font-weight: 400;
@@ -462,6 +566,16 @@ onLoad(() => {
         color: #BABABA;
         line-height: 28rpx;
         font-style: normal;
+      }
+    }
+    :deep(){
+      .wd-radio.is-button.is-checked .wd-radio__label {
+        background-color: #089D39 !important;
+        color: #FFFFFF !important;
+        border-color: #089D39 !important;
+      }
+      .custom-input{
+        text-align: right;
       }
     }
   }

@@ -22,11 +22,13 @@ interface NavigateToOptions {
        "/pageRank/pointsDetails/index" |
        "/pageRank/pointsRedemption/index" |
        "/pageMine/orderList/index" |
+       "/pageMine/orderLogistics/index" |
        "/pageMine/orderRefund/index" |
        "/pageMine/bankCardManage/index" |
        "/pageMine/addBankCard/index" |
        "/pageMine/myWallet/index" |
        "/pageMine/myPoints/index" |
+       "/pageMine/myCoupon/index" |
        "/pageMine/taking/index" |
        "/pageMine/extractSuccess/index" |
        "/pageMine/authManage/index" |

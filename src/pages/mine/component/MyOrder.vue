@@ -1,28 +1,34 @@
 <script setup lang="ts">
+import order1 from '@/static/svg/order1.svg'
+import order2 from '@/static/svg/order2.svg'
+import order3 from '@/static/svg/order3.svg'
+import order4 from '@/static/svg/order4.svg'
+import order5 from '@/static/svg/order5.svg'
+
 const list = ref([
   {
     title: '待付款',
-    icon: 'icon-bankUser',
+    icon: order1,
     url: '/pageMine/orderList/index',
   },
   {
     title: '待发货',
-    icon: 'icon-addressUser',
-    url: '/pageRank/orderList/index',
+    icon: order2,
+    url: '/pageMine/orderList/index',
   },
   {
     title: '待收货',
-    icon: 'icon-sampleUser',
+    icon: order3,
     url: '/pageMine/orderList/index',
   },
   {
     title: '待评价',
-    icon: 'icon-setUser',
+    icon: order4,
     url: '/pageMine/orderList/index',
   },
   {
     title: '退款/售后',
-    icon: 'icon-setUser',
+    icon: order5,
     url: '/pageMine/orderList/index',
   },
 ])
@@ -42,7 +48,7 @@ function toOrder(item: { title: string, url: string }) {
     <view class="order-list">
       <view v-for="(item, i) in list" :key="i" class="order-item" @click="toOrder(item)">
         <view class="order-img">
-          <text class="iconfont" :class="item.icon" />
+          <image class="img" :src="item.icon" mode="widthFix" />
         </view>
         <view class="order-label">
           {{ item.title }}
@@ -75,16 +81,14 @@ function toOrder(item: { title: string, url: string }) {
       flex-direction: column;
       align-items: center;
       .order-img{
-        width: 64rpx;
-        height: 64rpx;
-        background-color: #F5F5F5;
-        border-radius: 32rpx;
+        width: 44rpx;
+        height: 44rpx;
         display: flex;
         justify-content: center;
         align-items: center;
-        .iconfont{
-          font-size: 32rpx;
-          color: #999999;
+        .img{
+          width: 44rpx;
+          height: 44rpx;
         }
       }
       .order-label{

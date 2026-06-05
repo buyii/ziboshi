@@ -15,15 +15,15 @@ function toDetail() {
   <view class="productBox" @click="toDetail">
     <view class="product-top">
       <view class="top-item">
-        <text class="iconfont icon-urlUser item-text" />
+        <text class="iconfont icon-gfzy item-text" />
         <text class="item-text">官方直营</text>
       </view>
       <view class="top-item">
-        <text class="iconfont icon-urlUser item-text" />
+        <text class="iconfont icon-pzbz item-text" />
         <text class="item-text">品质保障</text>
       </view>
       <view class="top-item">
-        <text class="iconfont icon-urlUser item-text" />
+        <text class="iconfont icon-shwy item-text" />
         <text class="item-text">售后无忧</text>
       </view>
     </view>

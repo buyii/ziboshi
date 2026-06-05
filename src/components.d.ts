@@ -26,6 +26,7 @@ declare module 'vue' {
     WdCheckbox: typeof import('wot-design-uni/components/wd-checkbox/wd-checkbox.vue')['default']
     WdConfigProvider: typeof import('wot-design-uni/components/wd-config-provider/wd-config-provider.vue')['default']
     WdCountDown: typeof import('wot-design-uni/components/wd-count-down/wd-count-down.vue')['default']
+    WdFab: typeof import('wot-design-uni/components/wd-fab/wd-fab.vue')['default']
     WdForm: typeof import('wot-design-uni/components/wd-form/wd-form.vue')['default']
     WdGap: typeof import('wot-design-uni/components/wd-gap/wd-gap.vue')['default']
     WdIcon: typeof import('wot-design-uni/components/wd-icon/wd-icon.vue')['default']
@@ -43,10 +44,12 @@ declare module 'vue' {
     WdRadio: typeof import('wot-design-uni/components/wd-radio/wd-radio.vue')['default']
     WdRadioGroup: typeof import('wot-design-uni/components/wd-radio-group/wd-radio-group.vue')['default']
     WdSearch: typeof import('wot-design-uni/components/wd-search/wd-search.vue')['default']
-    WdSegmented: typeof import('wot-design-uni/components/wd-segmented/wd-segmented.vue')['default']
     WdSelectPicker: typeof import('wot-design-uni/components/wd-select-picker/wd-select-picker.vue')['default']
     WdStatusTip: typeof import('wot-design-uni/components/wd-status-tip/wd-status-tip.vue')['default']
+    WdStep: typeof import('wot-design-uni/components/wd-step/wd-step.vue')['default']
+    WdSteps: typeof import('wot-design-uni/components/wd-steps/wd-steps.vue')['default']
     WdSwipeAction: typeof import('wot-design-uni/components/wd-swipe-action/wd-swipe-action.vue')['default']
+    WdSwiper: typeof import('wot-design-uni/components/wd-swiper/wd-swiper.vue')['default']
     WdSwitch: typeof import('wot-design-uni/components/wd-switch/wd-switch.vue')['default']
     WdTab: typeof import('wot-design-uni/components/wd-tab/wd-tab.vue')['default']
     WdTabbar: typeof import('wot-design-uni/components/wd-tabbar/wd-tabbar.vue')['default']
@@ -56,5 +59,6 @@ declare module 'vue' {
     WdTextarea: typeof import('wot-design-uni/components/wd-textarea/wd-textarea.vue')['default']
     WdToast: typeof import('wot-design-uni/components/wd-toast/wd-toast.vue')['default']
     WdUpload: typeof import('wot-design-uni/components/wd-upload/wd-upload.vue')['default']
+    XCoupon: typeof import('./components/x-coupon.vue')['default']
   }
 }

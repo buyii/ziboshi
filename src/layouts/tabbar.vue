@@ -87,7 +87,7 @@ export default {
           </wd-tabbar-item>
         </wd-tabbar>
       </view>
-      <!-- <KefuBotton /> -->
+      <KefuBotton />
     </template>
     <template v-else>
       <VehicleManage />

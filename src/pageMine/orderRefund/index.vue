@@ -47,6 +47,7 @@ const platformList = ref<any>([
 const imgList = ref<UploadFileItem[]>([])
 
 const orderId = ref<string>('')
+const totalPayAmount = ref<string>('')
 const errProps = ref<string[]>([])
 const form = ref()
 const model = reactive<{
@@ -125,6 +126,7 @@ function handleSubmit() {
 
 onLoad((options) => {
   orderId.value = options?.orderId || ''
+  totalPayAmount.value = options?.totalPayAmount || ''
 })
 </script>
 
@@ -155,11 +157,12 @@ onLoad((options) => {
               ¥
             </view>
             <view class="num">
-              238.00
+              {{ totalPayAmount }}
             </view>
           </view>
           <view class="refundDesc">
-            最高238，含运费10元
+            最高{{ totalPayAmount }}
+            <!-- ，含运费10元 -->
           </view>
         </wd-cell-group>
         <wd-cell-group custom-class="group1" title="申请仅退款补充说明">
@@ -304,9 +307,9 @@ onLoad((options) => {
 <route lang="json">
 {
   "layout": "default",
-  "name": "findproducts",
+  "name": "orderRefund",
   "style": {
-    "navigationBarTitleText": "找品申请"
+    "navigationBarTitleText": "申请退款"
   }
 }
 </route>

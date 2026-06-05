@@ -19,8 +19,14 @@ const list = ref([
   },
   {
     title: '我的地址',
-    icon: 'icon-addressUser',
+    icon: 'icon-addressUser1',
     url: '/pageRank/addressManage/index?type=manage',
+    show: true,
+  },
+  {
+    title: '我的优惠券',
+    icon: 'icon-subsidy',
+    url: '/pageMine/myCoupon/index',
     show: true,
   },
   {

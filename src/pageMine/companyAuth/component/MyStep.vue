@@ -85,14 +85,14 @@ export default {
     justify-content: center;
     .step-line{
       height: 4rpx;
-      background-color: #F2ECEE;
+      background-color: #EEF1EF;
       margin-bottom: 32rpx;
       width: 100%;
       overflow: hidden;
       .line-bg{
         height: 100%;
         // width: 125%;
-        background-color: #EC6593;
+        background-color: #4DA46A;
       }
     }
   }

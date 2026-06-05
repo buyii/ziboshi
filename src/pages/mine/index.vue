@@ -151,13 +151,7 @@ onShareTimeline (() => {
 <template>
   <view class="mine-page">
     <view class="banner-wrap">
-      <wd-navbar safe-area-inset-top :left-arrow="false" :bordered="false" custom-class="my-navbar">
-        <template #title>
-          <view class="mytitle">
-            我的
-          </view>
-        </template>
-      </wd-navbar>
+      <wd-navbar title="我的" safe-area-inset-top fixed :placeholder="true" custom-class="my-navbar" :bordered="false" />
       <view class="user-info">
         <view class="user-img">
           <image
@@ -280,9 +274,6 @@ onShareTimeline (() => {
   :deep(){
     .my-navbar{
       background-color: transparent !important;
-      .wd-navbar__title{
-        margin: 0 !important;
-      }
     }
     .jonmsg{
       .wd-message-box__content{

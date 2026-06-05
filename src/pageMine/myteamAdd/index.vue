@@ -59,7 +59,7 @@ function handleClickLeft() {
 <template>
   <wd-navbar title="申请代理" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }" class="form-wrapper">
-    <wd-notice-bar :scrollable="false" text="总积积分≥5000积分即可申请" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+    <wd-notice-bar :scrollable="false" text="总积分≥5000积分即可申请" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
       <template #prefix>
         <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
       </template>

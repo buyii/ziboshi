@@ -31,7 +31,7 @@ const list = [
     id: 3,
     name: '公司认证审核中',
     img: authentication,
-    activeImg: authentication1,
+    activeImg: authentication,
   },
 ]
 

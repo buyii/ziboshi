@@ -99,20 +99,22 @@ export default {
             {{ props.item.joinTime }}
           </view>
         </view>
-        <view class="user-amount">
-          <view class="user-num">
-            {{ props.item.totalPayAmount }}
+        <view class="amount-box">
+          <view class="user-amount">
+            <view class="user-num">
+              {{ props.item.totalPayAmount }}
+            </view>
+            <view class="user-label">
+              下单金额
+            </view>
           </view>
-          <view class="user-label">
-            下单金额
-          </view>
-        </view>
-        <view class="user-amount">
-          <view class="user-num">
-            {{ props.item.focAgentFee }}
-          </view>
-          <view class="user-label">
-            我的收益
+          <view class="user-amount">
+            <view class="user-num">
+              {{ props.item.focAgentFee }}
+            </view>
+            <view class="user-label">
+              我的收益
+            </view>
           </view>
         </view>
         <view class="user-icon">
@@ -165,7 +167,6 @@ export default {
       border-radius: 48rpx;
     }
     .user-info{
-      flex: 1;
       .info-one{
         display: flex;
         align-items: center;
@@ -181,6 +182,13 @@ export default {
         }
       }
     }
+  }
+  .amount-box{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20rpx;
   }
   .user-amount{
     .user-num{

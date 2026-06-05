@@ -3,7 +3,6 @@ import ProductHome from './component/ProductHome.vue'
 import type { ProductItem } from '@/types/common'
 import { getProductList } from '@/api/product'
 import { getAgentInfo } from '@/api/mine'
-import { login } from '@/api/index'
 
 interface Pagination {
   pageNum: number
@@ -115,13 +114,23 @@ onLoad((options) => {
 <template>
   <wd-navbar title="首页" safe-area-inset-top fixed :placeholder="true" :bordered="false" />
   <view class="card-warp">
-    <view class="srbd">
-      <view class="srbd-text">
-        新人必读
+    <view class="top-box">
+      <view class="srbd">
+        <view class="srbd-text">
+          客户必读
+        </view>
+        <wd-button size="small" :round="false">
+          查看<wd-icon name="arrow-right" color="#042A10" />
+        </wd-button>
       </view>
-      <wd-button size="small" :round="false">
-        查看<wd-icon name="arrow-right" color="#042A10" />
-      </wd-button>
+      <view class="phone-box">
+        <view class="phone-label">
+          官方热线
+        </view>
+        <view class="phone-num">
+          400-6618-709
+        </view>
+      </view>
     </view>
     <view v-for="item in productList" :key="item.productId" class="produc-list">
       <ProductHome :item-data="item" />
@@ -133,17 +142,35 @@ onLoad((options) => {
 .card-warp{
   padding-left: 32rpx;
   padding-right: 32rpx;
-  .srbd{
-    width: 686rpx;
-    height: 192rpx;
+  padding-bottom: 32rpx;
+  padding-top: 16rpx;
+  .top-box{
     background: #94C3A3;
     border-radius: 32rpx;
+    padding: 42rpx 30rpx 24rpx 48rpx;
+  }
+  .phone-box{
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding-left: 48rpx;
-    padding-right: 30rpx;
-    box-sizing: border-box;
+    justify-content: center;
+    gap: 55rpx;
+    .phone-label{
+      font-weight: 400;
+      font-size: 28rpx;
+      color: #FFFFFF;
+    }
+    .phone-num{
+      font-weight: 400;
+      font-size: 28rpx;
+      color: #FFFFFF;
+    }
+  }
+  .srbd{
+    padding-bottom: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24rpx;
     .srbd-text{
       font-family: PingFangSC, PingFang SC;
       font-weight: 600;
@@ -156,18 +183,18 @@ onLoad((options) => {
     :deep(){
       .wd-button{
         width: 136rpx;
-        height: 64rpx;
+        height: 58rpx;
         background: linear-gradient( 0deg, #D3E6D9 0%, #FAFFFC 100%);
         box-shadow: 0rpx 16rpx 48rpx 0rpx rgba(74,109,85,0.25), inset 0rpx -6rpx 6rpx 0rpx rgba(231,221,212,0.3);
-        border-radius: 24rpx;
+        border-radius: 18rpx;
         color: #042A10;
         font-weight: 500;
-        font-size: 32rpx;
+        font-size: 30rpx;
       }
     }
   }
   .produc-list{
-    margin-top: 32rpx;
+    margin-top: 24rpx;
   }
 }
 </style>

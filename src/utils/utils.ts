@@ -207,9 +207,7 @@ export function formatDecimal(num: number | string): string | number {
  * @returns 当前页面路径
  */
 export function getCurrentPath() {
-  console.log('getCurrentPathgetCurrentPathgetCurrentPathgetCurrentPathgetCurrentPathgetCurrentPathgetCurrentPathgetCurrentPath')
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1]
-  console.log(currentPage)
   return currentPage.route || ''
 }
