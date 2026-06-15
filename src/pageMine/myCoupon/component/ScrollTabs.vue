@@ -7,8 +7,6 @@ const props = withDefaults(defineProps<TabsProps>(), {})
 
 const emit = defineEmits(['tabClick'])
 const modelValue = defineModel<string>()
-
-const list = computed(() => props.itemList)
 function handleClick() {
   emit('tabClick')
 }
@@ -27,11 +25,8 @@ export default {
 <template>
   <view class="tabwarp">
     <wd-tabs v-model="modelValue" slidable="always" :map-num="100000" @click="handleClick">
-      <block key="0">
-        <wd-tab title="全部" name="0" />
-      </block>
-      <block v-for="item in list" :key="item.key">
-        <wd-tab :title="item.title" :name="item.key" :badge-props="item.badgeProps" />
+      <block v-for="item in props.itemList" :key="item.key">
+        <wd-tab :title="item.title" :name="item.key" />
       </block>
     </wd-tabs>
   </view>

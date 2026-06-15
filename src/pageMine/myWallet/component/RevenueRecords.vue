@@ -24,6 +24,15 @@ const statusMap: { [key: number]: string } = {
   8: '退款中',
   9: '退款完成',
 }
+
+function copyId(item: any) {
+  uni.setClipboardData({
+    data: item.orderId,
+    success() {
+      console.log('success')
+    },
+  })
+}
 </script>
 
 <template>
@@ -32,6 +41,7 @@ const statusMap: { [key: number]: string } = {
       <view class="item-top">
         <view class="bianhao">
           订单编号{{ item.orderId }}
+          <text class="iconfont icon-copy" @click.stop="copyId(item)" />
         </view>
         <view class="revenue-num">
           <view>+{{ item.focAgentFee }}</view>
@@ -99,6 +109,11 @@ const statusMap: { [key: number]: string } = {
         font-size: 24rpx;
         color: #666666;
         line-height: 24rpx;
+        .iconfont{
+          font-size: 26rpx;
+          color: #999999;
+          margin-left: 16rpx;
+        }
       }
       .revenue-num{
         text-align: right;

@@ -111,7 +111,7 @@ onShow(() => {
 <template>
   <view class="page-top">
     <wd-navbar title="我的积分" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
-    <wd-notice-bar :scrollable="false" text="团队成员购买产品 / 1元 = 1积分" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+    <wd-notice-bar :scrollable="false" text="客户购买产品 / 1元 = 1积分" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
       <template #prefix>
         <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
       </template>

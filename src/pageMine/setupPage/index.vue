@@ -16,6 +16,10 @@ const copyUsername = ref<string>('')
 const copyPhone = ref<string>('')
 
 const userInfo = computed(() => userStore.userInfo)
+
+const nicknameType = 'nickname' as any
+const numberType = 'number' as any
+
 function handleClickLeft() {
   uni.navigateBack()
 }
@@ -132,20 +136,23 @@ function onUpload({ avatarUrl }: { avatarUrl: string }) {
 <template>
   <wd-navbar title="设置" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
   <view class="page-wrapper">
-    <wd-cell title="头像">
-      <view class="custom-value">
-        <image class="img" :src="imgSrc" />
-        <wd-button type="icon" open-type="chooseAvatar" icon="edit-1" @chooseavatar="onUpload" />
-      </view>
-    </wd-cell>
+    <wd-button custom-class="custom-btn" :round="false" block open-type="chooseAvatar" @chooseavatar="onUpload">
+      <wd-cell title="头像" custom-class="custom-cell">
+        <view class="custom-value">
+          <image class="img" :src="imgSrc" />
+          <wd-button type="icon" icon="edit-1" />
+        </view>
+      </wd-cell>
+    </wd-button>
+
     <wd-cell title="昵称">
-      <view class="custom-value">
+      <view class="custom-value" @click="onPrompt">
         <text class="name">{{ username }}</text>
-        <wd-button type="icon" icon="edit-1" @click="onPrompt" />
+        <wd-button type="icon" icon="edit-1" />
       </view>
     </wd-cell>
     <wd-cell title="联系方式">
-      <view class="custom-value">
+      <view class="custom-value" @click="onSetPhone">
         <text class="name">{{ phone }}</text>
         <wd-button type="icon" icon="edit-1" @click="onSetPhone" />
       </view>
@@ -168,10 +175,10 @@ function onUpload({ avatarUrl }: { avatarUrl: string }) {
     @cancel="handleCancel"
   />
   <wd-message-box selector="usernamebox">
-    <input v-model="copyUsername" type="nickname">
+    <wd-input v-model="copyUsername" :type="nicknameType" />
   </wd-message-box>
   <wd-message-box selector="phonebox">
-    <input v-model="copyPhone">
+    <wd-input v-model="copyPhone" :type="numberType " />
   </wd-message-box>
 </template>
 
@@ -197,6 +204,24 @@ function onUpload({ avatarUrl }: { avatarUrl: string }) {
         color: #111111;
         line-height: 32rpx;
         font-style: normal;
+      }
+    }
+    .custom-btn{
+      background-color: transparent !important;
+      width: auto !important;
+      height: auto !important;
+      padding: 0 !important;
+      line-height: 1 !important;
+      .wd-button__text{
+        width: 100%;
+      }
+    }
+    .custom-btn.wd-button--active{
+      background-color: transparent !important;
+      background: transparent !important;
+      &::before{
+        background-color: transparent !important;
+        background: transparent !important;
       }
     }
   }
@@ -245,16 +270,16 @@ function onUpload({ avatarUrl }: { avatarUrl: string }) {
     font-size: 28rpx;
   }
   :deep(){
-      .wd-button{
-        width: auto !important;
-        height: auto !important;
-        color: #111111 !important;
-        background-color: #fff !important;
-      }
-      .wd-button__content{
-        background-color: #fff !important;
-      }
+    .wd-button{
+      width: auto !important;
+      height: auto !important;
+      color: #111111 !important;
+      background-color: #fff !important;
     }
+    .wd-button__content{
+      background-color: #fff !important;
+    }
+  }
 }
 </style>
 

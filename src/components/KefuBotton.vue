@@ -66,19 +66,19 @@ function aaa(data: any) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 24rpx;
+  font-size: 20rpx;
   .wenzi{
     padding: 6rpx 12rpx;
     border-radius: 20rpx;
     background-color: #089D39;
-    margin-top: -24rpx;
+    margin-top: -20rpx;
     color: #FFf;
   }
 }
 .kefubox{
-  background-color: #FFE5EE;
-  width: 110rpx;
-  height: 110rpx;
+  background-color: #f2faf5;
+  width: 90rpx;
+  height: 90rpx;
   display: flex;
   align-items: center;
   justify-content: center;

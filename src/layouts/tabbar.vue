@@ -3,9 +3,15 @@ import type { ConfigProviderThemeVars } from 'wot-design-uni'
 import { useTabbar } from '@/composables/useTabbar'
 import { useLayoutStore } from '@/stores'
 
+import { msgRead } from '@/api/rank'
+
 const router = useRouter()
 const route = useRoute()
 const layoutStore = useLayoutStore()
+
+const msgStore = useMsgStore()
+
+const messages = computed(() => msgStore.messages)
 
 // #ifdef MP-WEIXIN
 const accountInfo = uni.getAccountInfoSync()
@@ -19,7 +25,20 @@ const themeVars = reactive<ConfigProviderThemeVars>({
 const { activeTabbar, getTabbarItemValue, setTabbarItemActive, tabbarList } = useTabbar()
 
 function handleTabbarChange({ value }: { value: string }) {
+  console.log(activeTabbar.value.name, 'activeTabbar')
   console.log('handleTabbarChange', value)
+  if (activeTabbar.value.name === 'rank' && messages.value.length > 0) {
+    setTabbarItemActive(value)
+    router.pushTab({ name: value, animationType: 'none', animationDuration: 0 })
+    const msgIds = messages.value.map(e => e.id)
+    msgRead({ id: msgIds.join(',') }).then((res) => {
+      if (res.code === 0) {
+        console.log(res)
+      }
+    })
+    msgStore.clearMessages()
+    return
+  }
   setTabbarItemActive(value)
   router.pushTab({ name: value, animationType: 'none', animationDuration: 0 })
 }
@@ -79,7 +98,7 @@ export default {
           inactive-color="#999999"
           @change="handleTabbarChange"
         >
-          <wd-tabbar-item v-for="(item, index) in tabbarList" :key="index" :name="item.name" custom-class="custom-tabbar" :value="getTabbarItemValue(item.name)" :title="item.title">
+          <wd-tabbar-item v-for="(item, index) in tabbarList" :key="index" :name="item.name" custom-class="custom-tabbar" :value="item.value" :title="item.title">
             <template #icon="{ active }">
               <text v-if="active" class="iconfont isActive" :class="item.activeIcon" />
               <text v-else class="iconfont" :class="item.icon" />
@@ -127,11 +146,16 @@ export default {
   color:#999999;
 }
 .custom-box{
-  :deep(.wd-tabbar-item__body-title){
-    font-family: PingFangSC, PingFang SC;
-    font-weight: 500;
-    font-size: 24rpx;
-    margin-top: 7px !important;
+  :deep(){
+    .wd-tabbar-item__body-title{
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 24rpx;
+      margin-top: 7px !important;
+    }
+    .wd-tabbar{
+      padding-top: 6rpx;
+    }
   }
 }
 .isActive{

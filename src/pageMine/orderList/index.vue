@@ -3,14 +3,29 @@ import OrderItem from './component/OrderItem.vue'
 import ScrollTabs from './component/ScrollTabs.vue'
 import { useLayoutStore } from '@/stores'
 
-import { getOrderList } from '@/api/order'
+import { countOrderStatus, getOrderList } from '@/api/order'
 
 interface Pagination {
   pageNum: number
   pageSize: number
   total: number
 }
-const tabs = [
+
+const countData = ref<{
+  finish: string
+  refund: string
+  waitPay: string
+  waitRece: string
+  waitSend: string
+}>({
+  finish: '0',
+  refund: '0',
+  waitPay: '0',
+  waitRece: '0',
+  waitSend: '0',
+})
+
+const tabs = computed(() => [
   {
     title: '待支付',
     key: '1',
@@ -18,23 +33,33 @@ const tabs = [
   {
     title: '待发货',
     key: '2',
+    badgeProps: {
+      modelValue: Number(countData.value.waitSend),
+    },
   },
   {
     title: '待收货',
     key: '3',
+    badgeProps: {
+      modelValue: Number(countData.value.waitRece),
+    },
   },
   {
-    title: '待评价',
+    title: '已完成',
     key: '4',
   },
   {
     title: '退款/售后',
     key: '5',
+    badgeProps: {
+      modelValue: Number(countData.value.refund),
+    },
   },
-]
+])
 
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const orderType = ref<string>('all')
+
 const state = ref()
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
@@ -80,6 +105,14 @@ function getDataList() {
   })
 }
 
+function getCount() {
+  countOrderStatus().then((res) => {
+    if (res.code === 0) {
+      countData.value = res.data
+    }
+  })
+}
+
 function scrolltolower() {
   if (pagination.value.pageNum * pagination.value.pageSize >= pagination.value.total) {
     state.value = 'finished'
@@ -105,6 +138,7 @@ function onRefresh() {
 }
 onShow(() => {
   getDataList()
+  getCount()
 })
 </script>
 

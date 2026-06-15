@@ -1,11 +1,12 @@
-import { onUnmounted, ref } from 'vue'
+import { type Ref, onUnmounted, ref, unref } from 'vue'
 
 /**
  * WebSocket 配置参数类型
  */
 interface WebSocketOptions {
-  url: string // WebSocket服务端地址
+  url: string | Ref<string> // WebSocket服务端地址
   protocols?: string | string[] // 可选，协议
+  autoConnect?: boolean // 是否自动连接，默认 true
   onOpen?: (res: UniApp.OnSocketOpenCallbackResult) => void // 连接成功回调
   onMessage?: (msg: UniApp.OnSocketMessageCallbackResult) => void // 收到消息回调
   onError?: (err: UniApp.GeneralCallbackResult) => void // 连接错误回调
@@ -34,7 +35,7 @@ export function useWebSocket(options: WebSocketOptions) {
    */
   function connect() {
     socketTask = uni.connectSocket({
-      url: options.url,
+      url: unref(options.url),
       protocols: options.protocols ? (Array.isArray(options.protocols) ? options.protocols : [options.protocols]) : undefined,
       success: () => {},
       fail: (err) => {
@@ -120,8 +121,10 @@ export function useWebSocket(options: WebSocketOptions) {
     close()
   })
 
-  // 自动建立连接
-  connect()
+  // 自动建立连接，除非显式关闭 autoConnect
+  if (options.autoConnect !== false) {
+    connect()
+  }
 
   // 返回响应式数据和方法
   return {
@@ -129,5 +132,6 @@ export function useWebSocket(options: WebSocketOptions) {
     message, // 最新消息
     send, // 发送消息方法
     close, // 关闭连接方法
+    connect, // 手动重连
   }
 }

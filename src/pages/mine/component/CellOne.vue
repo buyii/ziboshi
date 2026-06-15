@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useToast } from 'wot-design-uni'
+
+const props = withDefaults(defineProps<Props>(), {})
+const toast = useToast()
 interface Props {
   amountType: any
+  auditStatus: string
 }
-const props = withDefaults(defineProps<Props>(), {})
-
-const list = ref([
+const list = computed(() => [
   {
     title: '代理申请',
     icon: 'icon-grade',
@@ -14,7 +17,7 @@ const list = ref([
   {
     title: '体验装申请',
     icon: 'icon-cost',
-    url: '/pageMine/myteamAdd/index',
+    url: '/pageHome/paymentSample/index',
     show: props.amountType === 2,
   },
   {
@@ -48,6 +51,19 @@ const list = ref([
     show: true,
   },
 ])
+
+function itemClick(item: any) {
+  if (item.url === '/pageMine/myteamAdd/index') {
+    console.log(props.auditStatus)
+    if (props.auditStatus === '1') {
+      toast.show('申请审核中...')
+      return
+    }
+  }
+  uni.navigateTo({
+    url: item.url,
+  })
+}
 </script>
 
 <script lang="ts">
@@ -62,7 +78,7 @@ export default {
 
 <template>
   <view class="cell-wrap">
-    <wd-cell v-for="(item, i) in list.filter(e => e.show)" :key="i" :title="item.title" :to="item.url" is-link>
+    <wd-cell v-for="(item, i) in list.filter(e => e.show)" :key="i" :title="item.title" is-link @click="itemClick(item)">
       <template #icon>
         <text class="iconfont" :class="item.icon" />
       </template>

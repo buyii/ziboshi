@@ -3,13 +3,15 @@ import { useMessage, useToast } from 'wot-design-uni'
 import MyOrder from './component/MyOrder.vue'
 import CellOne from './component/CellOne.vue'
 import { getUserInfo } from '@/api/index'
-import { getAgentInfo, getUserAmount } from '@/api/mine'
+import { getAgentInfo, getApplyStatus, getUserAmount } from '@/api/mine'
 import { joinAgentTeam } from '@/api/team'
+import { countOrderStatus } from '@/api/order'
 
 const toast = useToast()
 const message = useMessage('join')
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+const auditStatus = ref<string>('0')
 const joinData = ref<any>({})
 const loading = ref<boolean>(false)
 const numData = ref<any>({
@@ -17,16 +19,51 @@ const numData = ref<any>({
   count: '0',
   kolServiceBalance: '0',
 })
+const countData = ref<{
+  finish: string
+  refund: string
+  waitPay: string
+  waitRece: string
+  waitSend: string
+}>({
+  finish: '0',
+  refund: '0',
+  waitPay: '0',
+  waitRece: '0',
+  waitSend: '0',
+})
+
+function getCount() {
+  countOrderStatus().then((res) => {
+    if (res.code === 0) {
+      countData.value = res.data
+    }
+  })
+}
+
+function getStatus() {
+  getApplyStatus().then((res) => {
+    if (res.code === 0) {
+      auditStatus.value = res.data.status
+    }
+  })
+}
+
+function getUsers() {
+  getUserAmount().then((res) => {
+    if (res.code === 0) {
+      numData.value = res.data
+    }
+  })
+}
 
 onShow(() => {
   getUserInfo().then((res) => {
     if (res.code === 0) {
       userStore.setUserInfo(res.data)
-    }
-  })
-  getUserAmount().then((res) => {
-    if (res.code === 0) {
-      numData.value = res.data
+      getCount()
+      getStatus()
+      getUsers()
     }
   })
 })
@@ -85,14 +122,14 @@ function joinTeam() {
     console.log('点击了取消按钮')
   })
 }
-// function copyId() {
-//   uni.setClipboardData({
-//     data: userInfo.value.userCode,
-//     success() {
-//       console.log('success')
-//     },
-//   })
-// }
+function copyId() {
+  uni.setClipboardData({
+    data: userInfo.value.userCode,
+    success() {
+      console.log('success')
+    },
+  })
+}
 
 function scanCcode() {
   uni.scanCode({
@@ -151,7 +188,7 @@ onShareTimeline (() => {
 <template>
   <view class="mine-page">
     <view class="banner-wrap">
-      <wd-navbar title="我的" safe-area-inset-top fixed :placeholder="true" custom-class="my-navbar" :bordered="false" />
+      <wd-navbar title="" safe-area-inset-top fixed :placeholder="true" custom-class="my-navbar" :bordered="false" />
       <view class="user-info">
         <view class="user-img">
           <image
@@ -170,7 +207,7 @@ onShareTimeline (() => {
           </view>
           <view class="user-id">
             ID · {{ userInfo.userCode }}
-            <!-- <text class="iconfont icon-copy" @click.stop="copyId" /> -->
+            <text class="iconfont icon-copy" @click.stop="copyId" />
           </view>
           <view class="status-box">
             <view class="user-status">
@@ -228,7 +265,7 @@ onShareTimeline (() => {
           <image src="../../static/svg/team.svg" />
           <view>
             <view class="team-title">
-              我的团队
+              我的客户
             </view>
             <view class="team-desc">
               {{ numData.count }}人
@@ -237,10 +274,10 @@ onShareTimeline (() => {
           </view>
         </view>
       </view>
-      <MyOrder />
-      <CellOne :amount-type="userInfo.amountType" />
+      <MyOrder :count-data="countData" />
+      <CellOne :amount-type="userInfo.amountType" :audit-status="auditStatus" />
     </view>
-    <view class="isbottom" />
+    <!-- <view class="isbottom" /> -->
     <wd-message-box selector="join" custom-class="jonmsg">
       <view class="join-box">
         <img class="join-img" :src="joinData.agentAvatar" alt="">
@@ -258,8 +295,7 @@ onShareTimeline (() => {
 
 <style scoped lang="scss">
 .mine-page{
-  height: 100vh;
-  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom);
   .isbottom{
     height: calc(var(--wot-tabbar-height) + env(safe-area-inset-bottom) + 16rpx);
   }

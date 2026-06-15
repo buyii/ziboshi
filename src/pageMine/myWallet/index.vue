@@ -111,7 +111,7 @@ onShow(() => {
 <template>
   <view class="page-top">
     <wd-navbar title="我的收益" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
-    <wd-notice-bar :scrollable="false" text="团队成员购买产品获得 40% 提成" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+    <wd-notice-bar :scrollable="false" text="客户购买产品获得 40% 提成" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
       <template #prefix>
         <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
       </template>

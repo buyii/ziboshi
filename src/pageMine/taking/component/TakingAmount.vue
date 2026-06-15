@@ -133,6 +133,9 @@ export default {
     </view>
     <view class="amount-input">
       <wd-input v-model="amount" size="large" :cursor-spacing="100" type="digit" placeholder="" @input="onInput">
+        <template #prefix>
+          <text class="prefix">¥</text>
+        </template>
         <template #suffix>
           <wd-button custom-class="amount-button" type="text" @click="allWithdrawal">
             全部
@@ -205,6 +208,9 @@ export default {
         line-height: 28rpx;
         font-style: normal;
       }
+    }
+    .prefix{
+      font-size: 48rpx
     }
   }
   .radio-item{

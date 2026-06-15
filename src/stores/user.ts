@@ -27,9 +27,10 @@ export const useUserStore = defineStore(
     const token = shallowRef<NullableString>(null)
     const userInfo = ref<User>({ ...initState })
     const paymentData = ref<any | null>(null)
-    const productData = ref<any | null>(null)
+    const orderData = ref<any | null>(null)
     const applyStatus = ref<string>('0')
     const showCopyTip = ref<boolean>(true)
+    const couponList = ref<any[]>([])
 
     const setShowCopyTip = (val: any) => {
       showCopyTip.value = val
@@ -43,8 +44,12 @@ export const useUserStore = defineStore(
       paymentData.value = { ...val }
     }
 
-    const setProductData = (val: any) => {
-      productData.value = { ...val }
+    const setOrderData = (val: any) => {
+      orderData.value = { ...val }
+    }
+
+    const setCouponList = (val: any) => {
+      couponList.value = val
     }
 
     const setToken = (val: any) => {
@@ -84,8 +89,10 @@ export const useUserStore = defineStore(
     return {
       token,
       userInfo,
-      productData,
-      setProductData,
+      orderData,
+      couponList,
+      setCouponList,
+      setOrderData,
       paymentData,
       setPaymentData,
       setToken,

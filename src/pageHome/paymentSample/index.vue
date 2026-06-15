@@ -1,99 +1,26 @@
 <script setup lang="ts">
 import { useToast } from 'wot-design-uni'
 import Commodity from './component/Commodity.vue'
-import MyPopup from './component/MyPopup.vue'
-import CouponPopup from './component/CouponPopup.vue'
 import { createAndPayOrder } from '@/api/order'
-import { getMyPoint } from '@/api/wallet'
-import { getCoupon, getUserDefaultAddress } from '@/api/common'
+import { getProductList } from '@/api/product'
+import { getUserDefaultAddress } from '@/api/common'
 import { useLayoutStore } from '@/stores'
 
-const userStore = useUserStore()
 const layoutStore = useLayoutStore()
 const statusBarHeight = computed(() => {
   return layoutStore.layoutStore.statusBarHeight
 })
 const toast = useToast()
-const userInfo = computed(() => userStore.userInfo)
-const paymentData = computed(() => {
-  return userStore.paymentData
-})
-const MyPopupRef = ref()
-const CouponPopupRef = ref()
+
 const loading = ref<boolean>(false)
+const productData = ref<any>({})
 const addressData = ref()
-const couponList = ref([])
-const selectCoupons = ref([])
-const payType = ref<number>(2)
-const itemNum = ref<number>(1)
-const amountPoint = ref<number>(0)
+const itemNum = ref<number>(5)
 const remark = ref<string>('')
 
 function handleClickLeft() {
   uni.navigateBack()
 }
-
-function confirmAuth() {
-  const params: any = {
-    productId: paymentData.value?.productId,
-    logisticsFee: paymentData.value.logisticsfee,
-    payType: payType.value,
-    itemNum: itemNum.value,
-    addressId: addressData.value?.id,
-    remark: remark.value,
-  }
-  loading.value = true
-  createAndPayOrder(params).then((res) => {
-    loading.value = false
-    if (res.code === 0) {
-      // 如果需要支付运费，调用支付接口
-      if (res.data.needPay) {
-        const data = { ...res.data }
-        uni.requestPayment({
-          ...data,
-          success(res) {
-            console.log(`success:${JSON.stringify(res)}`)
-            uni.navigateTo({
-              url: '/pageHome/applySuccess/index',
-            })
-          },
-          fail(err) {
-            console.log(`fail:${JSON.stringify(err)}`)
-            uni.redirectTo({
-              url: '/pageMine/orderList/index',
-            })
-          },
-        })
-        return
-      }
-      uni.navigateTo({
-        url: '/pageHome/applySuccess/index',
-      })
-    }
-  }).catch(() => {
-    loading.value = false
-  })
-}
-
-function payTypeChange(e: any) {
-  if (e.value === 1) {
-    selectCoupons.value = couponList.value.filter((item: any) => item.type === 1)
-  }
-  else {
-    selectCoupons.value = couponList.value
-  }
-}
-
-const discount = computed(() => {
-  const totalDiscount = selectCoupons.value.reduce((sum: number, coupon: any) => {
-    let num = Number(coupon.price)
-    if (coupon.type === 1) {
-      num = Number(coupon.price) * itemNum.value
-    }
-    return sum + Number(num)
-  }, 0)
-  return totalDiscount.toFixed(2)
-})
 
 function onConfirm() {
   if (!addressData.value) {
@@ -101,20 +28,12 @@ function onConfirm() {
     return
   }
 
-  if (payType.value === 1) {
-    MyPopupRef.value.open()
-    return
-  }
-
-  const filterCoupon = selectCoupons.value.filter((item: any) => item.type !== 1)
-  const couponId = filterCoupon.map((item: any) => item.id).join(',')
   const params: any = {
-    productId: paymentData.value?.productId,
-    payType: payType.value,
+    productId: productData.value?.productId,
+    payType: 3,
     itemNum: itemNum.value,
     addressId: addressData.value?.id,
     remark: remark.value,
-    couponId,
   }
   loading.value = true
   createAndPayOrder(params).then((res) => {
@@ -142,10 +61,16 @@ function onConfirm() {
   })
 }
 
-function getPoint() {
-  getMyPoint().then((res) => {
+function getdata() {
+  const params = {
+    productType: 2, // 1-正常商品 2-体验装
+  }
+  getProductList(params).then((res) => {
     if (res.code === 0) {
-      amountPoint.value = res.data.amount ? Number(res.data.amount) : 0
+      if (res.rows && res.rows.length > 0) {
+        const data = res.rows[0]
+        productData.value = data
+      }
     }
   })
 }
@@ -158,27 +83,6 @@ function getDefaultAddress() {
       addressData.value = res.data ? res.data : null
     }
   })
-}
-
-function getYouHui() {
-  getCoupon().then((res) => {
-    if (res.code === 0) {
-      couponList.value = res.data || []
-      if (payType.value === 1) {
-        selectCoupons.value = couponList.value.filter((item: any) => item.type === 1)
-      }
-      else {
-        selectCoupons.value = couponList.value
-      }
-    }
-  })
-}
-
-function selectCoupon() {
-  if (payType.value === 1) {
-    return
-  }
-  CouponPopupRef.value.open()
 }
 
 function toAddress() {
@@ -194,15 +98,8 @@ function toAddress() {
 }
 
 onShow(() => {
-  getPoint()
+  getdata()
   getDefaultAddress()
-  getYouHui()
-})
-
-onLoad((options) => {
-  if (options?.itemNum) {
-    itemNum.value = Number(options?.itemNum)
-  }
 })
 </script>
 
@@ -247,47 +144,12 @@ onLoad((options) => {
       </view>
     </view>
     <view class="warp111">
-      <Commodity :payment-data="paymentData" />
+      <Commodity :payment-data="productData" />
       <view class="guigebox" style="margin-top: 24rpx;">
-        <view class="guige">
-          <view>支付方式</view>
-          <view>
-            <wd-radio-group v-model="payType" shape="button" checked-color="#089D39" @change="payTypeChange">
-              <wd-radio :value="2">
-                现金支付
-              </wd-radio>
-              <wd-radio v-if="userInfo.amountType === 1" :value="1">
-                积分兑换
-              </wd-radio>
-            </wd-radio-group>
-          </view>
-        </view>
-        <!-- <view class="guige">
-        <view>运费</view>
-        <view>
-          {{ paymentData?.exclusivePrice }}元
-        </view>
-      </view> -->
         <view class="guige">
           <view>购买数量</view>
           <view>
-            <wd-input-number v-model="itemNum" />
-          </view>
-        </view>
-      </view>
-
-      <view class="guigebox" style="margin-top: 24rpx;">
-        <view class="guige">
-          <view>优惠券</view>
-          <view @click="selectCoupon">
-            - ¥ {{ discount }}
-            <text class="iconfont icon-into" />
-          </view>
-        </view>
-        <view class="guige">
-          <view>运费</view>
-          <view>
-            + {{ payType === 1 ? paymentData?.logisticsfee || '0.00' : '0.00' }} 元
+            <wd-input-number v-model="itemNum" :min="5" />
           </view>
         </view>
         <view class="guige">
@@ -300,28 +162,17 @@ onLoad((options) => {
     </view>
 
     <view class="botbox">
-      <view v-if="payType === 1" class="jifeng">
-        <view class="jifengbox">
-          <DigitBold :value="(paymentData!.price * itemNum - Number(discount)) * 2" int-size="40rpx" color="#FF5100" suffix=" 积分" suffix-size="24rpx" />
-          <DigitBold v-if="paymentData.logisticsfee && Number(paymentData?.logisticsfee) > 0" :value="paymentData?.logisticsfee" int-size="40rpx" color="#FF5100" suffix=" 运费" suffix-size="24rpx" />
-        </view>
-        <view class="jifengnum">
-          当前可用 <DigitBold :value="amountPoint" int-size="24rpx" decimal-size="24rpx" color="#FF5100" /> 积分
-        </view>
-      </view>
-      <view v-else class="jifeng">
-        <DigitBold :value="((paymentData!.price * itemNum) - Number(discount)).toFixed(2)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
+      <view class="jifeng">
+        <DigitBold :value="((productData!.price * itemNum)).toFixed(2)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
         <view class="yingfu">
           应付
         </view>
       </view>
-      <button class="puy-btn" :loading="loading" :disabled="payType === 1 && (amountPoint < paymentData!.price * itemNum * 2)" @click="onConfirm">
-        {{ payType === 1 && (amountPoint < paymentData!.price * itemNum * 2) ? '积分不足' : '去结算' }}
+      <button class="puy-btn" :loading="loading" @click="onConfirm">
+        去结算
       </button>
     </view>
   </view>
-  <MyPopup ref="MyPopupRef" :amount-point="amountPoint" :price="paymentData!.price" :num-point="(paymentData!.price * itemNum - Number(discount)) * 2" @confirm-auth="confirmAuth" />
-  <CouponPopup ref="CouponPopupRef" v-model="selectCoupons" :list="couponList" :item-num="itemNum" />
 </template>
 
 <style scoped lang="scss">
@@ -615,9 +466,9 @@ onLoad((options) => {
 <route lang="json">
 {
   "layout": "default",
-  "name": "payment",
+  "name": "paymentSample",
   "style": {
-    "navigationBarTitleText": "支付结算"
+    "navigationBarTitleText": "体验装支付"
   }
 }
 </route>

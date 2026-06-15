@@ -1,12 +1,22 @@
 <script setup lang="ts">
-const { itemData } = defineProps<Props>()
+// const { itemData } = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {})
 interface Props {
   itemData: any
+  coupon: any
 }
+
+const discount = computed(() => {
+  if (props.coupon) {
+    const num = Number(props.itemData.price) - Number(props.coupon.price)
+    return num.toFixed(2)
+  }
+  return props.itemData.price
+})
 
 function toDetail() {
   uni.navigateTo({
-    url: `/pageHome/details/index?productId=${itemData.productId}&activityId=${itemData.activityId}`,
+    url: `/pageHome/details/index?productId=${props.itemData.productId}&activityId=${props.itemData.activityId}`,
   })
 }
 </script>
@@ -28,17 +38,22 @@ function toDetail() {
       </view>
     </view>
     <view class="img-box">
-      <img class="img" :src="itemData.cover">
+      <img class="img" :src="props.itemData.cover">
     </view>
     <view class="product-info">
       <view class="jiage">
-        <DigitBold :value="itemData.price" int-size="64rpx" decimal-size="48rpx" color="#FF5017" />
+        <template v-if="props.coupon">
+          <DigitBold prefix="会员优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+          <wd-divider vertical color="#FF5017" />
+          <DigitBold prefix="原价¥" :value="props.itemData.price" int-size="28rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+        </template>
+        <DigitBold v-else :value="props.itemData.price" int-size="60rpx" prefix="¥" decimal-size="40rpx" color="#FF5017" />
         <view class="shiliang">
-          /盒/十条
+          {{ props.itemData.unit }}
         </view>
       </view>
       <view class="product-name">
-        {{ itemData.productName }}
+        {{ props.itemData.productName }}
       </view>
     </view>
   </view>
@@ -47,16 +62,20 @@ function toDetail() {
 <style lang="scss" scoped>
 .productBox{
   background-color: #fff;
-  border-radius: 32rpx;
-  padding: 28rpx;
+  border-radius: 32rpx 32rpx 0 0;
+  // padding: 28rpx;
   .product-top{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 28rpx 28rpx 0 28rpx;
     .top-item{
       display: flex;
       align-items: center;
       gap: 10rpx;
+      padding: 16rpx 20rpx;
+      background-color: #ffe4c8;
+      border-radius: 50rpx;
       .item-text{
         font-family: PingFangSC, PingFang SC;
         font-weight: 400;
@@ -69,15 +88,16 @@ function toDetail() {
   }
   .img-box{
     width: 100%;
-    height: 656rpx;
-    margin-top: 32rpx;
+    height: 600rpx;
+    margin-top: 16rpx;
     .img{
       width: 100%;
       height: 100%;
     }
   }
   .product-info{
-    margin-top: 32rpx;
+    margin-top: 16rpx;
+    padding: 0rpx 28rpx 28rpx 28rpx;
     .jiage{
       display: flex;
       align-items: baseline;
@@ -93,7 +113,7 @@ function toDetail() {
       font-weight: 400;
       font-size: 32rpx;
       color: #222222;
-      line-height: 44rpx;
+      line-height: 40rpx;
       text-align: left;
     }
   }

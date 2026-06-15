@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import LogisticsInfo from './component/LogisticsInfo.vue'
+import OrderItem from './component/OrderItem.vue'
 import { getOrderLogistics } from '@/api/order'
 import { useLayoutStore } from '@/stores'
 
 const statusMap: Record<string, string> = {
+  createOrder: '提交订单',
+  payOrder: '已下单',
+  send: '已发货',
   WAIT_ACCEPT: '待揽收',
   ACCEPT: '已揽收',
   TRANSPORT: '运输中',
@@ -19,6 +23,7 @@ const statusBarHeight = computed(() => {
 })
 const orderId = ref<any>(0)
 const logisticsData = ref<any>({
+  order: [],
   logistics: [],
 })
 
@@ -33,6 +38,16 @@ function getDetail() {
     }
   })
 }
+
+function copyId() {
+  uni.setClipboardData({
+    data: logisticsData.value.orderId,
+    success() {
+      console.log('success')
+    },
+  })
+}
+
 onLoad((options) => {
   orderId.value = options?.orderId || ''
   getDetail()
@@ -68,8 +83,55 @@ onLoad((options) => {
       <text class="iconfont icon-address dizhi-right" />
     </view>
     <wd-gap bg-color="#F8F8F8" height="16rpx" />
+    <OrderItem />
+    <wd-gap bg-color="#F8F8F8" height="16rpx" />
+    <view class="guigebox">
+      <view class="guige">
+        <view>订单编号</view>
+        <view>
+          {{ logisticsData.orderId }}
+          <text class="iconfont icon-copy" @click="copyId" />
+        </view>
+      </view>
+      <view class="guige">
+        <view>下单时间</view>
+        <view>
+          {{ logisticsData.createTime }}
+        </view>
+      </view>
+      <view class="guige">
+        <view>订单留言</view>
+        <view>
+          {{ logisticsData.remark || '' }}
+        </view>
+      </view>
+    </view>
+    <!-- <wd-gap bg-color="#F8F8F8" height="16rpx" />
+    <view class="guigebox" >
+      <view class="guige">
+        <view>商品价格</view>
+        <view>
+          {{ logisticsData.orderId }}
+          <text class="iconfont icon-copy" @click="copyId" />
+        </view>
+      </view>
+      <view class="guige">
+        <view>下单时间</view>
+        <view>
+          {{ logisticsData.paySuccessTime }}
+        </view>
+      </view>
+      <view class="guige">
+        <view>订单留言</view>
+        <view>
+          {{ logisticsData.remark || '' }}
+        </view>
+      </view>
+    </view> -->
+
+    <wd-gap bg-color="#F8F8F8" height="16rpx" />
     <view class="logistics-box">
-      <LogisticsInfo :logistics="logisticsData.logistics" />
+      <LogisticsInfo :logistics="logisticsData.logistics" :order="logisticsData.order" />
     </view>
   </view>
 </template>
@@ -79,7 +141,7 @@ onLoad((options) => {
   position: fixed;
   height: 304rpx;
   width: 100%;
-  background: linear-gradient( 180deg, rgba(229, 255, 255, 1) 0%, rgba(222, 255, 233, 1) 50%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient( 180deg, rgb(210, 244, 221) 0%, rgba(255, 255, 255, 1) 100%);
 }
 .collect-warp{
   position: relative;
@@ -138,6 +200,49 @@ onLoad((options) => {
     .dizhi-right{
       font-size: 28rpx;
       color: #000000;
+    }
+  }
+  .guigebox{
+    background-color: #FFFFFF;
+    border-radius: 16rpx;
+  }
+  .guige{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12rpx 24rpx;
+    min-height: 60rpx;
+    font-size: 28rpx;
+    font-style: normal;
+    view:nth-child(1){
+      color: #111111;
+      min-width: 160rpx;
+      font-weight: 500;
+    }
+    view:nth-child(2){
+      flex: 1;
+      color: #666666;
+      line-height: 1.4;
+      text-align: right;
+      text{
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 28rpx;
+        color: #BABABA;
+        line-height: 28rpx;
+        font-style: normal;
+        margin-left: 8rpx;
+      }
+    }
+    :deep(){
+      .wd-radio.is-button.is-checked .wd-radio__label {
+        background-color: #089D39 !important;
+        color: #FFFFFF !important;
+        border-color: #089D39 !important;
+      }
+      .custom-input{
+        text-align: right;
+      }
     }
   }
   .logistics-box{

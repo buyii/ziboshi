@@ -1,10 +1,20 @@
 import { alova } from '@/utils/request'
-// 排行榜
-export function getProductSales(params: Record<string, any>) {
-  return alova.Get<any>('/mall/mini/ranking/productRanking', {
+
+// 标记消息为已读
+export function msgRead(params: Record<string, any>) {
+  return alova.Get<any>('/mall/mini/user-msg/read', {
     params: { ...params },
-    meta: {
-      ignoreToken: true,
-    },
+  })
+}
+
+// 获取消息列表
+export function getMsgList() {
+  return alova.Get<any>('/mall/mini/user-msg/list', {})
+}
+
+// 删除消息
+export function msgDelete(params: Record<string, any>) {
+  return alova.Get<any>('/mall/mini/user-msg/delete', {
+    params: { ...params },
   })
 }

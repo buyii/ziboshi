@@ -2,6 +2,7 @@
 import { useToast } from 'wot-design-uni'
 import { useLayoutStore } from '@/stores'
 import { agentTeamApply } from '@/api/team'
+import { getMyPoint } from '@/api/wallet'
 
 const layoutStore = useLayoutStore()
 const statusBarHeight = computed(() => {
@@ -21,6 +22,15 @@ const model = reactive<{
 })
 
 const form = ref()
+const amountPoint = ref<number>(0)
+
+function getPoint() {
+  getMyPoint().then((res) => {
+    if (res.code === 0) {
+      amountPoint.value = res.data.amount ? Number(res.data.amount) : 0
+    }
+  })
+}
 
 function handleSubmit() {
   form.value.validate().then(({ valid, errors }: any) => {
@@ -54,12 +64,15 @@ function handleSubmit() {
 function handleClickLeft() {
   uni.navigateBack()
 }
+onShow(() => {
+  getPoint()
+})
 </script>
 
 <template>
   <wd-navbar title="申请代理" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }" class="form-wrapper">
-    <wd-notice-bar :scrollable="false" text="总积分≥5000积分即可申请" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
+    <wd-notice-bar :scrollable="false" text="总积分≥5000即可申请" custom-class="my-notice" color="#000000" background-color="#FFFFFF">
       <template #prefix>
         <img class="prefiximg" src="../../static/svg/home_notice.svg" alt="">
       </template>
@@ -101,6 +114,7 @@ function handleClickLeft() {
         />
       </wd-cell-group>
     </wd-form>
+    <wd-notice-bar :text="`您当前总积分为${amountPoint}`" :scrollable="false" />
   </view>
   <FootButton label="提 交" :loading="loading" fixed @confirm="handleSubmit" />
 </template>

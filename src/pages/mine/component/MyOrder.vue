@@ -5,31 +5,42 @@ import order3 from '@/static/svg/order3.svg'
 import order4 from '@/static/svg/order4.svg'
 import order5 from '@/static/svg/order5.svg'
 
-const list = ref([
+export interface TabsProps {
+  countData: any
+}
+
+const props = withDefaults(defineProps<TabsProps>(), {})
+
+const list = computed(() => [
   {
     title: '待付款',
     icon: order1,
     url: '/pageMine/orderList/index',
+    value: 0,
   },
   {
     title: '待发货',
     icon: order2,
     url: '/pageMine/orderList/index',
+    value: props.countData.waitSend,
   },
   {
     title: '待收货',
     icon: order3,
     url: '/pageMine/orderList/index',
+    value: props.countData.waitRece,
   },
   {
-    title: '待评价',
+    title: '已完成',
     icon: order4,
     url: '/pageMine/orderList/index',
+    value: 0,
   },
   {
     title: '退款/售后',
     icon: order5,
     url: '/pageMine/orderList/index',
+    value: props.countData.refund,
   },
 ])
 
@@ -48,7 +59,9 @@ function toOrder(item: { title: string, url: string }) {
     <view class="order-list">
       <view v-for="(item, i) in list" :key="i" class="order-item" @click="toOrder(item)">
         <view class="order-img">
-          <image class="img" :src="item.icon" mode="widthFix" />
+          <wd-badge :model-value="Number(item.value)" :max="99">
+            <image class="img" :src="item.icon" mode="widthFix" />
+          </wd-badge>
         </view>
         <view class="order-label">
           {{ item.title }}

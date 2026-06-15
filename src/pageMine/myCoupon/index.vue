@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ScrollTabs from './component/ScrollTabs.vue'
+
 import { useLayoutStore } from '@/stores'
 import { getCouponList } from '@/api/common'
 
@@ -8,10 +10,22 @@ interface Pagination {
   total: number
 }
 
+const tabs = [
+  {
+    title: '有效',
+    key: '1',
+  },
+  {
+    title: '已失效',
+    key: '2',
+  },
+]
+
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const state = ref()
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
+const orderType = ref<string>('1')
 const pagination = ref<Pagination>({
   pageNum: 1,
   pageSize: 10,
@@ -25,10 +39,16 @@ function handleClickLeft() {
   uni.navigateBack()
 }
 
+function tabClick() {
+  pagination.value.pageNum = 1
+  getDataList()
+}
+
 function getDataList() {
   const params = {
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
+    status: orderType.value,
   }
   loading.value = true
   getCouponList(params).then((res) => {
@@ -73,11 +93,14 @@ onShow(() => {
 
 <template>
   <wd-navbar title="我的优惠券" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
-  <MyScrollView :top="`${(statusBarHeight || 0) + 45}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
+  <view class="tab-box">
+    <ScrollTabs v-model="orderType" :item-list="tabs" @tab-click="tabClick" />
+  </view>
+  <MyScrollView :top="`${(statusBarHeight || 0) + 91}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
     <view v-if="dataList.length > 0" class="sample-content">
       <template v-for="item in dataList" :key="item.id">
         <x-coupon
-          :value="item.price" :title="item.name" color="#24d192"
+          :value="item.price" :title="item.name" color="#24d192" background-color="#e1f6ee"
           :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" validity="优惠券x1"
           :show-btn="false" :status="item.status === 2 ? 'used' : 'available'"
         />

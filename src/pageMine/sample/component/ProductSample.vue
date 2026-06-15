@@ -1,131 +1,18 @@
 <script setup lang="ts">
-import { useMessage, useToast } from 'wot-design-uni'
-import { closeOrder, confirmOrder, payOrder } from '@/api/order'
+import { payOrder } from '@/api/order'
 
 const props = withDefaults(defineProps<Props>(), {})
-const emit = defineEmits(['onRefresh'])
-const message = useMessage('shouhuo')
-const toast = useToast()
+
+interface Props {
+  itemData: any
+}
 
 const userStore = useUserStore()
-interface Props {
-  item: any
-}
-// 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
-const statusMap: { [key: number]: string } = {
-  1: '待支付',
-  2: '待发货',
-  3: '交易关闭',
-  4: '待收货',
-  5: '已收货',
-  7: '待评价',
-  8: '退款中',
-  9: '退款完成',
-}
-
-function onRefund1() {
-  uni.navigateTo({
-    url: `/pageMine/orderRefund/index?orderId=${props.item.orderId}&totalPayAmount=${props.item.totalPayAmount}`,
-  })
-}
-
-function confirmReceipt() {
-  const params = {
-    orderId: props.item.orderId,
-  }
-  message.confirm({
-    msg: '是否确认收货吗?',
-    title: '提示',
-    cancelButtonProps: {
-      customClass: 'custom-shadow1',
-    },
-    confirmButtonProps: {
-      customClass: 'custom-shadow',
-    },
-
-  }).then(() => {
-    confirmOrder(params).then((res) => {
-      if (res.code === 0) {
-        toast.show('确认收货成功')
-        emit('onRefresh')
-      }
-    })
-  }).catch(() => {
-    console.log('点击了取消按钮')
-  })
-}
-
-function toLogistics() {
-  if (props.item.status === 1 || props.item.status === 3) {
-    return
-  }
-  const data = { ...props.item }
-  userStore.setOrderData(data)
-  uni.navigateTo({
-    url: `/pageMine/orderLogistics/index?orderId=${props.item.orderId}`,
-  })
-}
-
-function buyAgain() {
-  uni.navigateTo({
-    url: `/pageHome/details/index?productId=${props.item.productId}`,
-  })
-}
-
-function onDel() {
-  message.confirm({
-    msg: '是否确认删除该订单?',
-    title: '提示',
-    cancelButtonProps: {
-      customClass: 'custom-shadow1',
-    },
-    confirmButtonProps: {
-      customClass: 'custom-shadow',
-    },
-
-  }).then(() => {
-    const params = {
-      orderId: props.item.orderId,
-    }
-    closeOrder(params).then((res) => {
-      if (res.code === 0) {
-        toast.show('删除成功')
-        emit('onRefresh')
-      }
-    })
-  }).catch(() => {
-    console.log('点击了取消按钮')
-  })
-}
-
 function toPay() {
-  const params = {
-    orderId: props.item.orderId,
-  }
-  payOrder(params).then((res) => {
-    if (res.code === 0) {
-      const data = { ...res.data }
-      uni.requestPayment({
-        ...data,
-        success(res) {
-          uni.navigateTo({
-            url: '/pageHome/applySuccess/index',
-          })
-        },
-        fail(err) {
-          console.log(`fail:${JSON.stringify(err)}`)
-        },
-      })
-    }
-  })
-}
-
-function copyId() {
-  uni.setClipboardData({
-    data: props.item.orderId,
-    success() {
-      console.log('success')
-    },
+  const data = { ...props.itemData }
+  userStore.setPaymentData(data)
+  uni.navigateTo({
+    url: `/pageHome/paymentSample/index?itemNum=1`,
   })
 }
 </script>
@@ -142,42 +29,23 @@ export default {
 
 <template>
   <view class="car-item">
-    <view
-      class="status"
-      :class="{
-        'status-ing': props.item.status === 1,
-        'status-success': props.item.status === 2,
-        'status-apply': props.item.status === 4,
-        'status-refuse': props.item.status === 3,
-        'status-queren': props.item.status === 5,
-        'status-daipingjia': props.item.status === 7,
-        'status-tuikuan': props.item.status === 8 || props.item.status === 9,
-      }"
-      @click="toLogistics"
-    >
-      {{ statusMap[props.item.status] }}
-    </view>
-    <view class="order" @click="toLogistics">
-      <view>订单编号</view>
-      <view>{{ props.item.orderId }} <text class="iconfont icon-copy text" @click.stop="copyId" /></view>
-    </view>
-    <view class="item-content" @click="toLogistics">
+    <view class="item-content">
       <view class="item-left">
-        <image :src="props.item.productImg" />
+        <image :src="props.itemData.cover" />
       </view>
       <view class="item-right">
         <view class="item-title">
-          <wd-text :text="props.item.productName" color="#000000" :lines="2" size="28rpx" />
+          <wd-text :text="props.itemData.productName" color="#000000" :lines="2" size="28rpx" />
         </view>
         <view class="item-cost">
           <view class="cost1">
-            <view>{{ props.item.createTime }}</view>
+            <view>{{ props.itemData.unit }}</view>
             <view class="cost2">
               <!-- <view class="cost-text">
-                运费：{{ props.item.logisticsFee }}元
+                运费：{{ props.itemData.logisticsFee }}元
               </view> -->
               <view class="cost-text">
-                x{{ props.item.itemNum || 1 }}
+                x{{ props.itemData.itemNum || 1 }}
               </view>
             </view>
           </view>
@@ -185,27 +53,12 @@ export default {
       </view>
     </view>
     <view class="item-foot">
-      <view v-if="props.item.payType === 1" class="jiage">
-        <DigitBold :value="props.item.totalPayAmount" suffix="积分" int-size="48rpx" decimal-size="48rpx" suffix-size="28rpx" color="#000000" />
-      </view>
-      <view v-else class="jiage">
-        {{ props.item.status === 1 ? '应付：' : '' }}<DigitBold :value="props.item.totalPayAmount" prefix="¥" int-size="48rpx" decimal-size="48rpx" prefix-size="28rpx" color="#000000" />
+      <view class="jiage">
+        <DigitBold :value="props.itemData.price" prefix="¥" int-size="48rpx" decimal-size="48rpx" prefix-size="28rpx" color="#000000" />
       </view>
       <view class="btns">
-        <wd-button v-if="props.item.status === 1" size="small" custom-class="custom-btntext" @click="toPay">
-          去支付
-        </wd-button>
-        <wd-button v-if="props.item.status === 3" size="small" custom-class="custom-btntext1" @click="buyAgain">
-          再来一单
-        </wd-button>
-        <wd-button v-if="(props.item.status === 2 || props.item.status === 4) && props.item.payType === 2" size="small" custom-class="custom-btntext1" @click="onRefund1">
-          申请退款
-        </wd-button>
-        <wd-button v-if="props.item.status === 4" size="small" custom-class="custom-btntext" @click="confirmReceipt">
-          确认收货
-        </wd-button>
-        <wd-button v-if="props.item.status === 1 || props.item.status === 3 || props.item.status === 5 || props.item.status === 9" size="small" custom-class="custom-btndel" @click="onDel">
-          删除订单
+        <wd-button size="small" custom-class="custom-btntext" @click="toPay">
+          购 买
         </wd-button>
       </view>
     </view>
@@ -287,7 +140,7 @@ export default {
     gap: 30rpx;
     align-items: center;
     margin-top: 24rpx;
-    padding-bottom: 12rpx;
+    padding-bottom: 24rpx;
     border-bottom: 4rpx solid #EEEEEE;
     .item-left{
       image{

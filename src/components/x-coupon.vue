@@ -39,8 +39,8 @@ const couponStyle = computed(() => ({
 }))
 const statusText = computed(() => {
   const map: Record<string, string> = {
-    used: '已使用',
-    expired: '已过期',
+    used: '已失效',
+    expired: '已失效',
     available: '',
   }
   return map[props.status || 'available'] || ''
@@ -190,7 +190,7 @@ function handleClick() {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 24rpx 30rpx 24rpx 40rpx; // 左侧预留缺口区域
+    padding: 24rpx 30rpx 24rpx 24rpx; // 左侧预留缺口区域
     position: relative;
     box-sizing: border-box;
   }
@@ -204,7 +204,7 @@ function handleClick() {
   }
 
   &__title {
-    font-size: 30rpx;
+    font-size: 26rpx;
     font-weight: bold;
     color: #333;
     margin-bottom: 18rpx;
@@ -277,7 +277,7 @@ function handleClick() {
       height: 40rpx;
       line-height: 40rpx;
       text-align: center;
-      background-color: #ccc;
+      background-color: #ff0055;
       color: #fff;
       font-size: 20rpx;
       transform: rotate(45deg) translate(11rpx, -11rpx);

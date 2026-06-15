@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { useToast } from 'wot-design-uni'
 import ProductHome from './component/ProductHome.vue'
+import PosterTem from './component/PosterTem.vue'
+import SharePopup from './component/SharePopup.vue'
+import BuyPopup from './component/BuyPopup.vue'
+import PosterPopup from './component/PosterPopup.vue'
+
 import type { ProductItem } from '@/types/common'
-import { getProductList } from '@/api/product'
+import { getProductDetail, getProductList } from '@/api/product'
 import { getAgentInfo } from '@/api/mine'
+import { getCoupon, miniQRCode } from '@/api/common'
 
 interface Pagination {
   pageNum: number
@@ -14,14 +21,29 @@ const pagination = ref<Pagination>({
   pageSize: 10,
   total: 0,
 })
-// const toast = useToast()
+const toast = useToast()
 const scene = ref()
 const state = ref()
 const joinData = ref<any>({})
-
+const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const productList = ref<ProductItem[]>([])
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+
+const posterPopupRef = ref<ComponentPublicInstance<{ open: (num: string) => void }> | null>(null)
+const SharePopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
+const BuyPopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
+
+const showPoster = ref(false)
+const imgUrl = ref('')
+const codeImg = ref('')
+const detailData = ref<any>({})
+
+const coupon = computed(() => {
+  const list = userStore.couponList.filter((item: any) => item.type === 1)
+  const item = list.find((item: any) => item.type === 1)
+  return item
+})
 
 function getdata() {
   if (pagination.value.pageNum === 1) {
@@ -29,6 +51,7 @@ function getdata() {
     })
   }
   const params = {
+    productType: 1, // 1-正常商品 2-体验装
   }
   getProductList(params).then((res) => {
     if (res.code === 0) {
@@ -41,6 +64,7 @@ function getdata() {
       else {
         productList.value = productList.value.concat(rows)
       }
+      getDetail()
     }
     else {
       state.value = 'error'
@@ -102,6 +126,72 @@ onShareTimeline (() => {
   }
 })
 
+function getYouHui() {
+  getCoupon().then((res) => {
+    if (res.code === 0) {
+      const list = res.data || []
+      userStore.setCouponList(list)
+    }
+  })
+}
+
+function getCode() {
+  toast.loading({
+    loadingType: 'ring',
+    loadingColor: '#FF0057',
+    msg: '海报生成中...',
+  })
+  const params = {
+    productId: detailData.value.productId,
+    activityId: detailData.value.activityId,
+  }
+  miniQRCode(params).then((res) => {
+    if (res.code === 0) {
+      showPoster.value = true
+      codeImg.value = res.data
+    }
+  }).catch(() => {
+    toast.close()
+  })
+}
+
+function onPoster() {
+  if (imgUrl.value) {
+    posterPopupRef.value?.open(imgUrl.value)
+  }
+  else {
+    getCode()
+  }
+}
+
+function changeImg(url: any) {
+  toast.close()
+  imgUrl.value = url
+  posterPopupRef.value?.open(imgUrl.value)
+}
+
+function onShareClick() {
+  SharePopupRef.value?.open()
+}
+
+function getDetail() {
+  getProductDetail({ productId: productList.value[0].productId, activityId: productList.value[0].activityId }).then((res) => {
+    if (res.code === 0) {
+      detailData.value = res.data
+    }
+  })
+}
+
+function toPay() {
+  BuyPopupRef.value?.open()
+}
+
+onShow(() => {
+  if (userInfo.value && userInfo.value.userCode) {
+    getYouHui()
+  }
+})
+
 onLoad((options) => {
   if (options?.scene) {
     scene.value = options?.scene
@@ -112,29 +202,26 @@ onLoad((options) => {
 </script>
 
 <template>
-  <wd-navbar title="首页" safe-area-inset-top fixed :placeholder="true" :bordered="false" />
+  <wd-navbar title="我的" safe-area-inset-top fixed :placeholder="true" :bordered="false" />
   <view class="card-warp">
-    <view class="top-box">
-      <view class="srbd">
-        <view class="srbd-text">
-          客户必读
-        </view>
-        <wd-button size="small" :round="false">
-          查看<wd-icon name="arrow-right" color="#042A10" />
-        </wd-button>
-      </view>
-      <view class="phone-box">
-        <view class="phone-label">
-          官方热线
-        </view>
-        <view class="phone-num">
-          400-6618-709
-        </view>
-      </view>
-    </view>
+    <image style="width: 100%;height: 220rpx;" :src="`${imgBaseUrl}/topbanner.png`" />
     <view v-for="item in productList" :key="item.productId" class="produc-list">
-      <ProductHome :item-data="item" />
+      <ProductHome :item-data="item" :coupon="coupon" />
     </view>
+    <view class="btn-box">
+      <wd-button custom-class="share-btn" @click="onShareClick">
+        <text class="iconfont icon-share1" />
+        分享
+      </wd-button>
+      <wd-button custom-class="buy-btn" @click="toPay">
+        <text class="iconfont icon-buy" />
+        购买
+      </wd-button>
+    </view>
+    <PosterPopup ref="posterPopupRef" />
+    <PosterTem v-if="showPoster" :code-img="codeImg" :detail-data="detailData" @change-img="changeImg" />
+    <SharePopup ref="SharePopupRef" @on-poster="onPoster" />
+    <BuyPopup ref="BuyPopupRef" :detail-data="detailData" />
   </view>
 </template>
 
@@ -194,7 +281,42 @@ onLoad((options) => {
     }
   }
   .produc-list{
-    margin-top: 24rpx;
+    margin-top: 16rpx;
+  }
+}
+.btn-box{
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 12rpx 16rpx 28rpx 16rpx;
+  border-radius: 0 0 32rpx 32rpx;
+  :deep(){
+    .share-btn{
+      width: 230rpx !important;
+      height: 80rpx !important;
+      background: rgba(8, 157, 57, 0.2) !important;
+      box-shadow: 0rpx 24rpx 80rpx 0rpx rgba(91,91,113,0.25) !important;
+      border-radius: 32rpx !important;
+      color: #089D39 !important;
+      font-weight: 500 !important;
+      font-size: 32rpx !important;
+      line-height: 32rpx !important;
+    }
+    .buy-btn{
+      width: 370rpx !important;
+      height: 80rpx !important;
+      background: #089D39 !important;
+      box-shadow: 0rpx 24rpx 80rpx 0rpx rgba(91,91,113,0.25) !important;
+      border-radius: 32rpx !important;
+      font-weight: 500 !important;
+      font-size: 32rpx !important;
+      color: #FFFFFF !important;
+      line-height: 32rpx !important;
+    }
+  }
+  .iconfont{
+    font-size: 28rpx;
+    margin-right: 8rpx;
   }
 }
 </style>

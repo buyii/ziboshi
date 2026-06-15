@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const statusMap = {
+  createOrder: '提交订单',
+  payOrder: '已下单',
+  send: '已发货',
   WAIT_ACCEPT: '待揽收',
   ACCEPT: '已揽收',
   TRANSPORT: '运输中',
@@ -17,12 +20,16 @@ interface LogisticsItem {
   desc?: string
 }
 
-const { logistics } = defineProps({
+const { logistics, order } = defineProps({
   logistics: {
     type: Array,
     default: () => ([]),
   },
-}) as { logistics: LogisticsItem[] }
+  order: {
+    type: Array,
+    default: () => ([]),
+  },
+}) as { logistics: LogisticsItem[], order: LogisticsItem[] }
 
 const active = ref<number>(0)
 </script>
@@ -54,6 +61,25 @@ export default {
         <template #description>
           <view class="logdesc">
             {{ item.desc }}
+          </view>
+        </template>
+      </wd-step>
+
+      <!-- 有快递单之前的状态 -->
+      <wd-step v-for="(item0, index) in order" :key="index">
+        <template #icon>
+          <view class="icon" :class="{ 'icon-active': index === active }">
+            <wd-icon name="check-bold" />
+          </view>
+        </template>
+        <template #title>
+          <view class="title">
+            {{ statusMap[item0.logisticsStatus] }} <text class="title-time"> {{ item0.time }}</text>
+          </view>
+        </template>
+        <template #description>
+          <view class="logdesc">
+            {{ item0.desc }}
           </view>
         </template>
       </wd-step>
@@ -103,6 +129,11 @@ export default {
   font-size: 32rpx;
   color: #222222;
   line-height: 32rpx;
+  .title-time{
+    font-weight: 400;
+    font-size: 24rpx;
+    color: #555555;
+  }
 }
 .description{
   font-family: PingFangSC, PingFang SC;

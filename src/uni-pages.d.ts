@@ -12,6 +12,7 @@ interface NavigateToOptions {
        "/pages/teamPerson/index" |
        "/pageHome/details/index" |
        "/pageHome/payment/index" |
+       "/pageHome/paymentSample/index" |
        "/pageHome/applySuccess/index" |
        "/pageHome/maintaincar/index" |
        "/pageHome/maintaincarLog/index" |
@@ -22,6 +23,7 @@ interface NavigateToOptions {
        "/pageRank/pointsDetails/index" |
        "/pageRank/pointsRedemption/index" |
        "/pageMine/orderList/index" |
+       "/pageMine/sample/index" |
        "/pageMine/orderLogistics/index" |
        "/pageMine/orderRefund/index" |
        "/pageMine/bankCardManage/index" |

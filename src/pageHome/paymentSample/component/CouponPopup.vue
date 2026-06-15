@@ -3,11 +3,9 @@ import { useLayoutStore } from '@/stores'
 
 interface MyProps {
   list: any
-  itemNum: number
 }
 const props = withDefaults(defineProps<MyProps>(), {
   list: [],
-  itemNum: 1,
 })
 
 const modelValue = defineModel<any>({
@@ -73,8 +71,8 @@ export default {
       <view class="popup-warp">
         <view v-for="item in props.list" :key="item.id" @click="itemClick(item)">
           <x-coupon
-            :value="item.price" :title="item.name" color="#24d192" background-color="#e1f6ee"
-            :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" :validity="item.type === 1 ? `优惠券x${props.itemNum}` : '优惠券x1'"
+            :value="item.price" :title="item.name" color="#24d192"
+            :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" validity="优惠券x1"
             :show-btn="false" :select="selectList.some((i: any) => i.id === item.id)"
           />
         </view>

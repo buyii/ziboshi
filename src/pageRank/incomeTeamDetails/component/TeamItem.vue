@@ -12,17 +12,26 @@ const props = withDefaults(defineProps<Props>(), {
   userId: '',
 })
 
-// 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
-const statusMap: { [key: number]: string } = {
-  1: '待支付',
-  2: '待发货',
-  3: '交易关闭',
-  4: '待收货',
-  5: '已收货',
-  7: '待评价',
-  8: '退款中',
-  9: '退款完成',
+function copyId(item: any) {
+  uni.setClipboardData({
+    data: props.item.orderId,
+    success() {
+      console.log('success')
+    },
+  })
 }
+
+// // 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
+// const statusMap: { [key: number]: string } = {
+//   1: '待支付',
+//   2: '待发货',
+//   3: '交易关闭',
+//   4: '待收货',
+//   5: '已收货',
+//   7: '待评价',
+//   8: '退款中',
+//   9: '退款完成',
+// }
 </script>
 
 <script lang="ts">
@@ -38,7 +47,7 @@ export default {
 <template>
   <view class="records-month">
     <view class="month-item">
-      <view class="item-top">
+      <!-- <view class="item-top">
         <view class="bianhao">
           订单编号{{ props.item.orderId }}
         </view>
@@ -55,28 +64,39 @@ export default {
         >
           {{ statusMap[item.status] }}
         </view>
-      </view>
-      <view class="user-box">
-        <img class="user-img" :src="item.avatar" alt="">
-        <view class="user-name">
-          {{ item.userName }}
+      </view> -->
+      <view class="user-warp">
+        <view class="user-box">
+          <img class="user-img" :src="item.avatar" alt="">
+          <view class="user-name">
+            {{ item.userName }}
+          </view>
+        </view>
+        <view class="info-num">
+          下单金额
+          <text class="num">{{ props.item.payGoodsAmount }}</text>
         </view>
       </view>
+
       <view class="item-content">
         <image :src="props.item.productImg" />
         <view class="item-info">
           <view class="item-title">
             <wd-text :text="props.item.productName" :lines="2" />
           </view>
+          <view class="bianhao">
+            订单编号:{{ props.item.orderId }}
+            <text class="iconfont icon-copy" @click.stop="copyId" />
+          </view>
           <view class="info-foot">
             <view class="info-time">
               <text class="iconfont icon-time icon" />
               <text>{{ props.item.paySuccessTime }}</text>
             </view>
-            <view class="info-num">
-              下单数量
-              <text class="num">{{ props.item.itemNum }}</text>
-            </view>
+            <!-- <view class="info-num">
+              下单金额
+              <text class="num">{{ props.item.payGoodsAmount }}</text>
+            </view> -->
           </view>
         </view>
         <view class="shouyi">
@@ -134,11 +154,31 @@ export default {
         color: #666666;
       }
     }
+    .user-warp{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20rpx;
+      .info-num{
+        display: flex;
+        align-items: center;
+        gap: 8rpx;
+        font-weight: 400;
+        font-size: 24rpx;
+        color: #999999;
+        line-height: 24rpx;
+        .num{
+          font-weight: 500;
+          font-size: 24rpx;
+          color: #222222;
+          line-height: 24rpx;
+        }
+      }
+    }
     .user-box{
       display: flex;
       align-items: center;
       gap: 8rpx;
-      margin: 20rpx 0;
     }
     .user-img{
       width: 32rpx;
@@ -158,8 +198,8 @@ export default {
       justify-content: space-between;
       gap: 20rpx;
       image{
-        width: 128rpx;
-        height: 128rpx;
+        width: 138rpx;
+        height: 138rpx;
         border-radius: 16rpx;
       }
       .item-info{
@@ -167,7 +207,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 128rpx;
+        height: 138rpx;
         .item-title{
           :deep(){
             .wd-text{
@@ -175,8 +215,19 @@ export default {
               font-weight: 400;
               font-size: 24rpx;
               color: #111111;
-              line-height: 24rpx;
+              line-height: 30rpx;
             }
+          }
+        }
+        .bianhao{
+          font-weight: 400;
+          font-size: 24rpx;
+          color: #666666;
+          line-height: 24rpx;
+          .iconfont{
+            font-size: 26rpx;
+            color: #999999;
+            margin-left: 10rpx;
           }
         }
         .info-foot{

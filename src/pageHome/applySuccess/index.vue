@@ -9,6 +9,11 @@ function toHome() {
     url: '/pages/home/index',
   })
 }
+function toOrder() {
+  uni.redirectTo({
+    url: '/pageMine/orderList/index',
+  })
+}
 </script>
 
 <template>
@@ -21,6 +26,9 @@ function toHome() {
       <view class="tip-btn">
         <wd-button @click="toHome">
           返回首页
+        </wd-button>
+        <wd-button @click="toOrder">
+          查看订单
         </wd-button>
       </view>
     </view>

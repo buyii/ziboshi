@@ -3,11 +3,10 @@ import { useLayoutStore } from '@/stores'
 
 interface MyProps {
   amountPoint: number
-  numPoint: number
+  price: number
 }
 const props = withDefaults(defineProps<MyProps>(), {
   amountPoint: 0,
-  numPoint: 0,
 })
 
 const emit = defineEmits(['confirmAuth', 'changeItem'])
@@ -56,10 +55,10 @@ export default {
         <text class="iconfont icon-close" @click="close" />
       </view>
       <view class="jifeng">
-        <DigitBold :value="props.numPoint" int-size="96rpx" decimal-size="96rpx" color="#000000" suffix=" 积分" suffix-size="32rpx" />
+        <DigitBold :value="props.price" int-size="96rpx" decimal-size="96rpx" color="#000000" suffix=" 积分" suffix-size="32rpx" />
       </view>
       <view class="desc">
-        当前积分<DigitBold :value="props.amountPoint" int-size="24rpx" decimal-size="24rpx" color="#FF5100" />，兑换后将剩余<DigitBold :value="props.amountPoint - props.numPoint" int-size="24rpx" decimal-size="24rpx" color="#FF5100" />积分
+        当前积分<DigitBold :value="props.amountPoint" int-size="24rpx" color="#FF5100" />，兑换后将剩余<DigitBold :value="props.amountPoint - props.price" int-size="24rpx" decimal-size="24rpx" color="#FF5100" />积分
       </view>
       <FootButton label="确认兑换" @confirm="onConfirm" />
     </wd-popup>

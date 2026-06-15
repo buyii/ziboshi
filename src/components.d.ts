@@ -26,6 +26,7 @@ declare module 'vue' {
     WdCheckbox: typeof import('wot-design-uni/components/wd-checkbox/wd-checkbox.vue')['default']
     WdConfigProvider: typeof import('wot-design-uni/components/wd-config-provider/wd-config-provider.vue')['default']
     WdCountDown: typeof import('wot-design-uni/components/wd-count-down/wd-count-down.vue')['default']
+    WdDivider: typeof import('wot-design-uni/components/wd-divider/wd-divider.vue')['default']
     WdFab: typeof import('wot-design-uni/components/wd-fab/wd-fab.vue')['default']
     WdForm: typeof import('wot-design-uni/components/wd-form/wd-form.vue')['default']
     WdGap: typeof import('wot-design-uni/components/wd-gap/wd-gap.vue')['default']

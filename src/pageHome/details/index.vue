@@ -28,7 +28,17 @@ const codeImg = ref('')
 const detailData = ref<any>({})
 
 const swiperList = computed(() => {
-  return detailData.value.imgs ? detailData.value.imgs.split(',') : [detailData.value.cover]
+  const list = detailData.value.coverOther ? detailData.value.coverOther.split(',') : []
+  return [detailData.value.cover, ...list]
+})
+
+const detailImgs = computed(() => {
+  return detailData.value.imgs ? detailData.value.imgs.split(',') : []
+})
+
+const dicts = computed(() => {
+  const list = detailData.value.guaranteeService ? detailData.value.guaranteeService.split(',') : []
+  return list
 })
 
 function getDetail() {
@@ -145,27 +155,24 @@ onLoad((options) => {
     <view class="cell-box">
       <wd-cell custom-value-class="cell-right" custom-title-class="cell-left">
         <template #icon>
-          <text class="iconfont icon-urlUser" />
+          <text class="iconfont icon-addressUser1" />
         </template>
         <template #title>
           <view class="title-box">
             <view class="title1">
               {{ detailData.originAddress }}
             </view>
-            <view class="title2">
-              {{ detailData.sendTime }}
-            </view>
           </view>
         </template>
       </wd-cell>
-      <wd-cell :title="detailData.guaranteeService" custom-value-class="cell-right" custom-title-class="cell-left">
+      <wd-cell v-for="item in dicts" :key="item" :title="item" custom-value-class="cell-right" custom-title-class="cell-left">
         <template #icon>
-          <text class="iconfont icon-urlUser" />
+          <text class="iconfont icon-xingzhuangjiehe" />
         </template>
       </wd-cell>
     </view>
     <!-- 详情页 -->
-    <StoreDetail :swiper-list="swiperList" />
+    <StoreDetail :swiper-list="detailImgs" />
     <view class="btn-box">
       <wd-button custom-class="share-btn" @click="onShareClick">
         <text class="iconfont icon-share1" />
@@ -185,6 +192,7 @@ onLoad((options) => {
 
 <style scoped lang="scss">
 .detail-box{
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
   :deep(){
     .wd-navbar{
       background-color: transparent;
@@ -218,7 +226,7 @@ onLoad((options) => {
     }
     :deep(){
       .wd-cell__wrapper{
-        height: 80rpx;
+        height: 50rpx;
         display: flex;
         align-items: center;
         .wd-cell__left{

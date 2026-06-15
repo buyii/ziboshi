@@ -8,9 +8,11 @@ interface MyProps {
   color?: string
   suffix?: string
   prefix?: string
+  showGap?: boolean
 }
 const props = withDefaults(defineProps<MyProps>(), {
   value: 0,
+  showGap: true,
 })
 const objValue = computed(() => {
   let intPart = ''
@@ -37,12 +39,14 @@ const objValue = computed(() => {
 <template>
   <view class="yongj" :style="{ color, lineHeight: intSize }">
     <text v-if="prefix" class="prefix" :style="{ fontSize: prefixSize || decimalSize }">{{ prefix }}</text>
+    <text :style="{ width: showGap ? '8rpx' : '' }" />
     <text class="integer" :style="{ fontSize: intSize }">
       {{ objValue.intPart }}
     </text>
     <text v-if="objValue.decimalPart" class="decimal" :style="{ fontSize: decimalSize }">
       .{{ objValue.decimalPart }}
     </text>
+    <text :style="{ width: showGap ? '8rpx' : '' }" />
     <text v-if="suffix" class="prefix" :style="{ fontSize: suffixSize || decimalSize }">{{ suffix }}</text>
   </view>
 </template>
@@ -56,17 +60,11 @@ const objValue = computed(() => {
     font-style: normal;
     display: flex;
     align-items: baseline;
-    .prefix{
-      margin-right: 8rpx;
-    }
     .integer{
       font-size: 36rpx;
     }
     .decimal{
       font-size: 28rpx;
-    }
-    .prefix{
-      margin-left: 8rpx;
     }
   }
 </style>

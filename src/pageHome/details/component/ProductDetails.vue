@@ -1,31 +1,42 @@
 <script setup lang="ts">
-const { itemData, swiperList } = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {})
 interface Props {
   itemData: any
   swiperList: any[]
 }
 
 const currentimg = ref(0)
+const userStore = useUserStore()
+
+const coupon = computed(() => {
+  const list = userStore.couponList.filter((item: any) => item.type === 1)
+  const item = list.find((item: any) => item.type === 1)
+  return item
+})
+const discount = computed(() => {
+  if (coupon.value) {
+    const num = Number(props.itemData.price) - Number(coupon.value.price)
+    return num.toFixed(2)
+  }
+  return props.itemData.price
+})
 
 function swiperClick(e: any) {
+  console.log(e, '点击了swiper', props.swiperList)
   uni.previewImage({
     current: e.index,
-    urls: swiperList,
+    urls: props.swiperList,
   })
 }
 </script>
 
 <template>
   <view class="productBox">
-    <!-- <view class="img-box">
-      <image class="img" :src="itemData.cover" mode="aspectFill" />
-    </view> -->
     <view class="detail-top">
-      <!-- <image :src="detailData?.schema.cover" style="width: 750rpx;height: 750rpx;" /> -->
       <wd-swiper
         v-model:current="currentimg"
         height="750rpx"
-        :list="swiperList"
+        :list="props.swiperList"
         autoplay
         :indicator="{ type: 'fraction' }"
         indicator-position="bottom-right"
@@ -34,13 +45,19 @@ function swiperClick(e: any) {
     </view>
     <view class="product-info">
       <view class="jiage">
-        <DigitBold :value="itemData.price" prefix="¥" int-size="80rpx" decimal-size="64rpx" color="#FF5017" />
+        <template v-if="coupon">
+          <DigitBold prefix="会员优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+          <wd-divider vertical color="#FF5017" />
+          <DigitBold prefix="原价¥" :value="props.itemData.price" int-size="28rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+        </template>
+        <DigitBold v-else :value="props.itemData.price" int-size="60rpx" prefix="¥" decimal-size="40rpx" color="#FF5017" />
+        <!-- <DigitBold :value="props.itemData.price" prefix="¥" int-size="80rpx" decimal-size="64rpx" color="#FF5017" /> -->
         <view class="shiliang">
-          /{{ itemData.unit }}
+          /{{ props.itemData.unit }}
         </view>
       </view>
       <view class="product-name">
-        {{ itemData.productName }}
+        {{ props.itemData.productName }}
       </view>
     </view>
   </view>

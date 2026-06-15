@@ -57,18 +57,24 @@ function onSelectImg(type: number) {
     sizeType: ['compressed'],
     success: (res) => {
       const tempFilePath = res.tempFilePaths[0]
-      uploadFile(tempFilePath, { prefix: 'auth' }).then((res: any) => {
-        if (res.code === 0) {
-          if (type === 1) {
-            frontImg.value = res.data
-          }
-          else if (type === 2) {
-            backImg.value = res.data
-          }
-        }
-        else {
-          toast.error(res.msg)
-        }
+      uni.compressImage({
+        src: tempFilePath,
+        quality: 80,
+        success: (res) => {
+          uploadFile(res.tempFilePath, { prefix: 'auth' }).then((res: any) => {
+            if (res.code === 0) {
+              if (type === 1) {
+                frontImg.value = res.data
+              }
+              else if (type === 2) {
+                backImg.value = res.data
+              }
+            }
+            else {
+              toast.error(res.msg)
+            }
+          })
+        },
       })
     },
   })
@@ -76,7 +82,7 @@ function onSelectImg(type: number) {
 
 function getDetail() {
   getUserAuth({ type: 1 }).then((res) => {
-    if (res.code === 0) {
+    if (res.code === 0 && res.data) {
       realName.value = res.data.realName
       idCard.value = res.data.idCard
       frontImg.value = res.data.frontImg

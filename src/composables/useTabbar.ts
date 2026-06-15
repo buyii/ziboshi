@@ -8,14 +8,24 @@ export interface TabbarItem {
   activeIcon: string
 }
 
+const msgStore = useMsgStore()
+
+const messages = computed(() => msgStore.messages.length)
+
 const tabbarItems = ref<TabbarItem[]>([
   { name: 'home', value: null, active: true, title: '首页', showNavbar: false, icon: 'icon-home_01', activeIcon: 'icon-home_11' },
-  { name: 'rank', value: null, active: false, title: '消息', showNavbar: false, icon: 'icon-message_0', activeIcon: 'icon-message_1' },
+  { name: 'rank', value: messages.value, active: false, title: '消息', showNavbar: false, icon: 'icon-message_0', activeIcon: 'icon-message_1' },
   { name: 'mine', value: null, active: false, title: '我的', showNavbar: false, icon: 'icon-user_0', activeIcon: 'icon-user_1' },
 ])
 
 export function useTabbar() {
-  const tabbarList = computed(() => tabbarItems.value)
+  const tabbarList = computed(() =>
+    tabbarItems.value.map(item =>
+      item.name === 'rank'
+        ? { ...item, value: messages.value }
+        : item,
+    ),
+  )
 
   const activeTabbar = computed(() => {
     const item = tabbarItems.value.find(item => item.active)

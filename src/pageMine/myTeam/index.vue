@@ -223,7 +223,7 @@ onLoad(() => {
 
 <template>
   <view class="topbox" :style="{ top: `0px` }">
-    <wd-navbar title="我的团队" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
+    <wd-navbar title="我的客户" safe-area-inset-top left-arrow :bordered="false" @click-left="handleClickLeft" />
     <view class="search-box">
       <MySearch v-model="userName" @search="search" @clear="search" />
     </view>
@@ -233,7 +233,7 @@ onLoad(() => {
           {{ teamData.teamMember || 0 }}
         </view>
         <view class="item-label">
-          团队用户
+          客户数量
         </view>
       </view>
       <view class="top-item">
@@ -241,7 +241,7 @@ onLoad(() => {
           {{ teamData.totalKolFocServiceFee || 0 }}
         </view>
         <view class="item-label">
-          已结算收益
+          已结算积分
         </view>
       </view>
       <view class="top-item">
@@ -249,7 +249,7 @@ onLoad(() => {
           {{ teamData.focAgentFee || 0 }}
         </view>
         <view class="item-label">
-          未结算收益
+          未结算积分
         </view>
       </view>
     </view>
@@ -431,7 +431,7 @@ onLoad(() => {
   "layout": "default",
   "name": "myTeam",
   "style": {
-    "navigationBarTitleText": "我的团队"
+    "navigationBarTitleText": "我的客户"
   }
 }
 </route>

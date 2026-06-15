@@ -38,3 +38,13 @@ export function confirmOrder(params: Record<string, any>) {
     ...params,
   })
 }
+// 删除订单
+export function closeOrder(params: Record<string, any>) {
+  return alova.Post<any>('/mall/mini/order/closeOrder', {
+    ...params,
+  })
+}
+// 订单状态数量统计
+export function countOrderStatus() {
+  return alova.Get<any>('/mall/mini/order/countOrderStatus', {})
+}

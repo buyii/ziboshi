@@ -43,6 +43,15 @@ export default defineUniPages({
           },
         },
         {
+          path: 'paymentSample/index',
+          type: 'page',
+          layout: 'default',
+          name: 'paymentSample',
+          style: {
+            navigationBarTitleText: '体验装支付',
+          },
+        },
+        {
           path: 'applySuccess/index',
           type: 'page',
           layout: 'default',
@@ -140,6 +149,15 @@ export default defineUniPages({
           name: 'orderList',
           style: {
             navigationBarTitleText: '我的订单',
+          },
+        },
+        {
+          path: 'sample/index',
+          type: 'page',
+          layout: 'default',
+          name: 'sample',
+          style: {
+            navigationBarTitleText: '申请体验装',
           },
         },
         {
@@ -256,7 +274,7 @@ export default defineUniPages({
           layout: 'default',
           name: 'myTeam',
           style: {
-            navigationBarTitleText: '我的团队',
+            navigationBarTitleText: '我的客户',
           },
         },
         {
