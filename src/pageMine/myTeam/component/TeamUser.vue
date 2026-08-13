@@ -16,11 +16,26 @@ const toast = useToast()
 const delmessage = useMessage('del')
 const idValue = ref('')
 
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
+
 function zhantie() {
   uni.getClipboardData({
     success(res) {
       console.log(res.data)
       idValue.value = res.data
+    },
+  })
+}
+function copyId() {
+  console.log('props.item.userCode', props.item.userCode)
+  uni.setClipboardData({
+    data: props.item.userCode,
+    success() {
+      console.log('success')
+    },
+    fail(err) {
+      console.log('err', err)
     },
   })
 }
@@ -35,9 +50,17 @@ function zhantie() {
 // }
 function toTeamPerson() {
   const userId = props.item.userId
-  uni.navigateTo({
-    url: `/pageRank/incomeTeamDetails/index?userId=${userId}&startTime=${props.startTime}&endTime=${props.endTime}`,
-  })
+  console.log('userId', userInfo.value.amountType)
+  if (userInfo.value.amountType === 2) {
+    uni.navigateTo({
+      url: `/pageRank/incomeTeamDetails/index?userId=${userId}&startTime=${props.startTime}&endTime=${props.endTime}`,
+    })
+  }
+  else {
+    uni.navigateTo({
+      url: `/pageRank/pointsDetails/index?userId=${userId}&startTime=${props.startTime}&endTime=${props.endTime}`,
+    })
+  }
 }
 
 function onDel() {
@@ -90,10 +113,14 @@ export default {
       <view class="user-content">
         <image class="img" :src="props.item.avatar" mode="scaleToFill" />
         <view class="user-info">
-          <view class="info-one">
+          <!-- <view class="info-one">
             <view class="user-name">
               <text>{{ props.item.userName }}</text>
             </view>
+          </view> -->
+          <view class="userid">
+            <view>用户ID:{{ props.item.userCode }}</view>
+            <text class="iconfont icon-copy copy" @click.stop="copyId" />
           </view>
           <view class="user-time">
             {{ props.item.joinTime }}
@@ -110,10 +137,10 @@ export default {
           </view>
           <view class="user-amount">
             <view class="user-num">
-              {{ props.item.focAgentFee }}
+              {{ props.item.amountType === 2 ? props.item.focAgentFee : props.item.kolFocServiceFee }}
             </view>
             <view class="user-label">
-              我的收益
+              {{ props.item.amountType === 2 ? '我的收益' : '我的积分' }}
             </view>
           </view>
         </view>
@@ -209,6 +236,22 @@ export default {
     .icon{
       color: #DADADA;
       font-size: 28rpx;
+    }
+  }
+  .userid{
+    display: flex;
+    gap: 8rpx;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 28rpx;
+    color: #666666;
+    line-height: 28rpx;
+    font-style: normal;
+    margin-top: 12rpx;
+    .copy{
+      font-size: 28rpx;
+      color: #999999;
+      margin-left: 16rpx;
     }
   }
   .user-time{

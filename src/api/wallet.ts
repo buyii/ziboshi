@@ -38,6 +38,13 @@ export function getWithdrawList(params: Record<string, any>) {
 export function getLastApplyTime() {
   return alova.Get<any>('/mall/mini/wallet-transaction/getLastApplyTime', {})
 }
+// 提现前校验
+export function onSign(params: Record<string, any>) {
+  return alova.Post<any>('/mall/mini/wallet-transaction/sign', {
+    ...params,
+  })
+}
+
 // 提现
 export function applyWithdraw(params: Record<string, any>) {
   return alova.Post<any>('/mall/mini/wallet-transaction/applyWithdraw', {

@@ -5,10 +5,9 @@ interface Props {
   itemData: any
   coupon: any
 }
-
 const discount = computed(() => {
   if (props.coupon) {
-    const num = Number(props.itemData.price) - Number(props.coupon.price)
+    const num = Number(props.itemData.price) * (Number(props.coupon.discounts) / 100)
     return num.toFixed(2)
   }
   return props.itemData.price
@@ -43,7 +42,7 @@ function toDetail() {
     <view class="product-info">
       <view class="jiage">
         <template v-if="props.coupon">
-          <DigitBold prefix="会员优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+          <DigitBold prefix="优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
           <wd-divider vertical color="#FF5017" />
           <DigitBold prefix="原价¥" :value="props.itemData.price" int-size="28rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
         </template>

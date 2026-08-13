@@ -21,6 +21,12 @@ const list = computed(() => [
     show: props.amountType === 2,
   },
   {
+    title: '提现记录',
+    icon: 'icon-agreement',
+    url: '/pageMine/withdrawalHistory/index',
+    show: props.amountType === 2,
+  },
+  {
     title: '我的地址',
     icon: 'icon-addressUser1',
     url: '/pageRank/addressManage/index?type=manage',

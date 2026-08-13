@@ -188,6 +188,6 @@ export default {
 
 <style lang="scss">
 .custom-shadow{
-  background-color: #FF0057 !important;
+  background-color: #089D39 !important;
 }
 </style>

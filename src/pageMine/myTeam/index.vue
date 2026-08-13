@@ -190,24 +190,24 @@ onShareAppMessage ((res) => {
   }
   if (userInfo.value && userInfo.value.userCode && userInfo.value.userType === '03') {
     return {
-      title: '星佣宝',
-      path: `/pages/home/index?scene=${userInfo.value.userCode}`,
+      title: '滋博仕',
+      path: `/pages/home/index?userCode=${userInfo.value.userCode}`,
     }
   }
   return {
-    title: '星佣宝',
+    title: '滋博仕',
     path: '/pages/home/index',
   }
 })
 onShareTimeline (() => {
   if (userInfo.value && userInfo.value.userCode && userInfo.value.userType === '03') {
     return {
-      title: '星佣宝',
-      path: `/pages/home/index?scene=${userInfo.value.userCode}`,
+      title: '滋博仕',
+      path: `/pages/home/index?userCode=${userInfo.value.userCode}`,
     }
   }
   return {
-    title: '星佣宝',
+    title: '滋博仕',
     path: '/pages/home/index',
   }
 })
@@ -241,7 +241,8 @@ onLoad(() => {
           {{ teamData.totalKolFocServiceFee || 0 }}
         </view>
         <view class="item-label">
-          已结算积分
+          已结算
+          <!-- {{ userInfo.amountType === 2 ? '收益' : '积分' }} -->
         </view>
       </view>
       <view class="top-item">
@@ -249,7 +250,8 @@ onLoad(() => {
           {{ teamData.focAgentFee || 0 }}
         </view>
         <view class="item-label">
-          未结算积分
+          未结算
+          <!-- {{ userInfo.amountType === 2 ? '收益' : '积分' }} -->
         </view>
       </view>
     </view>

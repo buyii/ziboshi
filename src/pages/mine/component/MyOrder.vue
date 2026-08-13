@@ -15,31 +15,31 @@ const list = computed(() => [
   {
     title: '待付款',
     icon: order1,
-    url: '/pageMine/orderList/index',
+    url: '/pageMine/orderList/index?type=1',
     value: 0,
   },
   {
     title: '待发货',
     icon: order2,
-    url: '/pageMine/orderList/index',
+    url: '/pageMine/orderList/index?type=2',
     value: props.countData.waitSend,
   },
   {
     title: '待收货',
     icon: order3,
-    url: '/pageMine/orderList/index',
+    url: '/pageMine/orderList/index?type=3',
     value: props.countData.waitRece,
   },
   {
     title: '已完成',
     icon: order4,
-    url: '/pageMine/orderList/index',
+    url: '/pageMine/orderList/index?type=4',
     value: 0,
   },
   {
     title: '退款/售后',
     icon: order5,
-    url: '/pageMine/orderList/index',
+    url: '/pageMine/orderList/index?type=5',
     value: props.countData.refund,
   },
 ])

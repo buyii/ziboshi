@@ -111,7 +111,7 @@ export default {
 </script>
 
 <template>
-  <wd-overlay :show="show" :z-index="99999" custom-style="background: #C40043;">
+  <wd-overlay :show="show" :z-index="99999" custom-style="background: #8c9890;">
     <view class="poster-wrapper">
       <view class="close" @click="close">
         <wd-icon name="close" size="24rpx" color="#000000" />

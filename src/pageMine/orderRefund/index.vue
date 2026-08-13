@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UploadFileItem, UploadStatusType, UploadSuccessEvent } from 'wot-design-uni/components/wd-upload/types'
 
-import { action } from '@/api/common'
+import { action, getByKey, getDictList } from '@/api/common'
 
 import { refund } from '@/api/order'
 
@@ -13,39 +13,11 @@ const statusBarHeight = computed(() => {
 const userStore = useUserStore()
 const { token } = userStore
 
-const platformList = ref<any>([
-  {
-    value: '1',
-    label: '京东',
-  },
-  {
-    value: '2',
-    label: '开普勒',
-  },
-  {
-    value: '3',
-    label: '手Q',
-  },
-  {
-    value: '4',
-    label: '微信',
-  },
-  {
-    value: '5',
-    label: '1号店',
-  },
-  {
-    value: '6',
-    label: '十元街',
-  },
-  {
-    value: '7',
-    label: '京东极速版',
-  },
-])
+const platformList = ref<any>([])
 
 const imgList = ref<UploadFileItem[]>([])
 
+const configList = ref<any[]>([])
 const orderId = ref<string>('')
 const totalPayAmount = ref<string>('')
 const errProps = ref<string[]>([])
@@ -124,7 +96,38 @@ function handleSubmit() {
   })
 }
 
+function getAddress() {
+  getByKey({ configKey: 'refund_address,refund_phone' }).then((res) => {
+    if (res.code === 0) {
+      configList.value = res.data
+    }
+  })
+}
+
+function copyAddress() {
+  const texts = configList.value.map(e => e.configValue)
+  const text = texts.join(';')
+  uni.setClipboardData({
+    data: text,
+    success() {
+      console.log('success')
+    },
+  })
+}
+
+function getCause() {
+  getDictList({
+    dictType: 'refund_cause',
+  }).then((res) => {
+    if (res.code === 0) {
+      platformList.value = res.data
+    }
+  })
+}
+
 onLoad((options) => {
+  getCause()
+  getAddress()
   orderId.value = options?.orderId || ''
   totalPayAmount.value = options?.totalPayAmount || ''
 })
@@ -135,14 +138,14 @@ onLoad((options) => {
   <wd-gap bg-color="#F4F4F4" height="16rpx" />
   <view :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }" class="refund-box">
     <view>
-      <wd-message-box />
-      <wd-toast />
       <wd-form ref="form" :model="model">
         <wd-select-picker
           v-model="model.refundReason" type="radio"
           :show-confirm="false"
           label="申请原因"
           label-width="100px"
+          value-key="dictValue"
+          label-key="dictLabel"
           custom-label-class="customlabel"
           custom-content-class="custom-content-class"
           prop="refundReason"
@@ -151,6 +154,23 @@ onLoad((options) => {
           placeholder="请选择申请原因"
           :rules="[{ required: true, message: '请选择申请原因' }]"
         />
+        <wd-cell custom-class="group" vertical>
+          <template #title>
+            <view style="width:100%;flex: 1;display: flex;align-items: center;justify-content: space-between;">
+              <view class="cell-tit">
+                退货地址
+              </view>
+              <view class="fuzhi">
+                <text class="iconfont icon-copy" @click.stop="copyAddress" />
+              </view>
+            </view>
+          </template>
+          <view v-for="item in configList" :key="item" class="config">
+            <view class="confvalue">
+              {{ item.configValue }}
+            </view>
+          </view>
+        </wd-cell>
         <wd-cell-group custom-class="group" title="申请金额">
           <view class="refundNum">
             <view class="numprefix">
@@ -165,9 +185,9 @@ onLoad((options) => {
             <!-- ，含运费10元 -->
           </view>
         </wd-cell-group>
-        <wd-cell-group custom-class="group1" title="申请仅退款补充说明">
+        <wd-cell-group :custom-class="model.refundReason === '其他' ? 'group1' : 'group'" title="申请退款补充说明">
           <view class="textarea-box">
-            <wd-textarea v-model="model.refundDesc" prop="refundDesc" custom-class="textarea" :rules="[{ required: true, message: '请输入补充说明' }]" />
+            <wd-textarea v-model="model.refundDesc" prop="refundDesc" custom-class="textarea" :rules="[{ required: model.refundReason === '其他', message: '请输入补充说明' }]" />
           </view>
           <view view class="upload-box">
             <wd-upload
@@ -189,6 +209,8 @@ onLoad((options) => {
       </wd-form>
     </view>
     <FootButton label="提交申请" :loading="loading" fixed @confirm="handleSubmit" />
+    <wd-message-box />
+    <wd-toast />
   </view>
 </template>
 
@@ -196,6 +218,12 @@ onLoad((options) => {
 .refund-box{
   padding: 48rpx 0;
   padding-bottom: calc(130rpx + env(safe-area-inset-bottom));
+  .config{
+    font-size: 28rpx;
+    color: #000000;
+    line-height: 45rpx;
+    padding-bottom: 20rpx;
+  }
   .refundNum{
     display: flex;
     gap: 8rpx;
@@ -300,6 +328,11 @@ onLoad((options) => {
         }
       }
     }
+  }
+  .cell-tit{
+    font-weight: 400;
+    font-size: 32rpx;
+    color: #111111;
   }
 }
 </style>

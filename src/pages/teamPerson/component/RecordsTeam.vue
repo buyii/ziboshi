@@ -29,7 +29,7 @@ export default {
             </view>
           </view>
           <view class="item-user">
-            <image class="img" src="../../../static/logo.svg" />
+            <image class="img" src="../../../static/logo.jpg" />
             <view class="item-user-name">
               庄强
             </view>

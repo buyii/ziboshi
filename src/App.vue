@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getMsgList } from '@/api/rank'
+
 const layoutStore = useLayoutStore()
 const userStore = useUserStore()
 const msgStore = useMsgStore()
@@ -30,6 +32,20 @@ const { isConnected, send, close, connect } = useWebSocket({
   },
   heartbeatMsg: JSON.stringify({ type: 'ping' }),
   heartbeatInterval: 15000,
+})
+
+function getDataList() {
+  getMsgList().then((res) => {
+    if (res.code === 0) {
+      msgStore.setMessagesAll(res.data.noRead)
+    }
+  })
+}
+
+onShow(() => {
+  if (userInfo.value.userCode) {
+    getDataList()
+  }
 })
 
 watch(

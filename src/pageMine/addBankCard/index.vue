@@ -170,7 +170,7 @@ onLoad(() => {
         />
         <wd-input
           v-model="model.phone"
-          label="手机号"
+          label="预留手机号"
           prop="phone"
           :cursor-spacing="100"
           placeholder-class="myPlaceholder"

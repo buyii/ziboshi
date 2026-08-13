@@ -3,23 +3,23 @@ import { useToast } from 'wot-design-uni'
 import ProductDetails from './component/ProductDetails.vue'
 import PosterTem from './component/PosterTem.vue'
 import SharePopup from './component/SharePopup.vue'
-import BuyPopup from './component/BuyPopup.vue'
 import PosterPopup from './component/PosterPopup.vue'
 import StoreDetail from './component/StoreDetail.vue'
 import { getProductDetail } from '@/api/product'
 import { miniQRCode } from '@/api/common'
+import { login } from '@/api/index'
 
 const toast = useToast()
 const productId = ref('')
-const activityId = ref('')
 const scene = ref('')
 const showContent = ref(true)
 const countdown = ref<any>(null)
 const yearsNum = ref<number>(0)
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
 
 const posterPopupRef = ref<ComponentPublicInstance<{ open: (num: string) => void }> | null>(null)
 const SharePopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
-const BuyPopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
 
 const showPoster = ref(false)
 const imgUrl = ref('')
@@ -42,7 +42,7 @@ const dicts = computed(() => {
 })
 
 function getDetail() {
-  getProductDetail({ productId: productId.value, activityId: activityId.value }).then((res) => {
+  getProductDetail({ productId: productId.value }).then((res) => {
     if (res.code === 0) {
       detailData.value = res.data
       showContent.value = false
@@ -73,12 +73,11 @@ function onPoster() {
 function getCode() {
   toast.loading({
     loadingType: 'ring',
-    loadingColor: '#FF0057',
+    loadingColor: '#089D39',
     msg: '海报生成中...',
   })
   const params = {
     productId: detailData.value.productId,
-    activityId: detailData.value.activityId,
   }
   miniQRCode(params).then((res) => {
     if (res.code === 0) {
@@ -101,13 +100,22 @@ function handleClickLeft() {
 }
 
 function toPay() {
-  BuyPopupRef.value?.open()
+  const data = { ...detailData.value }
+  userStore.setPaymentData(data)
+  uni.navigateTo({
+    url: `/pageHome/payment/index`,
+  })
 }
 
 onShareAppMessage ((res) => {
   if (res.from === 'button') { // 来自页面内分享按钮
-    console.log(res, 999999999999)
     SharePopupRef.value?.close()
+  }
+  if (userInfo.value && userInfo.value.userCode) {
+    return {
+      title: '滋博仕',
+      path: `/pageHome/details/index?productId=${detailData.value.productId}&userCode=${userInfo.value.userCode}`,
+    }
   }
   return {
     title: detailData.value.productName,
@@ -116,12 +124,34 @@ onShareAppMessage ((res) => {
   }
 })
 onShareTimeline (() => {
+  if (userInfo.value && userInfo.value.userCode) {
+    return {
+      title: '滋博仕',
+      path: `/pageHome/details/index?productId=${detailData.value.productId}&userCode=${userInfo.value.userCode}`,
+    }
+  }
   return {
     title: detailData.value.productName,
     path: `/pageHome/details/index?productId=${detailData.value.productId}`,
     imageUrl: detailData.value.cover,
   }
 })
+
+function getAgent(userCode: any) {
+  uni.login({
+    success(loginRes) {
+      login({
+        code: loginRes.code,
+        recommendCode: userCode,
+      }).then((res) => {
+        if (res.code === 0) {
+          const { data } = res
+          userStore.setUserInfo(data)
+        }
+      })
+    },
+  })
+}
 
 // const chartRef = ref<ComponentPublicInstance<{ getServerData: () => void }> | null>(null)
 
@@ -131,12 +161,18 @@ onLoad((options) => {
     // 对options?.scene 进行解码
     const sceneData = decodeURIComponent(options?.scene)
     const scenes = sceneData.split(',')
-    productId.value = scenes[1] || ''
-    activityId.value = scenes[0] || ''
+    productId.value = scenes[0] || ''
+    const userCode = scenes[1] || ''
+    if (userCode) {
+      getAgent(userCode)
+    }
   }
   else {
     productId.value = options?.productId || ''
-    activityId.value = options?.activityId || ''
+    const userCode = options?.userCode || ''
+    if (userCode) {
+      getAgent(userCode)
+    }
   }
   getDetail()
 })
@@ -186,7 +222,6 @@ onLoad((options) => {
     <PosterPopup ref="posterPopupRef" />
     <PosterTem v-if="showPoster" :code-img="codeImg" :detail-data="detailData" @change-img="changeImg" />
     <SharePopup ref="SharePopupRef" @on-poster="onPoster" />
-    <BuyPopup ref="BuyPopupRef" :detail-data="detailData" />
   </view>
 </template>
 

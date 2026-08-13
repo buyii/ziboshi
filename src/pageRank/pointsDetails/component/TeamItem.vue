@@ -36,22 +36,16 @@ export default {
 <template>
   <view class="records-month">
     <view class="month-item">
-      <view class="item-top">
-        <view class="bianhao">
-          订单编号{{ props.item.orderId }}
+      <view class="user-warp">
+        <view class="user-box">
+          <img class="user-img" :src="item.avatar" alt="">
+          <view class="user-name">
+            {{ item.userName }}
+          </view>
         </view>
-        <view
-          class="status" :class="{
-            'status-ing': item.status === 1,
-            'status-success': item.status === 2,
-            'status-apply': item.status === 4,
-            'status-refuse': item.status === 3,
-            'status-queren': item.status === 5,
-            'status-daipingjia': item.status === 7,
-            'status-tuikuan': item.status === 8 || item.status === 9,
-          }"
-        >
-          {{ statusMap[item.status] }}
+        <view class="info-num">
+          下单金额
+          <text class="num">{{ props.item.payGoodsAmount }}</text>
         </view>
       </view>
       <view class="item-content">
@@ -65,18 +59,32 @@ export default {
               <text class="iconfont icon-time icon" />
               <text>{{ props.item.paySuccessTime }}</text>
             </view>
-            <view class="info-num">
+            <!-- <view class="info-num">
               下单数量
               <text class="num">{{ props.item.itemNum }}</text>
-            </view>
+            </view> -->
           </view>
         </view>
         <view class="shouyi">
           <view>
-            <DigitBold :value="props.item.kolFocServiceFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
+            <DigitBold v-if="props.item.status === 7 || props.item.status === '7'" :value="props.item.kolServiceFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
+            <DigitBold v-else :value="props.item.kolFocServiceFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
           </view>
           <view class="jiesuan">
-            未结算
+            {{ props.item.status === 7 || props.item.status === '7' ? '已结算积分' : '未结算积分' }}
+          </view>
+          <view
+            class="status" :class="{
+              'status-ing': item.status === 1,
+              'status-success': item.status === 2,
+              'status-apply': item.status === 4,
+              'status-refuse': item.status === 3,
+              'status-queren': item.status === 5,
+              'status-daipingjia': item.status === 7,
+              'status-tuikuan': item.status === 8 || item.status === 9,
+            }"
+          >
+            {{ statusMap[item.status] }}
           </view>
         </view>
       </view>
@@ -102,30 +110,45 @@ export default {
         color: #666666;
         line-height: 24rpx;
       }
-      .status{
-        font-weight: 500;
+    }
+
+    .user-warp{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20rpx;
+      .info-num{
+        display: flex;
+        align-items: center;
+        gap: 8rpx;
+        font-weight: 400;
         font-size: 24rpx;
-        color: #666666;
+        color: #999999;
         line-height: 24rpx;
+        .num{
+          font-weight: 500;
+          font-size: 24rpx;
+          color: #222222;
+          line-height: 24rpx;
+        }
       }
-      .status-ing{
-        color: #DA261D;
-      }
-      .status-success{
-        color: #EF942B;
-      }
-      .status-refuse{
-        color: #BABABA;
-      }
-      .status-apply{
-        color: #5084F3;
-      }
-      .status-queren{
-        color: #000000;
-      }
-      .status-tuikuan{
-        color: #666666;
-      }
+    }
+    .user-box{
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+    }
+    .user-img{
+      width: 32rpx;
+      height: 32rpx;
+      border-radius: 56rpx;
+      border: 2rpx solid #FFFFFF;
+    }
+    .user-name{
+      font-weight: 400;
+      font-size: 24rpx;
+      color: #111111;
+      line-height: 24rpx;
     }
     .item-content{
       display: flex;
@@ -196,6 +219,31 @@ export default {
           color: #BABABA;
           line-height: 24rpx;
           margin-top: 8rpx;
+        }
+        .status{
+          font-weight: 500;
+          font-size: 24rpx;
+          color: #666666;
+          line-height: 24rpx;
+          margin-top: 30rpx;
+        }
+        .status-ing{
+          color: #666666;
+        }
+        .status-success{
+          color: #EF942B;
+        }
+        .status-refuse{
+          color: #BABABA;
+        }
+        .status-apply{
+          color: #5084F3;
+        }
+        .status-queren{
+          color: #000000;
+        }
+        .status-tuikuan{
+          color: #DA261D;
         }
       }
     }

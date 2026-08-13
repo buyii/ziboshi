@@ -3,8 +3,8 @@ import BankItem from './component/BankItem.vue'
 import { useLayoutStore } from '@/stores'
 import { getBankCardList } from '@/api/bank'
 
-const instance = getCurrentInstance()
 const layoutStore = useLayoutStore()
+const userStore = useUserStore()
 const statusBarHeight = computed(() => {
   return layoutStore.layoutStore.statusBarHeight
 })
@@ -40,12 +40,7 @@ function onDelSuccess() {
 }
 
 function onBack(item: any) {
-  const _this = instance?.proxy
-  // eslint-disable-next-line ts/ban-ts-comment
-  // @ts-expect-error
-  const eventChannel = _this?.getOpenerEventChannel()
-
-  eventChannel.emit('backEvent', item)
+  userStore.setSelectBank(item)
   uni.navigateBack()
 }
 onShow(() => {

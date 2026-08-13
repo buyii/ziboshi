@@ -21,16 +21,20 @@ const tabs = [
     key: 'all',
   },
   {
-    title: '待收货',
+    title: '待发货',
     key: '1',
   },
   {
-    title: '已收货',
+    title: '待收货',
     key: '2',
   },
   {
-    title: '退货退款',
+    title: '已收货',
     key: '3',
+  },
+  {
+    title: '退货退款',
+    key: '4',
   },
 ]
 

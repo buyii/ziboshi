@@ -105,7 +105,7 @@ export default {
         line-height: 24rpx;
       }
       .status-ing{
-        color: #DA261D;
+        color: #666666;
       }
       .status-success{
         color: #EF942B;
@@ -120,7 +120,7 @@ export default {
         color: #000000;
       }
       .status-tuikuan{
-        color: #666666;
+        color: #DA261D;
       }
     }
     .item-content{

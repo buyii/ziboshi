@@ -21,9 +21,9 @@ const activeTab = ref<number>(1)
 
 const state = ref()
 const amountData = ref({
-  amount: '0.00',
-  total: '0.00',
-  waitSettle: '0.00',
+  amount: '0.0',
+  total: '0.0',
+  waitSettle: '0.0',
 })
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
@@ -122,7 +122,7 @@ onShow(() => {
           可提现金额
         </view>
         <view class="amount-box">
-          <wd-text custom-class="custom-text" :text="amountData.amount" mode="price" color="#111111" size="56rpx">
+          <wd-text custom-class="custom-text" :text="amountData.amount" color="#111111" size="56rpx">
             <template #prefix>
               <text class="prefix-text">
                 ¥
@@ -141,7 +141,7 @@ onShow(() => {
             <view class="acc-title">
               历史累计收益
             </view>
-            <wd-text custom-class="custom-text" :text="amountData.total" mode="price" color="#444444" size="48rpx">
+            <wd-text custom-class="custom-text" :text="amountData.total" color="#444444" size="48rpx">
               <template #prefix>
                 <text class="prefix-acc">
                   ¥
@@ -153,7 +153,7 @@ onShow(() => {
             <view class="acc-title">
               未结算金额
             </view>
-            <wd-text custom-class="custom-text" :text="amountData.waitSettle" mode="price" color="#444444" size="48rpx">
+            <wd-text custom-class="custom-text" :text="amountData.waitSettle" color="#444444" size="48rpx">
               <template #prefix>
                 <text class="prefix-acc">
                   ¥
@@ -169,7 +169,7 @@ onShow(() => {
   <MyScrollView :top="`${(statusBarHeight || 0) - 1}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
     <view class="records-box">
       <template v-if="dataList.length > 0">
-        <RevenueRecords :datas-list="dataList" />
+        <RevenueRecords :datas-list="dataList" :active-tab="activeTab" />
       </template>
       <wd-status-tip v-if="dataList.length < 1 && !loading" tip="暂无数据~">
         <template #image>
@@ -226,7 +226,7 @@ onShow(() => {
     margin-bottom: 48rpx;
     :deep(){
       .custom-text{
-        font-weight: 400;
+        font-weight: 500;
         font-size: 56rpx;
         color: #111111;
         line-height: 64rpx;

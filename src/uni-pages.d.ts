@@ -32,6 +32,8 @@ interface NavigateToOptions {
        "/pageMine/myPoints/index" |
        "/pageMine/myCoupon/index" |
        "/pageMine/taking/index" |
+       "/pageMine/takingVerification/index" |
+       "/pageMine/withdrawalHistory/index" |
        "/pageMine/extractSuccess/index" |
        "/pageMine/authManage/index" |
        "/pageMine/companyAuth/index" |

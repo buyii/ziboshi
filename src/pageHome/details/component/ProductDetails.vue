@@ -9,20 +9,19 @@ const currentimg = ref(0)
 const userStore = useUserStore()
 
 const coupon = computed(() => {
-  const list = userStore.couponList.filter((item: any) => item.type === 1)
-  const item = list.find((item: any) => item.type === 1)
+  const list = userStore.couponList
+  const item = list.find((item: any) => item.calType === 2)
   return item
 })
 const discount = computed(() => {
   if (coupon.value) {
-    const num = Number(props.itemData.price) - Number(coupon.value.price)
+    const num = Number(props.itemData.price) * (Number(coupon.value.discounts) / 100)
     return num.toFixed(2)
   }
   return props.itemData.price
 })
 
 function swiperClick(e: any) {
-  console.log(e, '点击了swiper', props.swiperList)
   uni.previewImage({
     current: e.index,
     urls: props.swiperList,
@@ -46,7 +45,7 @@ function swiperClick(e: any) {
     <view class="product-info">
       <view class="jiage">
         <template v-if="coupon">
-          <DigitBold prefix="会员优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
+          <DigitBold prefix="优惠后¥" :value="discount" int-size="42rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
           <wd-divider vertical color="#FF5017" />
           <DigitBold prefix="原价¥" :value="props.itemData.price" int-size="28rpx" decimal-size="28rpx" color="#FF5017" :show-gap="false" />
         </template>

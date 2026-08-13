@@ -21,16 +21,20 @@ const tabs = [
     key: 'all',
   },
   {
-    title: '待收货',
+    title: '待发货',
     key: '1',
   },
   {
-    title: '已收货',
+    title: '待收货',
     key: '2',
   },
   {
-    title: '退货退款',
+    title: '已收货',
     key: '3',
+  },
+  {
+    title: '退货退款',
+    key: '4',
   },
 ]
 
@@ -38,6 +42,7 @@ const tabValue = ref<string>('all')
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const layoutStore = useLayoutStore()
 const state = ref()
+const userId = ref('')
 const productName = ref('')
 const dataList = ref<any>([])
 const dateRange = ref<DateRange>({
@@ -98,11 +103,12 @@ function getDataList() {
   const params = {
     startTime: dateRange.value.startDate,
     endTime: dateRange.value.endDate,
+    userId: userId.value || '',
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
     productName: productName.value,
     status2: tabValue.value === 'all' ? '' : tabValue.value,
-    amountType: 1,
+    amountType: 2,
   }
   getMyTeamMemberOrderList({ ...params }).then((res) => {
     if (res.code === 0) {
@@ -127,6 +133,7 @@ function search() {
   getDataList()
 }
 onLoad((options) => {
+  userId.value = options?.userId
   const month = getCurrentMonth()
   // 获取月份有多少天
   const days = getDaysInMonth(month)

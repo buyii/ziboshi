@@ -49,23 +49,20 @@ export default {
         <view>关于我们</view>
       </view>
       <view class="popup-content">
-        <image class="logo" src="../../../static/logo.svg" />
+        <image class="logo" src="../../../static/logo.jpg" />
         <view class="name">
-          星佣宝
+          滋博士
         </view>
         <view class="ver">
-          Version 1.0.11
+          Version 1.0.0
         </view>
         <view class="time">
-          2025.03.20
+          2026.06.15
         </view>
         <view class="brief">
           <view class="text">
-            在数字经济飞速发展的时代，星佣宝应运而生，平台以创新模式+数字智能相结合，为商家与达人之间构建了一个高效的选品系统。凭借独特的商业模式、先进的交易管理、强大的数据分析等，打造业界领先的辅助交易平台。开创一个全新的商业生态，实现多方共赢。
+            滋博士是深耕男性滋补的垂直电商小程序，针对当前男性精力不足、体虚乏力、熬夜损耗等问题精准发力。平台恪守草本本源、科学配比配方，每批次均可溯源，并经过权威检测，无多余添加、不夸大功效。微信一键登录，兼顾隐私保护、极速发货与专业售后，让滋补选购省心又安心。
           </view>
-          <!-- <view class="text">
-            星佣宝不仅解决了，商家和达人之间的效率问题还开创了一个全新的商业生态实现多方共赢
-          </view> -->
         </view>
       </view>
       <view class="btn-box">

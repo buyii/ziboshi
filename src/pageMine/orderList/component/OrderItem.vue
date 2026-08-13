@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMessage, useToast } from 'wot-design-uni'
 import { closeOrder, confirmOrder, payOrder } from '@/api/order'
+import { getByKey } from '@/api/common'
 
 const props = withDefaults(defineProps<Props>(), {})
 const emit = defineEmits(['onRefresh'])
@@ -11,6 +12,8 @@ const userStore = useUserStore()
 interface Props {
   item: any
 }
+
+const merchantId = ref<string>('')
 // 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
 const statusMap: { [key: number]: string } = {
   1: '待支付',
@@ -29,29 +32,48 @@ function onRefund1() {
   })
 }
 
-function confirmReceipt() {
+function orderConfirm() {
   const params = {
     orderId: props.item.orderId,
   }
-  message.confirm({
-    msg: '是否确认收货吗?',
-    title: '提示',
-    cancelButtonProps: {
-      customClass: 'custom-shadow1',
-    },
-    confirmButtonProps: {
-      customClass: 'custom-shadow',
-    },
+  confirmOrder(params).then((res) => {
+    if (res.code === 0) {
+      toast.show('确认收货成功')
+      emit('onRefresh')
+    }
+  })
+}
 
-  }).then(() => {
-    confirmOrder(params).then((res) => {
-      if (res.code === 0) {
-        toast.show('确认收货成功')
-        emit('onRefresh')
+function confirmReceipt() {
+  getByKey({ configKey: 'wechant_mechant_id' }).then((res) => {
+    if (res.code === 0) {
+      merchantId.value = res.data[0].configValue
+      // 拉起确认收货组件
+      const wxAny = wx as any
+      if (wxAny.openBusinessView) {
+        wxAny.openBusinessView({
+          businessType: 'weappOrderConfirm',
+          extraData: {
+            merchant_id: merchantId.value,
+            merchant_trade_no: props.item.orderId,
+          },
+          success() {
+            // dosomething
+            orderConfirm()
+          },
+          fail() {
+            // dosomething
+          },
+          complete() {
+            // dosomething
+          },
+        })
       }
-    })
-  }).catch(() => {
-    console.log('点击了取消按钮')
+      else {
+        console.log('当前微信版本不支持该功能，请升级到最新微信版本后重试')
+        // 引导用户升级微信版本
+      }
+    }
   })
 }
 
@@ -237,7 +259,7 @@ export default {
     padding: 0 24rpx;
   }
   .status-ing{
-    color: #DA261D;
+    color: #666666;
   }
   .status-success{
     color: #EF942B;
@@ -252,7 +274,7 @@ export default {
     color: #000000;
   }
   .status-tuikuan{
-    color: #666666;
+    color: #DA261D;
   }
   .order{
     display: flex;

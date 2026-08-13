@@ -2,7 +2,7 @@
 import { useMessage, useToast } from 'wot-design-uni'
 import TakingAmount from './component/TakingAmount.vue'
 import { useLayoutStore } from '@/stores'
-import { applyWithdraw, getLastApplyTime, getWalletAccountsBalance } from '@/api/wallet'
+import { applyWithdraw, getWalletAccountsBalance, onSign } from '@/api/wallet'
 
 const toast = useToast()
 const message = useMessage()
@@ -12,17 +12,16 @@ const statusBarHeight = computed(() => {
 })
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+const bankData = computed(() => userStore.selectBank)
 const describeList = [
-  '单人单月累计提现上限额度30000.00元',
+  '单人单月累计提现上限额度30000.00元，单次最小提现金额为100元',
   '每次提现，第三方支付平台将会收取7.5%的提现手续费。(该费用将根据输入金额的7.5%进行计算)',
   '企业提现或个人大额提现建议选择公对公转账',
-  '为了避免频繁提现交易，平台限定七天提现一次',
+  '个人提现部分，平台需代扣个人所得税，缴税标准参照国家税务总局2025第16号文件执行。',
   '如有疑问请及时联系客服',
 ]
 const amount = ref<string>('')
 const invoice = ref<string[]>([])
-const bankData = ref<any>(null)
-const countdown = ref<any>(null)
 const channelType = ref<number>(1)
 const balanceData = ref({
   kolServiceBalance: 0,
@@ -33,10 +32,18 @@ function handleClickLeft() {
   uni.navigateBack()
 }
 function onConfirm() {
+  // return
   if ((!amount.value) || amount.value === '0') {
     toast.error({
       position: 'middle',
       msg: '请输入提现金额',
+    })
+    return
+  }
+  if (Number(amount.value) < 100) {
+    toast.error({
+      position: 'middle',
+      msg: '最小提现金额为100',
     })
     return
   }
@@ -57,7 +64,6 @@ function onConfirm() {
       })
       return
     }
-    console.log(bankData.value)
     // 获取银行卡后四位
     const bankNumber = bankData.value.cardNumber
     const lastFourDigits = bankNumber.slice(-4)
@@ -111,6 +117,11 @@ function onConfirm() {
     if (channelType.value === 2) {
       params.invoice = invoice.value.join(',')
     }
+
+    if (channelType.value === 1) {
+      aaa()
+      return
+    }
     applyWithdraw(params).then((res) => {
       if (res.code === 0) {
         console.log(res.code)
@@ -129,6 +140,46 @@ function onConfirm() {
     console.log('点击了取消按钮')
   })
 }
+
+function bbb(params: any) {
+  applyWithdraw(params).then((res) => {
+    if (res.code === 0) {
+      console.log(res.code)
+      toast.close()
+      uni.navigateTo({
+        url: '/pageMine/extractSuccess/index',
+      })
+    }
+    else {
+      toast.close()
+    }
+  }).catch(() => {
+    toast.close()
+  })
+}
+function aaa() {
+  const params: any = {
+    amount: amount.value,
+    channelType: channelType.value,
+    bankCardId: bankData.value.id,
+    balanceType: '3',
+  }
+  onSign(params).then((res) => {
+    if (res.code === 0) {
+      if (res.data.need) {
+        toast.close()
+        uni.navigateTo({
+          url: `/pageMine/takingVerification/index?faceSignUrl=${res.data.faceSignUrl}`,
+        })
+      }
+      else {
+        bbb(params)
+      }
+    }
+  }).catch(() => {
+    toast.close()
+  })
+}
 function getBalance() {
   getWalletAccountsBalance().then((res) => {
     if (res.code === 0) {
@@ -136,47 +187,43 @@ function getBalance() {
     }
   })
 }
-function finishTime() {
-  countdown.value = null
-}
-function getAppleTime() {
-  getLastApplyTime().then((res) => {
-    if (res.code === 0) {
-      if (res.data) {
-        // 返回的时间加上7天
-        const str = res.data.replace(/-/g, '\/')
-        const date = new Date(str)
-        date.setDate(date.getDate() + 7)
-        const num = new Date(date).getTime() - new Date().getTime()
-        if (num > 0) {
-          countdown.value = num
-        }
-        else {
-          countdown.value = null
-        }
-        return
-      }
-      countdown.value = null
-    }
+function showImg() {
+  uni.previewImage({
+    current: 0,
+    urls: ['https://imgs.xingyongbao.cn/sys/mini/077055c50b1a1429d5ce39843df76983.jpg', 'https://imgs.xingyongbao.cn/sys/mini/be4bd297f84ebaef2f0804f03430432a.jpg'],
   })
 }
+function xieyi() {
+  wx.downloadFile({
+    url: 'https://imgs.xingyongbao.cn/sys/mini/protocol.pdf',
+    success(res) {
+      const filePath = res.tempFilePath
+      wx.openDocument({
+        filePath,
+        success() {
+          console.log('打开文档成功')
+        },
+      })
+    },
+  })
+}
+
 onLoad(() => {
-  getAppleTime()
   getBalance()
 })
 </script>
 
 <template>
-  <wd-navbar title="我的钱包" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
+  <wd-navbar title="提现" safe-area-inset-top left-arrow fixed :bordered="false" @click-left="handleClickLeft" />
   <view class="taking" :style="{ paddingTop: `${(statusBarHeight || 0) + 44}px` }">
     <view class="amount-box">
       <view class="amount-keti">
         可提现金额
       </view>
-      <wd-text custom-class="custom-text" :text="balanceData.agentBalance" mode="price" />
+      <wd-text custom-class="custom-text" :text="balanceData.agentBalance" />
     </view>
     <TakingAmount
-      v-model:amount="amount" v-model:channel-type="channelType" v-model:bank-data="bankData"
+      v-model:amount="amount" v-model:channel-type="channelType"
       v-model:invoice="invoice" :max-amount="balanceData.agentBalance"
     />
     <view class="describe">
@@ -184,37 +231,17 @@ onLoad(() => {
         <view>{{ index + 1 }}</view>
         <view>{{ item }}</view>
       </view>
+      <view class="btn-box">
+        <wd-button type="text" @click="showImg">
+          缴税规则
+        </wd-button>
+        <wd-button type="text" @click="xieyi">
+          签约协议
+        </wd-button>
+      </view>
     </view>
   </view>
-  <view v-if="countdown" class="timebox">
-    <view class="timebox-content">
-      <text class="iconfont icon-time" />
-      <wd-count-down :time="countdown" @finish="finishTime">
-        <template #default="{ current }">
-          <view class="time-label">
-            <text class="time-label">距</text>
-            <text class="text-time">
-              {{ current.days >= 10 ? current.days : `0${current.days}` }}
-            </text>
-            <text class="time-text">天</text>
-            <text class="time-text">
-              <text>
-                {{ current.hours >= 10 ? current.hours : `0${current.hours}` }}h
-              </text>
-              <text>
-                {{ current.minutes >= 10 ? current.minutes : `0${current.minutes}` }}m
-              </text>
-              <text>
-                {{ current.seconds >= 10 ? current.seconds : `0${current.seconds}` }}s
-              </text>
-            </text>
-            <text class="time-label">可提现</text>
-          </view>
-        </template>
-      </wd-count-down>
-    </view>
-  </view>
-  <FootButton v-else label="确认" @confirm="onConfirm" />
+  <FootButton label="确认" @confirm="onConfirm" />
 </template>
 
 <style scoped lang="scss">
@@ -278,6 +305,10 @@ onLoad(() => {
     }
   }
 }
+.btn-box{
+  display: flex;
+  gap: 30rpx;
+}
 
 .timebox {
   padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
@@ -337,7 +368,7 @@ onLoad(() => {
   "layout": "default",
   "name": "taking",
   "style": {
-    "navigationBarTitleText": "我的钱包"
+    "navigationBarTitleText": "提现"
   }
 }
 </route>

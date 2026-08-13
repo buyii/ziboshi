@@ -28,6 +28,7 @@ export const useUserStore = defineStore(
     const userInfo = ref<User>({ ...initState })
     const paymentData = ref<any | null>(null)
     const orderData = ref<any | null>(null)
+    const selectBank = ref<any | null>(null)
     const applyStatus = ref<string>('0')
     const showCopyTip = ref<boolean>(true)
     const couponList = ref<any[]>([])
@@ -46,6 +47,10 @@ export const useUserStore = defineStore(
 
     const setOrderData = (val: any) => {
       orderData.value = { ...val }
+    }
+
+    const setSelectBank = (val: any) => {
+      selectBank.value = { ...val }
     }
 
     const setCouponList = (val: any) => {
@@ -95,6 +100,8 @@ export const useUserStore = defineStore(
       setOrderData,
       paymentData,
       setPaymentData,
+      selectBank,
+      setSelectBank,
       setToken,
       setUserInfo,
       upDataUserInfo,

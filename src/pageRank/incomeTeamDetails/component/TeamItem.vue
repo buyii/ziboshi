@@ -21,17 +21,17 @@ function copyId(item: any) {
   })
 }
 
-// // 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
-// const statusMap: { [key: number]: string } = {
-//   1: '待支付',
-//   2: '待发货',
-//   3: '交易关闭',
-//   4: '待收货',
-//   5: '已收货',
-//   7: '待评价',
-//   8: '退款中',
-//   9: '退款完成',
-// }
+// 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
+const statusMap: { [key: number]: string } = {
+  1: '待支付',
+  2: '待发货',
+  3: '交易关闭',
+  4: '待收货',
+  5: '已收货',
+  7: '已结算',
+  8: '退款中',
+  9: '退款完成',
+}
 </script>
 
 <script lang="ts">
@@ -93,18 +93,28 @@ export default {
               <text class="iconfont icon-time icon" />
               <text>{{ props.item.paySuccessTime }}</text>
             </view>
-            <!-- <view class="info-num">
-              下单金额
-              <text class="num">{{ props.item.payGoodsAmount }}</text>
-            </view> -->
           </view>
         </view>
         <view class="shouyi">
           <view>
-            <DigitBold :value="props.item.focAgentFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
+            <DigitBold v-if="props.item.status === 7 || props.item.status === '7'" :value="props.item.agentFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
+            <DigitBold v-else :value="props.item.focAgentFee" int-size="32rpx" decimal-size="32rpx" prefix="+" color="#999999" />
           </view>
           <view class="jiesuan">
-            未结算
+            {{ props.item.status === 7 || props.item.status === '7' ? '已结算' : '未结算' }}
+          </view>
+          <view
+            class="status" :class="{
+              'status-ing': item.status === 1,
+              'status-success': item.status === 2,
+              'status-apply': item.status === 4,
+              'status-refuse': item.status === 3,
+              'status-queren': item.status === 5,
+              'status-daipingjia': item.status === 7,
+              'status-tuikuan': item.status === 8 || item.status === 9,
+            }"
+          >
+            {{ statusMap[item.status] }}
           </view>
         </view>
       </view>
@@ -128,30 +138,6 @@ export default {
         font-size: 24rpx;
         color: #666666;
         line-height: 24rpx;
-      }
-      .status{
-        font-weight: 500;
-        font-size: 24rpx;
-        color: #666666;
-        line-height: 24rpx;
-      }
-      .status-ing{
-        color: #DA261D;
-      }
-      .status-success{
-        color: #EF942B;
-      }
-      .status-refuse{
-        color: #BABABA;
-      }
-      .status-apply{
-        color: #5084F3;
-      }
-      .status-queren{
-        color: #000000;
-      }
-      .status-tuikuan{
-        color: #666666;
       }
     }
     .user-warp{
@@ -272,6 +258,31 @@ export default {
           color: #BABABA;
           line-height: 24rpx;
           margin-top: 8rpx;
+        }
+        .status{
+          font-weight: 500;
+          font-size: 24rpx;
+          color: #666666;
+          line-height: 24rpx;
+          margin-top: 30rpx;
+        }
+        .status-ing{
+          color: #666666;
+        }
+        .status-success{
+          color: #EF942B;
+        }
+        .status-refuse{
+          color: #BABABA;
+        }
+        .status-apply{
+          color: #5084F3;
+        }
+        .status-queren{
+          color: #000000;
+        }
+        .status-tuikuan{
+          color: #DA261D;
         }
       }
     }

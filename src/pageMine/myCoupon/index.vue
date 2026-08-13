@@ -100,7 +100,8 @@ onShow(() => {
     <view v-if="dataList.length > 0" class="sample-content">
       <template v-for="item in dataList" :key="item.id">
         <x-coupon
-          :value="item.price" :title="item.name" color="#24d192" background-color="#e1f6ee"
+          :value="item.calType === 1 ? item.price : `${item.discounts / 100}折`" :title="item.name" color="#24d192" background-color="#e1f6ee"
+          :type="item.calType === 1 ? 'money' : ''"
           :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" validity="优惠券x1"
           :show-btn="false" :status="item.status === 2 ? 'used' : 'available'"
         />

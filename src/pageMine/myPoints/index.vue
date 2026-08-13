@@ -21,9 +21,9 @@ const activeTab = ref<number>(1)
 
 const state = ref()
 const amountData = ref({
-  amount: '0.00',
-  total: '0.00',
-  waitSettle: '0.00',
+  amount: '0.0',
+  total: '0.0',
+  waitSettle: '0.0',
 })
 const loading = ref<boolean>(false)
 const dataList = ref<any>([])
@@ -46,7 +46,7 @@ function getDataList() {
     pageNum: pagination.value.pageNum,
     pageSize: pagination.value.pageSize,
     status: activeTab.value,
-    amountType: 1,
+    amountType: 2,
   }
   loading.value = true
   getMyTeamMemberOrderList(params).then((res) => {
@@ -151,7 +151,7 @@ onShow(() => {
   <MyScrollView :top="`${(statusBarHeight || 0) - 1}px`" :state="state" @scrolltolower="scrolltolower" @loadmore="loadmore">
     <view class="records-box">
       <template v-if="dataList.length > 0">
-        <RevenueRecords :datas-list="dataList" />
+        <RevenueRecords :datas-list="dataList" :active-tab="activeTab" />
       </template>
       <wd-status-tip v-if="dataList.length < 1 && !loading" tip="暂无数据~">
         <template #image>

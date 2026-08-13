@@ -77,6 +77,9 @@ function onSelectImg(type: number) {
         },
       })
     },
+    fail: (err) => {
+      console.log('err', err)
+    },
   })
 }
 
@@ -91,7 +94,7 @@ function getDetail() {
   })
 }
 
-onShow(() => {
+onLoad(() => {
   getDetail()
 })
 </script>

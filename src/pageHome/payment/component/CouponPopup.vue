@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { useLayoutStore } from '@/stores'
 
-interface MyProps {
-  list: any
-  itemNum: number
-}
 const props = withDefaults(defineProps<MyProps>(), {
   list: [],
   itemNum: 1,
 })
-
+const imgBaseUrl = import.meta.env.VITE_IMG_URL
+interface MyProps {
+  list: any
+  itemNum: number
+}
 const modelValue = defineModel<any>({
   default: [],
   required: true,
@@ -71,13 +71,22 @@ export default {
     >
       <!-- threshold   deadline -->
       <view class="popup-warp">
-        <view v-for="item in props.list" :key="item.id" @click="itemClick(item)">
-          <x-coupon
-            :value="item.price" :title="item.name" color="#24d192" background-color="#e1f6ee"
-            :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" :validity="item.type === 1 ? `优惠券x${props.itemNum}` : '优惠券x1'"
-            :show-btn="false" :select="selectList.some((i: any) => i.id === item.id)"
-          />
-        </view>
+        <template v-if="props.list.length >= 1">
+          <view v-for="item in props.list" :key="item.id" @click="itemClick(item)">
+            <!--  -->
+            <x-coupon
+              :value="item.calType === 1 ? item.price : `${item.discounts / 100}折`" :title="item.name" color="#24d192" background-color="#e1f6ee"
+              :type="item.calType === 1 ? 'money' : ''"
+              :desc="`${Number(item.threshold) > 0 ? `满${item.threshold}可用` : '无门槛'} - ${item.deadline === 1 ? '无期限' : ''}`" :validity="item.type === 1 ? `优惠券x${props.itemNum}` : '优惠券x1'"
+              :show-btn="false" :select="selectList.some((i: any) => i.id === item.id)"
+            />
+          </view>
+        </template>
+        <wd-status-tip v-if="props.list.length < 1" tip="暂无优惠券~">
+          <template #image>
+            <image style="width: 320rpx;height: 344rpx;margin-top: 60rpx;" :src="`${imgBaseUrl}/notData1.png`" />
+          </template>
+        </wd-status-tip>
         <view class="zhanwei" />
       </view>
       <FootButton label="确 定" @confirm="onConfirm" />

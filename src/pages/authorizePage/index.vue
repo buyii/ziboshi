@@ -44,7 +44,7 @@ function handleOpenPrivacyContract() {
 
 <template>
   <view class="authpage">
-    <image class="logoimg" src="../../static/svg/xieyilogo.svg" />
+    <image class="logoimg" src="../../static/logo.jpg" />
     <view class="text-box">
       <view class="text1">
         为了给您提供更好的服务，请授权以下权限
@@ -57,7 +57,7 @@ function handleOpenPrivacyContract() {
       <wd-checkbox v-model="checkbox" shape="square" checked-color="#089D39" />
       <view class="xieyi-box" @click="handleOpenPrivacyContract">
         <text class="iconfont icon-agreement" />
-        <text>《星佣宝小程序隐私保护指引》</text>
+        <text>《滋博仕小程序隐私保护指引》</text>
       </view>
     </view>
     <view class="btn-box">
@@ -81,7 +81,8 @@ function handleOpenPrivacyContract() {
 }
 .logoimg{
   width: 208rpx;
-  height: 286rpx;
+  height: 208rpx;
+  border-radius: 24rpx;
 }
 .text-box{
   width: 658rpx;

@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<Props>(), {})
 
 interface Props {
   datasList: any[]
+  activeTab?: number
 }
 
 // 1：待付款，2：支付成功，3：支付失败，4：已发货，5：确认收货，7：待评价，8：退款中，9：退款完成
@@ -41,11 +42,11 @@ const statusMap: { [key: number]: string } = {
         <view class="user-box">
           <img class="user-img" :src="item.avatar" alt="">
           <view class="user-name">
-            {{ item.userName }}
+            ID：{{ item.userCode }}
           </view>
         </view>
         <view
-          v-if="item.status === 2" class="daishou"
+          v-if="props.activeTab === 2" class="daishou"
           :class="{
             'status-ing': item.status === 1,
             'status-success': item.status === 2,
@@ -138,7 +139,7 @@ const statusMap: { [key: number]: string } = {
         line-height: 24rpx;
       }
       .status-ing{
-        color: #DA261D;
+        color: #666666;
       }
       .status-success{
         color: #EF942B;
@@ -153,7 +154,7 @@ const statusMap: { [key: number]: string } = {
         color: #000000;
       }
       .status-tuikuan{
-        color: #666666;
+        color: #DA261D;
       }
     }
     .item-content{

@@ -140,6 +140,10 @@ onShow(() => {
   getDataList()
   getCount()
 })
+
+onLoad((options) => {
+  orderType.value = options?.type || 'all'
+})
 </script>
 
 <template>

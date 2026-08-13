@@ -28,23 +28,33 @@ const payType = ref<number>(2)
 const itemNum = ref<number>(1)
 const amountPoint = ref<number>(0)
 const remark = ref<string>('')
+const selectItem = ref<any>(null)
 
 function handleClickLeft() {
   uni.navigateBack()
 }
+
+const selectData = computed(() => {
+  if (selectItem.value) {
+    return selectItem.value
+  }
+  const list = paymentData.value.productSpec.filter((item: any) => item.itemType === 2)
+
+  return list ? list[0] : null
+})
 
 function confirmAuth() {
   const params: any = {
     productId: paymentData.value?.productId,
     logisticsFee: paymentData.value.logisticsfee,
     payType: payType.value,
+    specId: selectData.value.itemId,
     itemNum: itemNum.value,
     addressId: addressData.value?.id,
     remark: remark.value,
   }
   loading.value = true
   createAndPayOrder(params).then((res) => {
-    loading.value = false
     if (res.code === 0) {
       // 如果需要支付运费，调用支付接口
       if (res.data.needPay) {
@@ -53,9 +63,12 @@ function confirmAuth() {
           ...data,
           success(res) {
             console.log(`success:${JSON.stringify(res)}`)
-            uni.navigateTo({
-              url: '/pageHome/applySuccess/index',
-            })
+            setTimeout(() => {
+              loading.value = false
+              uni.navigateTo({
+                url: '/pageHome/applySuccess/index',
+              })
+            }, 2000)
           },
           fail(err) {
             console.log(`fail:${JSON.stringify(err)}`)
@@ -64,11 +77,18 @@ function confirmAuth() {
             })
           },
         })
-        return
       }
-      uni.navigateTo({
-        url: '/pageHome/applySuccess/index',
-      })
+      else {
+        setTimeout(() => {
+          loading.value = false
+          uni.navigateTo({
+            url: '/pageHome/applySuccess/index',
+          })
+        }, 2000)
+      }
+    }
+    else {
+      loading.value = false
     }
   }).catch(() => {
     loading.value = false
@@ -77,7 +97,7 @@ function confirmAuth() {
 
 function payTypeChange(e: any) {
   if (e.value === 1) {
-    selectCoupons.value = couponList.value.filter((item: any) => item.type === 1)
+    selectCoupons.value = []
   }
   else {
     selectCoupons.value = couponList.value
@@ -85,15 +105,44 @@ function payTypeChange(e: any) {
 }
 
 const discount = computed(() => {
-  const totalDiscount = selectCoupons.value.reduce((sum: number, coupon: any) => {
-    let num = Number(coupon.price)
-    if (coupon.type === 1) {
-      num = Number(coupon.price) * itemNum.value
-    }
-    return sum + Number(num)
-  }, 0)
-  return totalDiscount.toFixed(2)
+  if (payType.value === 1) {
+    return '无'
+  }
+  const zhekou: any = selectCoupons.value.find((item: any) => item.calType === 2)
+  console.log('zhekou', zhekou)
+  if (zhekou) {
+    return `${zhekou.discounts / 100}折`
+  }
+  else {
+    return '无'
+  }
 })
+
+const totalPrice = computed(() => {
+  const zhekou: any = selectCoupons.value.find((item: any) => item.calType === 2)
+  const price = Number(selectData.value.price) * itemNum.value
+  if (payType.value === 1) {
+    return price
+  }
+  if (zhekou) {
+    return (price * Number(zhekou.discounts) / 100).toFixed(2)
+  }
+  return price
+})
+const productSpec = computed(() => {
+  const list = paymentData.value.productSpec.filter((item: any) => item.itemType === 1)
+
+  return list || []
+})
+const productSpec2 = computed(() => {
+  const list = paymentData.value.productSpec.filter((item: any) => item.itemType === 2)
+
+  return list || []
+})
+
+function selectClick(item: any) {
+  selectItem.value = item
+}
 
 function onConfirm() {
   if (!addressData.value) {
@@ -112,22 +161,25 @@ function onConfirm() {
     productId: paymentData.value?.productId,
     payType: payType.value,
     itemNum: itemNum.value,
+    specId: selectData.value.itemId,
     addressId: addressData.value?.id,
     remark: remark.value,
     couponId,
   }
   loading.value = true
   createAndPayOrder(params).then((res) => {
-    loading.value = false
     if (res.code === 0) {
       const data = { ...res.data }
       uni.requestPayment({
         ...data,
-        success(res) {
-          console.log(`success:${JSON.stringify(res)}`)
-          uni.navigateTo({
-            url: '/pageHome/applySuccess/index',
-          })
+        success() {
+          // 支付成功后过两秒再跳转
+          setTimeout(() => {
+            loading.value = false
+            uni.navigateTo({
+              url: '/pageHome/applySuccess/index',
+            })
+          }, 2000)
         },
         fail(err) {
           console.log(`fail:${JSON.stringify(err)}`)
@@ -136,6 +188,9 @@ function onConfirm() {
           })
         },
       })
+    }
+    else {
+      loading.value = false
     }
   }).catch(() => {
     loading.value = false
@@ -198,12 +253,6 @@ onShow(() => {
   getDefaultAddress()
   getYouHui()
 })
-
-onLoad((options) => {
-  if (options?.itemNum) {
-    itemNum.value = Number(options?.itemNum)
-  }
-})
 </script>
 
 <template>
@@ -249,6 +298,20 @@ onLoad((options) => {
     <view class="warp111">
       <Commodity :payment-data="paymentData" />
       <view class="guigebox" style="margin-top: 24rpx;">
+        <view class="guige2">
+          <view class="select-title">
+            规格
+          </view>
+          <view
+            v-for="item in productSpec2" :key="item.itemId" class="guigeSele"
+            :class="{ active: selectData && selectData.itemId === item.itemId }"
+            @click="selectClick(item)"
+          >
+            {{ item.itemName }}
+          </view>
+        </view>
+      </view>
+      <view class="guigebox" style="margin-top: 24rpx;">
         <view class="guige">
           <view>支付方式</view>
           <view>
@@ -262,12 +325,6 @@ onLoad((options) => {
             </wd-radio-group>
           </view>
         </view>
-        <!-- <view class="guige">
-        <view>运费</view>
-        <view>
-          {{ paymentData?.exclusivePrice }}元
-        </view>
-      </view> -->
         <view class="guige">
           <view>购买数量</view>
           <view>
@@ -280,14 +337,22 @@ onLoad((options) => {
         <view class="guige">
           <view>优惠券</view>
           <view @click="selectCoupon">
-            - ¥ {{ discount }}
+            {{ discount }}
             <text class="iconfont icon-into" />
           </view>
         </view>
+
+        <view v-for="item in productSpec" :key="item.itemId" class="guige">
+          <view>{{ item.name }}</view>
+          <view>
+            {{ item.itemName }}
+          </view>
+        </view>
+
         <view class="guige">
           <view>运费</view>
           <view>
-            + {{ payType === 1 ? paymentData?.logisticsfee || '0.00' : '0.00' }} 元
+            + {{ payType === 1 ? paymentData?.logisticsfee || '0.0' : '0.0' }} 元
           </view>
         </view>
         <view class="guige">
@@ -302,7 +367,7 @@ onLoad((options) => {
     <view class="botbox">
       <view v-if="payType === 1" class="jifeng">
         <view class="jifengbox">
-          <DigitBold :value="(paymentData!.price * itemNum - Number(discount)) * 2" int-size="40rpx" color="#FF5100" suffix=" 积分" suffix-size="24rpx" />
+          <DigitBold :value="Number(totalPrice) * 2" int-size="40rpx" color="#FF5100" suffix=" 积分" suffix-size="24rpx" />
           <DigitBold v-if="paymentData.logisticsfee && Number(paymentData?.logisticsfee) > 0" :value="paymentData?.logisticsfee" int-size="40rpx" color="#FF5100" suffix=" 运费" suffix-size="24rpx" />
         </view>
         <view class="jifengnum">
@@ -310,17 +375,17 @@ onLoad((options) => {
         </view>
       </view>
       <view v-else class="jifeng">
-        <DigitBold :value="((paymentData!.price * itemNum) - Number(discount)).toFixed(2)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
+        <DigitBold :value="totalPrice" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
         <view class="yingfu">
           应付
         </view>
       </view>
-      <button class="puy-btn" :loading="loading" :disabled="payType === 1 && (amountPoint < paymentData!.price * itemNum * 2)" @click="onConfirm">
-        {{ payType === 1 && (amountPoint < paymentData!.price * itemNum * 2) ? '积分不足' : '去结算' }}
+      <button class="puy-btn" :loading="loading" :disabled="payType === 1 && (amountPoint < Number(totalPrice) * 2)" @click="onConfirm">
+        {{ payType === 1 && (amountPoint < Number(totalPrice) * 2) ? '积分不足' : '去结算' }}
       </button>
     </view>
   </view>
-  <MyPopup ref="MyPopupRef" :amount-point="amountPoint" :price="paymentData!.price" :num-point="(paymentData!.price * itemNum - Number(discount)) * 2" @confirm-auth="confirmAuth" />
+  <MyPopup ref="MyPopupRef" :amount-point="amountPoint" :price="paymentData!.price" :num-point="Number(totalPrice) * 2" @confirm-auth="confirmAuth" />
   <CouponPopup ref="CouponPopupRef" v-model="selectCoupons" :list="couponList" :item-num="itemNum" />
 </template>
 
@@ -571,6 +636,25 @@ onLoad((options) => {
   .guigebox{
     background-color: #FFFFFF;
     border-radius: 16rpx;
+  }
+  .select-title{
+    font-size: 28rpx;
+    margin-bottom: 24rpx;
+  }
+  .guige2{
+    padding: 12rpx 24rpx;
+    font-size: 28rpx;
+  }
+  .guigeSele{
+    background: #F5F5F5;
+    border-radius: 8rpx;
+    padding: 12rpx 24rpx;
+    font-size: 24rpx;
+    margin-bottom: 12rpx;
+  }
+  .active{
+    background: rgba(8, 157, 57, 0.1);
+    color: #089D39;
   }
   .guige{
     display: flex;

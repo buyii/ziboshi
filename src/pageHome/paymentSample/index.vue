@@ -163,7 +163,7 @@ onShow(() => {
 
     <view class="botbox">
       <view class="jifeng">
-        <DigitBold :value="((productData!.price * itemNum)).toFixed(2)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
+        <DigitBold :value="((productData!.price * itemNum)).toFixed(1)" int-size="40rpx" decimal-size="28rpx" color="#FF5100" />
         <view class="yingfu">
           应付
         </view>

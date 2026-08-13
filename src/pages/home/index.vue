@@ -3,13 +3,12 @@ import { useToast } from 'wot-design-uni'
 import ProductHome from './component/ProductHome.vue'
 import PosterTem from './component/PosterTem.vue'
 import SharePopup from './component/SharePopup.vue'
-import BuyPopup from './component/BuyPopup.vue'
 import PosterPopup from './component/PosterPopup.vue'
 
 import type { ProductItem } from '@/types/common'
 import { getProductDetail, getProductList } from '@/api/product'
-import { getAgentInfo } from '@/api/mine'
 import { getCoupon, miniQRCode } from '@/api/common'
+import { login } from '@/api/index'
 
 interface Pagination {
   pageNum: number
@@ -22,9 +21,7 @@ const pagination = ref<Pagination>({
   total: 0,
 })
 const toast = useToast()
-const scene = ref()
 const state = ref()
-const joinData = ref<any>({})
 const imgBaseUrl = import.meta.env.VITE_IMG_URL
 const productList = ref<ProductItem[]>([])
 const userStore = useUserStore()
@@ -32,7 +29,6 @@ const userInfo = computed(() => userStore.userInfo)
 
 const posterPopupRef = ref<ComponentPublicInstance<{ open: (num: string) => void }> | null>(null)
 const SharePopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
-const BuyPopupRef = ref<ComponentPublicInstance<{ open: () => void, close: () => void }> | null>(null)
 
 const showPoster = ref(false)
 const imgUrl = ref('')
@@ -40,16 +36,12 @@ const codeImg = ref('')
 const detailData = ref<any>({})
 
 const coupon = computed(() => {
-  const list = userStore.couponList.filter((item: any) => item.type === 1)
-  const item = list.find((item: any) => item.type === 1)
+  const list = userStore.couponList
+  const item = list.find((item: any) => item.calType === 2)
   return item
 })
 
 function getdata() {
-  if (pagination.value.pageNum === 1) {
-    nextTick(() => {
-    })
-  }
   const params = {
     productType: 1, // 1-正常商品 2-体验装
   }
@@ -83,18 +75,18 @@ onPullDownRefresh(() => {
 })
 
 function getAgent(userCode: any) {
-  getAgentInfo({
-    userCode,
-    source: 2,
-  }).then((res) => {
-    if (res.code === 0) {
-      if (res.data.has) {
-        if (userInfo.value && userInfo.value.userCode === res.data.agent.agentUserCode) {
-          return
+  uni.login({
+    success(loginRes) {
+      login({
+        code: loginRes.code,
+        recommendCode: userCode,
+      }).then((res) => {
+        if (res.code === 0) {
+          const { data } = res
+          userStore.setUserInfo(data)
         }
-        joinData.value = res.data.agent
-      }
-    }
+      })
+    },
   })
 }
 
@@ -102,26 +94,26 @@ onShareAppMessage ((res) => {
   if (res.from === 'button') { // 来自页面内分享按钮
     console.log(res.target)
   }
-  if (userInfo.value && userInfo.value.userCode && userInfo.value.userType === '03') {
+  if (userInfo.value && userInfo.value.userCode) {
     return {
-      title: '星佣宝',
-      path: `/pages/home/index?scene=${userInfo.value.userCode}`,
+      title: '滋博仕',
+      path: `/pages/home/index?userCode=${userInfo.value.userCode}`,
     }
   }
   return {
-    title: '星佣宝',
+    title: '滋博仕',
     path: '/pages/home/index',
   }
 })
 onShareTimeline (() => {
-  if (userInfo.value && userInfo.value.userCode && userInfo.value.userType === '03') {
+  if (userInfo.value && userInfo.value.userCode) {
     return {
-      title: '星佣宝',
-      path: `/pages/home/index?scene=${userInfo.value.userCode}`,
+      title: '滋博仕',
+      path: `/pages/home/index?userCode=${userInfo.value.userCode}`,
     }
   }
   return {
-    title: '星佣宝',
+    title: '滋博仕',
     path: '/pages/home/index',
   }
 })
@@ -183,7 +175,11 @@ function getDetail() {
 }
 
 function toPay() {
-  BuyPopupRef.value?.open()
+  const data = { ...detailData.value }
+  userStore.setPaymentData(data)
+  uni.navigateTo({
+    url: `/pageHome/payment/index`,
+  })
 }
 
 onShow(() => {
@@ -193,16 +189,16 @@ onShow(() => {
 })
 
 onLoad((options) => {
-  if (options?.scene) {
-    scene.value = options?.scene
-    getAgent(scene.value)
+  if (options?.userCode) {
+    const userCode = options?.userCode || ''
+    getAgent(userCode)
   }
   getdata()
 })
 </script>
 
 <template>
-  <wd-navbar title="我的" safe-area-inset-top fixed :placeholder="true" :bordered="false" />
+  <wd-navbar title="首页" safe-area-inset-top fixed :placeholder="true" :bordered="false" />
   <view class="card-warp">
     <image style="width: 100%;height: 220rpx;" :src="`${imgBaseUrl}/topbanner.png`" />
     <view v-for="item in productList" :key="item.productId" class="produc-list">
@@ -221,7 +217,6 @@ onLoad((options) => {
     <PosterPopup ref="posterPopupRef" />
     <PosterTem v-if="showPoster" :code-img="codeImg" :detail-data="detailData" @change-img="changeImg" />
     <SharePopup ref="SharePopupRef" @on-poster="onPoster" />
-    <BuyPopup ref="BuyPopupRef" :detail-data="detailData" />
   </view>
 </template>
 

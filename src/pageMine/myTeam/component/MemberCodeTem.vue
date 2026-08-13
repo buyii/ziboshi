@@ -36,7 +36,7 @@ function onSuccess(e: any) {
       css="background-color: #fff;width: 630rpx; height: 910rpx;"
       @success="onSuccess"
     >
-      <l-painter-view css="height: 88rpx; background: #f6d9e3">
+      <l-painter-view css="height: 88rpx; background: #aec9ac;">
         <l-painter-text
           :text="userInfo.userName"
           css="padding: 30rpx 0 0 38rpx;font-family: PingFangSC, PingFang SC;font-weight: 400;font-size: 36rpx;color: #111111;"
@@ -60,7 +60,7 @@ function onSuccess(e: any) {
       />
       <l-painter-image
         :src="codebg"
-        css="width: 630rpx; height: 830rpx;background: #f6d9e3;border-radius: 0 0 32rpx 32rpx;overflow: hidden;"
+        css="width: 630rpx; height: 830rpx;background: #aec9ac;border-radius: 0 0 32rpx 32rpx;overflow: hidden;"
       />
       <l-painter-image
         :src="props.baseImg"

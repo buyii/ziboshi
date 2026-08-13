@@ -3,7 +3,7 @@ import { defineUniPages } from '@uni-helper/vite-plugin-uni-pages'
 export default defineUniPages({
   pages: [],
   globalStyle: {
-    navigationBarTitleText: '星佣宝',
+    navigationBarTitleText: '滋博仕',
     navigationBarTextStyle: 'white',
     navigationStyle: 'custom',
   },
@@ -230,6 +230,24 @@ export default defineUniPages({
           name: 'taking',
           style: {
             navigationBarTitleText: '我的钱包',
+          },
+        },
+        {
+          path: 'takingVerification/index',
+          type: 'page',
+          layout: 'default',
+          name: 'takingVerification',
+          style: {
+            navigationBarTitleText: '身份验证',
+          },
+        },
+        {
+          path: 'withdrawalHistory/index',
+          type: 'page',
+          layout: 'default',
+          name: 'withdrawalHistory',
+          style: {
+            navigationBarTitleText: '提现记录',
           },
         },
         {

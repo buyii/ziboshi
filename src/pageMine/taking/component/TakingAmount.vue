@@ -12,15 +12,13 @@ const amount = defineModel<string>('amount', {
 const channelType = defineModel<number | undefined>('channelType', {
   required: true,
 })
-const bankData = defineModel<any>('bankData', {
-  required: true,
-})
 const invoice = defineModel<string[]>('invoice', {
   required: true,
 })
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+const bankData = computed(() => userStore.selectBank)
 
 const toast = useToast()
 
@@ -69,9 +67,10 @@ function allWithdrawal() {
   amount.value = props.maxAmount
 }
 
-function radioChange() {
-  bankData.value = null
-  invoice.value = []
+function radioChange(e: any) {
+  if (e.value === 1) {
+    invoice.value = []
+  }
 }
 
 function toSelect() {
@@ -85,12 +84,6 @@ function toSelect() {
   if (channelType.value === 1) {
     uni.navigateTo({
       url: '/pageMine/bankCardManage/index?type=select',
-      events: {
-        // 为指定事件添加一个监听器，获取被打开页面传送到当前页面的数据
-        backEvent(data: any) {
-          bankData.value = data
-        },
-      },
     })
   }
 }
@@ -150,7 +143,7 @@ export default {
             个人提现
           </wd-radio>
           <view class="select-box" @click="toSelect">
-            <text v-if="bankData" class="select-txt acitvetxt">{{ bankData.bankName }}({{ bankData.cardNumber.slice(-4) }})</text>
+            <text v-if="channelType === 1 && bankData" class="select-txt acitvetxt">{{ bankData.bankName }}({{ bankData.cardNumber.slice(-4) }})</text>
             <text v-else class="select-txt">请选择银行卡</text>
             <text class="iconfont icon-into" />
           </view>

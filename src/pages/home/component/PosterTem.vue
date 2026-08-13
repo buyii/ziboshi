@@ -35,7 +35,7 @@ function onSuccess(e: any) {
     >
       <l-painter-image
         :src="props.detailData.cover"
-        css="object-fit: cover; object-position: 50% 50%; position: absolute; top: 0;left:0; width: 100%; height: 1128rpx"
+        css="object-fit: fill; object-position: 50% 50%; position: absolute; top: 0;left:0; width: 100%; height: 1128rpx"
       />
       <l-painter-view css="position: absolute; top: 0;left:0;width: 302rpx;height: 80rpx;margin-left: 22rpx;margin-top: 40rpx;background: rgba(255,255,255,0.96);border-radius: 48rpx;padding: 8rpx">
         <l-painter-image
